@@ -1,0 +1,6 @@
+Works directly like a proper package
+
+python -c "import pykuli; print pykuli.demonstrate()"
+
+To run tests:
+python -m pykuli.tests
