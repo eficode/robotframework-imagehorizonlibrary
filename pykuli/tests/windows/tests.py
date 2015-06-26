@@ -1,49 +1,38 @@
-import unittest, os
-import pyautogui as ag
+import unittest
+import os, time
+import pykuli
 
-from pykuli.tests.windows.constants import REFERENCE_IMAGES_FOLDER
-
-ag.FAILSAFE = True
-SCREEN_WIDTH = ag.size()[0]
-SCREEN_HEIGHT = ag.size()[1]
-
-def click_image(ref_image, button='left'):
-	location = ag.locateOnScreen(REFERENCE_IMAGES_FOLDER+os.sep+ref_image)
-	ag.click(ag.center(location), button=button)
-
-def locate_image(ref_image):
-	return ag.locateOnScreen(REFERENCE_IMAGES_FOLDER+os.sep+ref_image)
+REFERENCE_IMAGE_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'reference_images')
+os.environ['REFERENCE_IMAGE_FOLDER'] = REFERENCE_IMAGE_FOLDER
 
 class TestWindowsWithImages(unittest.TestCase):
 	
-	def test_command_prompt(self):
-		ag.moveTo(26, 777)
-		ag.click()
-		ag.typewrite('cmd')
-		ag.press('enter')
-		ag.typewrite('dir')
-		ag.press('enter')
-
 	def test_notepad_with_images(self):
-		click_image('Start.png')
-		ag.typewrite('notepad')
-		ag.press('enter')
-		locate_image('Notepad_icon.png')
-		locate_image('Notepad_untitled.png')
-		ag.typewrite('echo "Sakke on homo"')
-		ag.hotkey('ctrl', 'a')
-		ag.hotkey('ctrl', 'c')
-		click_image('Start.png')
-		ag.typewrite('command')
-		ag.press('enter')
-		click_image('Command_prompt_administrator.png', 'right')
-		ag.moveTo(ag.center(locate_image('Command_prompt_edit.png')))
-		click_image('Command_prompt_paste.png')
-		ag.press('enter')
+		pykuli.click_image('Start.png')
+		pykuli.typewrite('notepad')
+		pykuli.press('enter')
+		pykuli.locate_image('Notepad_icon.png')
+		pykuli.locate_image('Notepad_untitled.png')
+		pykuli.typewrite('echo "I love pykuli"')
+		pykuli.hotkey('ctrl', 'a')
+		pykuli.hotkey('ctrl', 'c')
+		pykuli.click_image('Start.png')
+		pykuli.typewrite('command')
+		pykuli.press('enter')
+		pykuli.click_image('Command_prompt_administrator.png', 'right')
+		pykuli.moveTo(pykuli.locate_image('Command_prompt_edit.png'))
+		pykuli.click_image('Command_prompt_paste.png')
+		pykuli.press('enter')
+		time.sleep(3)
+		pykuli.click_image('Command_prompt_administrator.png', 'right')		
+		pykuli.press('c')
+		pykuli.click_image('Notepad_unselected.png')
+		pykuli.hotkey('alt', 'f4')
+		pykuli.press('right')
+		pykuli.press('enter')
 
 def suite():
     tests = [
-    			'test_command_prompt', 
     			'test_notepad_with_images',
     		]
     return unittest.TestSuite(map(TestWindowsWithImages, tests))

@@ -9,4 +9,3 @@ if PLATFORM.lower().startswith('windows'):
 	from pykuli.tests.windows.tests import main as test_main
 
 test_main()
-

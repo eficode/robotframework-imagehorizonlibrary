@@ -14,10 +14,8 @@ def main():
     parser.add_argument("-mm", "--monitor_mouse", help="print mouse movement", action="store_true")    
 
     args = parser.parse_args()
-    
     arg_count = len([1 for v in vars(args).values() if v])
 
-    
     if args.monitor_mouse:
     	monitor_mouse()
 
