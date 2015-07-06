@@ -18,7 +18,13 @@ class TestWindowsWithImages(unittest.TestCase):
 
         lib.press('Key.WIN')
         lib.type('notepad', 'Key.enter')
-        lib.wait('icon Notepad')
+        lib.wait_for('notepad active')
+        lib.type('I love ImageHorizonLibrary', 'key.enter')
+        lib.type_with_keys_down('shift makes me shout', 'key.shift', pause='0.1', interval=0.05)
+        lib.press_combination('KEY.CTRL', 'a')
+        lib.press_combination('KeY.cTrL', 'c')
+        lib.type('key.Enter')
+        lib.press_combination('Key.ctrl', 'V')
 
 
 

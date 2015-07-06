@@ -7,14 +7,15 @@ class _Keyboard(object):
 
     def __convert_to_valid_special_key(self, key):
         key = key.lower()
-        if not key.startswith('key.'):
+        if key.startswith('key.'):
+            key = key.split('key.', 1)[1]
+        elif len(key) > 1:
             return None
-        key = key.split('key.', 1)[1]
         if key in ag.KEYBOARD_KEYS:
             return key
         return None
 
-    def __normalize(self, keys, fail_fast=True):
+    def __validate(self, keys, fail_fast=True):
         valid_keys = []
         for key in keys:
             key = self.__convert_to_valid_special_key(key)
@@ -27,7 +28,7 @@ class _Keyboard(object):
 
 
     def press(self, *keys):
-        keys = self.__normalize(keys)
+        keys = self.__validate(keys)
         ag.hotkey(*keys)
 
     def type(self, *keys_or_text, **options):
@@ -37,3 +38,21 @@ class _Keyboard(object):
                 ag.press(key, **options)
             else:
                 ag.typewrite(key_or_text, **options)
+
+    def type_with_keys_down(self, text, *keys, **options):
+        pause = float(options.get('pause', 0.0))
+        interval = float(options.get('interval', 0.0))
+        valid_keys = self.__validate(keys)
+        for key in valid_keys:
+            ag.keyDown(key, pause=pause)
+        ag.typewrite(text, pause=pause, interval=interval)
+        for key in valid_keys:
+            ag.keyUp(key, pause=pause)
+
+    def press_combination(self, *keys, **options):
+        keys = self.__validate(keys)
+        ag.hotkey(*keys, **options)
+
+    
+
+
