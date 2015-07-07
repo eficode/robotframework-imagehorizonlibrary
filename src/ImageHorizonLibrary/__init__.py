@@ -5,7 +5,6 @@ class KeyboardException(Exception):
     pass
 
 
-
 try:
     import pyautogui as ag
 except ImportError:
@@ -23,10 +22,16 @@ from recognition import *
 class ImageHorizonLibrary(_Keyboard,
                           _Mouse,
                           _OperatingSystem,
-                          _RecognizeImages):
-    def __init__(self, reference_folder=None):
+                          _RecognizeImages,
+                          _Screenshot):
+
+    def __init__(self, reference_folder=None, screenshot_folder=None,
+                 keyword_on_failure='ImageHorizonLibrary.Take A Screenshot'):
         self.reference_folder = reference_folder
+        self.screenshot_folder = screenshot_folder
+        self.keyword_on_failure = keyword_on_failure
         self.open_applications = {}
+        self.screenshot_counter = 1
         self.is_windows = utils.is_windows()
         self.is_mac = utils.is_mac()
         self.is_linux = utils.is_linux()

@@ -5,13 +5,14 @@ from Tkinter import Tk as TK
 
 import pyautogui as ag
 from robot.api import logger
-
+from robot.libraries.BuiltIn import BuiltIn
 
 class ImageNotFoundException(Exception):
     pass
 
 class ReferenceFolderException(Exception):
     pass
+
 
 class _RecognizeImages(object):
 
@@ -75,7 +76,6 @@ class _RecognizeImages(object):
 
     def _copy(self):
         key = 'Key.command' if self.is_mac else 'Key.ctrl'
-        self._press(key, 'a')
         self._press(key, 'c')
         with self._tk() as clipboard_content:
             return clipboard_content
@@ -101,21 +101,32 @@ class _RecognizeImages(object):
         return self._copy()
 
     def does_exist(self, reference_image):
+        keyword_on_failure = self.keyword_on_failure
+        self.keyword_on_failure = 'BuiltIn.No Operation'
         try:
             return bool(self.locate(reference_image))
         except ImageNotFoundException:
             return False
+        finally:
+            self.keyword_on_failure = keyword_on_failure
+
+    def _run_on_failure(self):
+        try:
+            BuiltIn().run_keyword(self.keyword_on_failure)
+        except:
+            logger.warn('Failed to take a screenshot. '
+                        'Is Robot Framework running?')
 
     def locate(self, reference_image):
         reference_image = self.__normalize(reference_image)
         location = ag.locateCenterOnScreen(reference_image)
         if location == None:
+            self._run_on_failure()
             raise ImageNotFoundException('Reference image "%s" was not found '
                                          'on screen' % reference_image)
         return location
 
     def wait_for(self, image_name, timeout=10):
-        image_name = self.__normalize(image_name)
         stop_time = time() + int(timeout)
         while time() < stop_time:
             try:

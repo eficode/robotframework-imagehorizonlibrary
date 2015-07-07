@@ -1,5 +1,6 @@
 from platform import platform, architecture
 
+
 PLATFORM = platform()
 ARCHITECTURE = architecture()
 
@@ -14,3 +15,4 @@ def is_linux():
 
 def is_java():
     return PLATFORM.lower().startswith('java')
+

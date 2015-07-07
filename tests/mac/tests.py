@@ -5,7 +5,7 @@ from os.path import dirname, join as path_join, realpath
 
 from ImageHorizonLibrary import ImageHorizonLibrary
 
-REFERENCE_IMAGE_FOLDER = path_join(dirname(realpath(__file__)), 
+REFERENCE_IMAGE_FOLDER = path_join(dirname(realpath(__file__)),
                                            'reference_images')
 
 class TestWindowsWithImages(unittest.TestCase):
@@ -37,8 +37,6 @@ class TestWindowsWithImages(unittest.TestCase):
         lib.click_image('button equals')
         lib.wait_for('result 10')
         lib.press_combination('key.command', 'q')
-
-
 
 def suite():
     tests = [
