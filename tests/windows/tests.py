@@ -13,6 +13,12 @@ class TestWindowsWithImages(unittest.TestCase):
         lib = ImageHorizonLibrary()
         self.assertTrue(lib)
 
+    def test_open_application(self):
+        lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
+        lib.open_application('Calc.exe')
+        lib.wait_for('calculator active', '8')
+        lib.press_combination('key.alt', 'key.f4')
+
     def test_notepad_with_images(self):
         lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
 
@@ -25,34 +31,13 @@ class TestWindowsWithImages(unittest.TestCase):
         lib.press_combination('KeY.cTrL', 'c')
         lib.type('key.Enter')
         lib.press_combination('Key.ctrl', 'V')
-
-
-
-        #lib.click_image('Start.png')
-        #lib.typewrite('notepad')
-        #lib.press('enter')
-        #lib.locate_image('Notepad_icon.png')
-        #lib.locate_image('Notepad_untitled.png')
-        #lib.typewrite('echo "I love lib"')
-        #lib.hotkey('ctrl', 'a')
-        #lib.hotkey('ctrl', 'c')
-        #lib.click_image('Start.png')
-        #lib.typewrite('command')
-        #lib.press('enter')
-        #lib.click_image('Command_prompt_administrator.png', 'right')
-        #lib.moveTo(lib.locate_image('Command_prompt_edit.png'))
-        #lib.click_image('Command_prompt_paste.png')
-        #lib.press('enter')
-        #time.sleep(3)
-        #lib.click_image('Command_prompt_administrator.png', 'right')
-        #lib.press('c')
-        #lib.click_image('Notepad_unselected.png')
-        #lib.hotkey('alt', 'f4')
-        #lib.press('right')
-        #lib.press('enter')
+        lib.press_combination('key.alt', 'key.F4')
+        lib.type('key.right', 'key.enter')
 
 def suite():
     tests = [
+                'test_empty_lib_initialization',
+                'test_open_application',
                 'test_notepad_with_images',
             ]
     return unittest.TestSuite(map(TestWindowsWithImages, tests))

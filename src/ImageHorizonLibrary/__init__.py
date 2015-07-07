@@ -14,6 +14,8 @@ except ImportError:
 from interaction import *
 from recognition import *
 
-class ImageHorizonLibrary(_RecognizeImages, _Keyboard):
+class ImageHorizonLibrary(_RecognizeImages, 
+	  					  _Keyboard,
+	  					  _OperatingSystem):
     def __init__(self, reference_folder=None):
         self.reference_folder = reference_folder
