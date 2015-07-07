@@ -1,5 +1,7 @@
-from time import time
+from contextlib import contextmanager
 from os.path import abspath, isdir, isfile, join as path_join
+from time import time
+from Tkinter import Tk as TK
 
 import pyautogui as ag
 from robot.api import logger
@@ -35,6 +37,10 @@ class _RecognizeImages(object):
         ag.click(center_location)
         return center_location
 
+    def _click_to_the_direction_of(self, direction, location, offset,
+                                   clicks, button, interval):
+        raise NotImplementedError('This is defined in the main class.')
+
     def _locate_and_click_direction(self, direction, reference_image, offset,
                                     clicks, button, interval):
         location = self.locate(reference_image)
@@ -60,6 +66,39 @@ class _RecognizeImages(object):
                                     button='left', interval=0.0):
         self._locate_and_click_direction('right', reference_image, offset,
                                          clicks, button, interval)
+
+    @contextmanager
+    def _tk(self):
+        tk = TK()
+        yield tk.clipboard_get()
+        tk.destroy()
+
+    def _copy(self):
+        key = 'Key.command' if self.is_mac else 'Key.ctrl'
+        self._press(key, 'a')
+        self._press(key, 'c')
+        with self._tk() as clipboard_content:
+            return clipboard_content
+
+    def copy_from_the_above_of(self, reference_image, offset):
+        self._locate_and_click_direction('up', reference_image, offset,
+                                         clicks=3, button='left', interval=0.0)
+        return self._copy()
+
+    def copy_from_the_below_of(self, reference_image, offset):
+        self._locate_and_click_direction('down', reference_image, offset,
+                                         clicks=3, button='left', interval=0.0)
+        return self._copy()
+
+    def copy_from_the_left_of(self, reference_image, offset):
+        self._locate_and_click_direction('left', reference_image, offset,
+                                         clicks=3, button='left', interval=0.0)
+        return self._copy()
+
+    def copy_from_the_right_of(self, reference_image, offset):
+        self._locate_and_click_direction('right', reference_image, offset,
+                                         clicks=3, button='left', interval=0.0)
+        return self._copy()
 
     def does_exist(self, reference_image):
         try:

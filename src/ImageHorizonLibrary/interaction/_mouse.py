@@ -7,6 +7,10 @@ class MouseException(Exception):
 
 class _Mouse(object):
 
+    def _click_to_the_direction_of(self, direction, location, offset,
+                                   clicks, button, interval):
+        raise NotImplementedError('This is defined in the main class.')
+
     def click_to_the_above_of(self, location, offset, clicks=1,
                               button='left', interval=0.0):
         self._click_to_the_direction_of(self, 'up', location, offset,

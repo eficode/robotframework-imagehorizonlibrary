@@ -1,7 +1,7 @@
 from _recognize_images import _RecognizeImages
-
-reg = _RecognizeImages()
+from _screenshot import _Screenshot
 
 __all__ = [
-    '_RecognizeImages'
+    '_RecognizeImages',
+    '_Screenshot'
 ]
