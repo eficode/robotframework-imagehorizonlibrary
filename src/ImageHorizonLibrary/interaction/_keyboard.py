@@ -1,7 +1,9 @@
 import pyautogui as ag
 
+
 class KeyboardException(Exception):
     pass
+
 
 class _Keyboard(object):
 
@@ -25,7 +27,6 @@ class _Keyboard(object):
                                         (key, ', '.join(ag.KEYBOARD_KEYS)))
             valid_keys.append(key)
         return valid_keys
-
 
     def press(self, *keys):
         keys = self.__validate(keys)
@@ -53,6 +54,6 @@ class _Keyboard(object):
         keys = self.__validate(keys)
         ag.hotkey(*keys, **options)
 
-    
+
 
 

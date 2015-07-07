@@ -12,13 +12,15 @@ except ImportError:
     raise ImageHorizonLibraryException('Please install Robot Framework')
 
 import utils
+from base import _Shared
 from interaction import *
 from recognition import *
 
-class ImageHorizonLibrary(_RecognizeImages, 
-	  					  _Keyboard,
+class ImageHorizonLibrary(_RecognizeImages,
+                          _Keyboard,
                           _Mouse,
-	  					  _OperatingSystem):
+                          _OperatingSystem,
+                          _Shared):
     def __init__(self, reference_folder=None):
         self.reference_folder = reference_folder
         self.open_applications = {}
