@@ -1,2 +1,5 @@
+output.xml
+report.html
+log.html
 *.pyc
 .DS_Store
