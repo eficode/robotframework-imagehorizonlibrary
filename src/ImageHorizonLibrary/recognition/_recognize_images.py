@@ -29,7 +29,7 @@ class _RecognizeImages(object):
                                          % path)
         return path
 
-    def _locate(self, reference_image):
+    def locate(self, reference_image):
         reference_image = self.__normalize(reference_image)
         location = ag.locateCenterOnScreen(reference_image)
         if location == None:
@@ -37,8 +37,14 @@ class _RecognizeImages(object):
                                          'on screen' % reference_image)
         return location
 
+    def does_exist(self, reference_image):
+        try:
+            return bool(self.locate(reference_image))
+        except ImageNotFoundException:
+            return False
+
     def click_image(self, image_name):
-        center_location = self._locate(image_name)
+        center_location = self.locate(image_name)
         logger.info('Clicking image "%s" in position %s' % (image_name,
                                                             center_location))
         ag.click(center_location)
@@ -49,13 +55,12 @@ class _RecognizeImages(object):
         stop_time = time() + int(timeout)
         while time() < stop_time:
             try:
-                location = self._locate(image_name)
+                location = self.locate(image_name)
+                break
             except ImageNotFoundException:
-                pass
-            else:
-                return location
-        raise ImageNotFoundException('Reference image "%s" was not found '
-                                     'on screen' % image_name)
+                raise
+        logger.info('Found image "%s" in position %s' % (image_name, location))
+        return location
 
 
 

@@ -1,21 +1,25 @@
+import shlex
 import subprocess
-from platform import platform
-
-PLATFORM = platform()
 
 class OSException(Exception):
     pass
 
 class _OperatingSystem(object):
 
-    def open_application(self, app, *args):
-        if PLATFORM.lower().startswith('windows'):
-            subprocess.Popen([app]+list(args))
-        elif PLATFORM.lower().startswith('darwin'):
-            subprocess.Popen(['open', '-a', app, '--args']+list(args))
-        #elif PLATFORM.lower().startswith('linux'):
-        #    subprocess.Popen([app]+list(args))
-        else:
-            raise OSException('Unsupported platform.\
-                              Supported platforms are:\n\
-                              windows, osx') #, linux')
+    def launch_application(self, app, alias=None):
+        if not alias:
+            alias = str(len(self.open_applications))
+        process = subprocess.Popen(shlex.split(app))
+        self.open_applications[alias] = process
+        return alias
+
+    def terminate_application(self, alias=None):
+        if not alias:
+            alias = str(len(self.open_applications)-1)
+        if not alias in self.open_applications:
+            raise OSException('Invalid alias "%s".' % alias)
+        self.open_applications[alias].terminate()
+        self.open_applications.pop(alias)
+
+
+        

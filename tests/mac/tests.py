@@ -14,37 +14,37 @@ class TestWindowsWithImages(unittest.TestCase):
         lib = ImageHorizonLibrary()
         self.assertTrue(lib)
 
-    def test_open_application(self):
+    def test_open_and_close_application(self):
         lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
-        lib.open_application('/Applications/Calculator.app')
+        alias1 = lib.launch_application('open -a /Applications/Calculator.app')
         lib.wait_for('calculator active')
-        lib.press_combination('key.command', 'q')
-        lib.open_application('Calculator')
+        lib.terminate_application(alias1)
+        lib.launch_application('open -a Calculator', alias='My calculator')
         lib.wait_for('calculator active')
-        lib.press_combination('key.command', 'q')
-        lib.open_application('Calculator.app')
+        lib.terminate_application('My calculator')
+        lib.launch_application('open -a Calculator.app')
         lib.wait_for('calculator active')
-        lib.press_combination('key.command', 'q')
-
+        lib.terminate_application()
 
     def test_calculator(self):
         lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
-        lib.open_application('Calculator')
-        lib.type('notepad', 'Key.enter')
-        lib.wait_for('notepad active')
-        lib.type('I love ImageHorizonLibrary', 'key.enter')
-        lib.type_with_keys_down('shift makes me shout', 'key.shift',
-                                pause='0.1', interval=0.05)
-        lib.press_combination('KEY.CTRL', 'a')
-        lib.press_combination('KeY.cTrL', 'c')
-        lib.type('key.Enter')
-        lib.press_combination('Key.ctrl', 'V')
+        lib.launch_application('open -a Calculator')
+        lib.wait_for('calculator active')
+        button_5_pos = lib.click_image('button 5')
+        lib.click_image('button plus')
+        lib.move_to(button_5_pos)
+        lib.click()
+        lib.click_image('button equals')
+        lib.wait_for('result 10')
+        lib.press_combination('key.command', 'q')
+
+
 
 def suite():
     tests = [
                 'test_empty_lib_initialization',
-                'test_open_application',
-                #'test_notepad_with_images',
+                'test_open_and_close_application',
+                'test_calculator',
             ]
     return unittest.TestSuite(map(TestWindowsWithImages, tests))
 
