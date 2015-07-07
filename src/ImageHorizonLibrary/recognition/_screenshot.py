@@ -11,6 +11,7 @@ class _Screenshot(object):
     def _make_up_filename(self):
         try:
             path = BuiltIn().get_variable_value('${SUITE NAME}')
+            path = '%s-screenshot' % path.replace(' ', '')
         except RobotNotRunningError:
             rand_str = ''.join(choice(ascii_lowercase) for _ in range(7))
             path = 'ImageHorizon-%s-screenshot' % rand_str
