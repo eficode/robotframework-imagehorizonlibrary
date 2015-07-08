@@ -121,20 +121,27 @@ class _RecognizeImages(object):
         reference_image = self.__normalize(reference_image)
         location = ag.locateCenterOnScreen(reference_image)
         if location == None:
-            self._run_on_failure()
+            if screenshot_on_failure:
+                self._run_on_failure()
             raise ImageNotFoundException('Reference image "%s" was not found '
                                          'on screen' % reference_image)
         return location
 
-    def wait_for(self, image_name, timeout=10):
+    def wait_for(self, reference_image, timeout=10):
         stop_time = time() + int(timeout)
-        while time() < stop_time:
+        reference_image = self.__normalize(reference_image)
+        location = ag.locateCenterOnScreen(reference_image)
+        while not location:
             try:
-                location = self.locate(image_name)
-                break
+                location = ag.locateCenterOnScreen(reference_image)
             except ImageNotFoundException:
-                raise
-        logger.info('Found image "%s" in position %s' % (image_name, location))
+                if time() < stop_time:
+                    pass
+                else:
+                    self._run_on_failure()
+                    raise
+        logger.info('Found image "%s" in position %s' % (reference_image, 
+                                                         location))
         return location
 
 
