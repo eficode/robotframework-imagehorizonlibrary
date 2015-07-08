@@ -57,7 +57,7 @@ class ImageHorizonLibrary(_Keyboard,
                  button=button, interval=float(interval))
 
     def _convert_to_valid_special_key(self, key):
-        key = key.lower()
+        key = str(key).lower()
         if key.startswith('key.'):
             key = key.split('key.', 1)[1]
         elif len(key) > 1:
