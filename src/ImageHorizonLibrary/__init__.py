@@ -1,13 +1,11 @@
 from contextlib import contextmanager
 from Tkinter import Tk as TK
 
-
 class ImageHorizonLibraryException(Exception):
     pass
 
 class KeyboardException(Exception):
     pass
-
 
 try:
     import pyautogui as ag

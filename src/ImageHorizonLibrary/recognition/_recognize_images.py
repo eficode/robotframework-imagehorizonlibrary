@@ -116,7 +116,7 @@ class _RecognizeImages(object):
                         'Is Robot Framework running?')
 
     def locate(self, reference_image):
-        reference_image = self.__normalize(reference_image)
+        reference_image = str(self.__normalize(reference_image))
         location = ag.locateCenterOnScreen(reference_image)
         if location == None:
             self._run_on_failure()
