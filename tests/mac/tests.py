@@ -38,11 +38,29 @@ class TestWindowsWithImages(unittest.TestCase):
         lib.wait_for('result 10')
         lib.press_combination('key.command', 'q')
 
+    def test_click_to_directions(self):
+        lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
+        lib.launch_application('open -a Calculator')
+        lib.wait_for('calculator active')
+        button_5_pos = lib.locate('button 5')
+        lib.click_to_the_left_of(button_5_pos, '56', clicks='2',
+                             button='left', interval='0.0')
+        lib.click_to_the_above_of(button_5_pos, '56', clicks='2',
+                             button='left', interval='0.0')
+        lib.click_to_the_right_of(button_5_pos, '56', clicks='2',
+                             button='left', interval='0.0')
+        lib.click_to_the_below_of(button_5_pos, '56', clicks='2',
+                             button='left', interval='0.0')
+        lib.wait_for('result 44886622')
+        lib.terminate_application()
+
+
 def suite():
     tests = [
                 'test_empty_lib_initialization',
                 'test_open_and_close_application',
                 'test_calculator',
+                'test_click_to_directions',
             ]
     return unittest.TestSuite(map(TestWindowsWithImages, tests))
 

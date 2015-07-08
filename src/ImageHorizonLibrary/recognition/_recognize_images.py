@@ -1,14 +1,18 @@
-from contextlib import contextmanager
 from os.path import abspath, isdir, isfile, join as path_join
 from time import time
-from Tkinter import Tk as TK
+from contextlib import contextmanager
 
 import pyautogui as ag
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
 
 class ImageNotFoundException(Exception):
-    pass
+    
+    def __init__(self, image_name):
+        self.image_name = image_name
+
+    def __str__(self):
+        return 'Reference image "%s" was not found on screen' % self.image_name
 
 class ReferenceFolderException(Exception):
     pass
@@ -27,8 +31,7 @@ class _RecognizeImages(object):
             path += '.png'
         path = abspath(path_join(self.reference_folder, path))
         if not isfile(path):
-            raise ImageNotFoundException('Reference image "%s" does not exist'
-                                         % path)
+            raise ImageNotFoundException(path)
         return path
 
     def click_image(self, image_name):
@@ -68,49 +71,44 @@ class _RecognizeImages(object):
         self._locate_and_click_direction('right', reference_image, offset,
                                          clicks, button, interval)
 
-    @contextmanager
-    def _tk(self):
-        tk = TK()
-        yield tk.clipboard_get()
-        tk.destroy()
-
-    def _copy(self):
-        key = 'Key.command' if self.is_mac else 'Key.ctrl'
-        self._press(key, 'c')
-        with self._tk() as clipboard_content:
-            return clipboard_content
-
     def copy_from_the_above_of(self, reference_image, offset):
         self._locate_and_click_direction('up', reference_image, offset,
                                          clicks=3, button='left', interval=0.0)
-        return self._copy()
+        return self.copy()
 
     def copy_from_the_below_of(self, reference_image, offset):
         self._locate_and_click_direction('down', reference_image, offset,
                                          clicks=3, button='left', interval=0.0)
-        return self._copy()
+        return self.copy()
 
     def copy_from_the_left_of(self, reference_image, offset):
         self._locate_and_click_direction('left', reference_image, offset,
                                          clicks=3, button='left', interval=0.0)
-        return self._copy()
+        return self.copy()
 
     def copy_from_the_right_of(self, reference_image, offset):
         self._locate_and_click_direction('right', reference_image, offset,
                                          clicks=3, button='left', interval=0.0)
-        return self._copy()
+        return self.copy()
+
+    @contextmanager
+    def _suppress_keyword_on_failure(self):
+        keyword = self.keyword_on_failure
+        self.keyword_on_failure = None
+        yield None
+        self.keyword_on_failure = keyword
+
 
     def does_exist(self, reference_image):
-        keyword_on_failure = self.keyword_on_failure
-        self.keyword_on_failure = 'BuiltIn.No Operation'
-        try:
-            return bool(self.locate(reference_image))
-        except ImageNotFoundException:
-            return False
-        finally:
-            self.keyword_on_failure = keyword_on_failure
+        with self._suppress_keyword_on_failure():
+            try:
+                return bool(self.locate(reference_image))
+            except ImageNotFoundException:
+                return False
 
     def _run_on_failure(self):
+        if not self.keyword_on_failure:
+            return
         try:
             BuiltIn().run_keyword(self.keyword_on_failure)
         except:
@@ -121,25 +119,23 @@ class _RecognizeImages(object):
         reference_image = self.__normalize(reference_image)
         location = ag.locateCenterOnScreen(reference_image)
         if location == None:
-            if screenshot_on_failure:
-                self._run_on_failure()
-            raise ImageNotFoundException('Reference image "%s" was not found '
-                                         'on screen' % reference_image)
+            self._run_on_failure()
+            raise ImageNotFoundException(reference_image)
         return location
 
     def wait_for(self, reference_image, timeout=10):
         stop_time = time() + int(timeout)
-        reference_image = self.__normalize(reference_image)
-        location = ag.locateCenterOnScreen(reference_image)
-        while not location:
-            try:
-                location = ag.locateCenterOnScreen(reference_image)
-            except ImageNotFoundException:
-                if time() < stop_time:
+        location = None
+        with self._suppress_keyword_on_failure():
+            while time() < stop_time:
+                try:
+                    location = self.locate(reference_image)
+                    break
+                except ImageNotFoundException:
                     pass
-                else:
-                    self._run_on_failure()
-                    raise
+        if location == None:
+            self._run_on_failure()
+            raise ImageNotFoundException(reference_image)
         logger.info('Found image "%s" in position %s' % (reference_image, 
                                                          location))
         return location

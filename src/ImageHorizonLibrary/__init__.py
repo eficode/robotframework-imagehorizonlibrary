@@ -1,3 +1,7 @@
+from contextlib import contextmanager
+from Tkinter import Tk as TK
+
+
 class ImageHorizonLibraryException(Exception):
     pass
 
@@ -51,7 +55,8 @@ class ImageHorizonLibrary(_Keyboard,
             x = x + offset
         if direction == 'down':
             y = y + offset
-        ag.click(x, y, clicks=clicks, button=button, interval=interval)
+        ag.click(x, y, clicks=int(clicks), 
+                 button=button, interval=float(interval))
 
     def _convert_to_valid_special_key(self, key):
         key = key.lower()
@@ -73,6 +78,22 @@ class ImageHorizonLibrary(_Keyboard,
                                         (key, ', '.join(ag.KEYBOARD_KEYS)))
             valid_keys.append(key)
         return valid_keys
+
+    @contextmanager
+    def _tk(self):
+        tk = TK()
+        yield tk.clipboard_get()
+        tk.destroy()
+
+    def copy(self):
+        key = 'Key.command' if self.is_mac else 'Key.ctrl'
+        self._press(key, 'c')
+        with self._tk() as clipboard_content:
+            return clipboard_content
+
+    def pause(self):
+        ag.alert(text='Test execution paused.', title='Pause', 
+                 button='Continue')
 
     def _press(self, *keys, **options):
         keys = self._validate_keys(keys)
