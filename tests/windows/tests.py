@@ -15,15 +15,13 @@ class TestWindowsWithImages(unittest.TestCase):
 
     def test_open_application(self):
         lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
-        lib.open_application('Calc.exe')
+        lib.launch_application('Calc.exe')
         lib.wait_for('calculator active', '8')
         lib.press_combination('key.alt', 'key.f4')
 
     def test_notepad_with_images(self):
         lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
-
-        lib.press('Key.WIN')
-        lib.type('notepad', 'Key.enter')
+        lib.type('Key.WIN', 'notepad', 'Key.enter')
         lib.wait_for('notepad active')
         lib.type('I love ImageHorizonLibrary', 'key.enter')
         lib.type_with_keys_down('shift makes me shout', 'key.shift', pause='0.1', interval=0.05)
