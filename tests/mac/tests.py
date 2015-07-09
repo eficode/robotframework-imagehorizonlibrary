@@ -25,6 +25,8 @@ class TestWindowsWithImages(unittest.TestCase):
         lib.launch_application('open -a Calculator.app')
         lib.wait_for('calculator active')
         lib.terminate_application()
+        import time
+        time.sleep(5)
 
     def test_calculator(self):
         lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
@@ -41,6 +43,7 @@ class TestWindowsWithImages(unittest.TestCase):
     def test_click_to_directions(self):
         lib = ImageHorizonLibrary(REFERENCE_IMAGE_FOLDER)
         lib.launch_application('open -a Calculator')
+        lib.move_to(1, 1)
         lib.wait_for('calculator active')
         button_5_pos = lib.locate('button 5')
         lib.click_to_the_left_of(button_5_pos, '56', clicks='2',
