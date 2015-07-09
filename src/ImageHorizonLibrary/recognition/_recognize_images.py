@@ -6,16 +6,7 @@ import pyautogui as ag
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
 
-class ImageNotFoundException(Exception):
-    
-    def __init__(self, image_name):
-        self.image_name = image_name
-
-    def __str__(self):
-        return 'Reference image "%s" was not found on screen' % self.image_name
-
-class ReferenceFolderException(Exception):
-    pass
+from ..errors import ImageNotFoundException, ReferenceFolderException
 
 
 class _RecognizeImages(object):
@@ -136,7 +127,7 @@ class _RecognizeImages(object):
         if location == None:
             self._run_on_failure()
             raise ImageNotFoundException(reference_image)
-        logger.info('Found image "%s" in position %s' % (reference_image, 
+        logger.info('Found image "%s" in position %s' % (reference_image,
                                                          location))
         return location
 

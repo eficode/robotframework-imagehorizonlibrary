@@ -6,8 +6,6 @@ import pyautogui
 class TestKeyboard(TestCase):
     def setUp(self):
         self.mock = MagicMock()
-        for method in ['typewrite', 'press', 'keyDown', 'keyUp']:
-            setattr(self.mock, method, MagicMock())
         self.mock.KEYBOARD_KEYS = pyautogui.KEYBOARD_KEYS
         self.patcher = patch.dict('sys.modules', {'pyautogui' : self.mock})
         self.patcher.start()
@@ -15,7 +13,7 @@ class TestKeyboard(TestCase):
         self.lib = ImageHorizonLibrary()
 
     def tearDown(self):
-        self.mock.clear()
+        self.mock.reset_mock()
         self.patcher.stop()
 
     def test_type_with_text(self):

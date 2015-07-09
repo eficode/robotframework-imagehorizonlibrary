@@ -1,11 +1,6 @@
+from collections import OrderedDict
 from contextlib import contextmanager
 from Tkinter import Tk as TK
-
-class ImageHorizonLibraryException(Exception):
-    pass
-
-class KeyboardException(Exception):
-    pass
 
 try:
     import pyautogui as ag
@@ -18,6 +13,7 @@ except ImportError:
     raise ImageHorizonLibraryException('Please install Robot Framework')
 
 import utils
+from errors import *
 from interaction import *
 from recognition import *
 
@@ -32,7 +28,7 @@ class ImageHorizonLibrary(_Keyboard,
         self.reference_folder = reference_folder
         self.screenshot_folder = screenshot_folder
         self.keyword_on_failure = keyword_on_failure
-        self.open_applications = {}
+        self.open_applications = OrderedDict()
         self.screenshot_counter = 1
         self.is_windows = utils.is_windows()
         self.is_mac = utils.is_mac()
@@ -41,8 +37,7 @@ class ImageHorizonLibrary(_Keyboard,
             raise ImageHorizonLibraryException('Java is not supported.'
                                                ' Please use pybot.')
 
-    def _click_to_the_direction_of(self, direction, location, offset,
-                                   clicks, button, interval):
+    def _get_location(self, direction, location, offset):
         x, y = location
         offset = int(offset)
         if direction == 'left':
@@ -53,8 +48,22 @@ class ImageHorizonLibrary(_Keyboard,
             x = x + offset
         if direction == 'down':
             y = y + offset
-        ag.click(x, y, clicks=int(clicks), 
-                 button=button, interval=float(interval))
+        return x, y
+
+    def _click_to_the_direction_of(self, direction, location, offset,
+                                   clicks, button, interval):
+        x, y = self._get_location(direction, location, offset)
+        try:
+            clicks = int(clicks)
+        except ValueError:
+            raise MouseException('Invalid argument "%s" for `clicks`')
+        if not button in ['left', 'middle', 'right']:
+            raise MouseException('Invalid button "%s" for `button`')
+        try:
+            interval = float(interval)
+        except ValueError:
+            raise MouseException('Invalid argument "%s" for `interval`')
+        ag.click(x, y, clicks=clicks, button=button, interval=interval)
 
     def _convert_to_valid_special_key(self, key):
         key = str(key).lower()
@@ -90,7 +99,7 @@ class ImageHorizonLibrary(_Keyboard,
             return clipboard_content
 
     def pause(self):
-        ag.alert(text='Test execution paused.', title='Pause', 
+        ag.alert(text='Test execution paused.', title='Pause',
                  button='Continue')
 
     def _press(self, *keys, **options):

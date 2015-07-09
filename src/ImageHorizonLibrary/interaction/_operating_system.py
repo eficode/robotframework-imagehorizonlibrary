@@ -1,8 +1,7 @@
 import shlex
 import subprocess
 
-class OSException(Exception):
-    pass
+from ..errors import OSException
 
 class _OperatingSystem(object):
 
@@ -11,7 +10,7 @@ class _OperatingSystem(object):
         Launches an application.
         Executes the string argument 'app' as a subprocess.
         Returns alias, which is a reference to the subprocess
-        and can be passed to terminate application. Alias can be overridden 
+        and can be passed to terminate application. Alias can be overridden
         by providing argument alias.
 
         Warning:
@@ -29,12 +28,15 @@ class _OperatingSystem(object):
         Terminates the last app that was launched with launch_application,
         or the app corresponding to alias if alias is given.
         '''
-        if not alias:
-            alias = str(len(self.open_applications)-1)
-        if not alias in self.open_applications:
+        if alias and not alias in self.open_applications:
             raise OSException('Invalid alias "%s".' % alias)
-        self.open_applications[alias].terminate()
-        self.open_applications.pop(alias)
+        process = self.open_applications.pop(alias, None)
+        if not process:
+            try:
+                _, process = self.open_applications.popitem()
+            except KeyError:
+                raise OSException('`Terminate Application` called without '
+                            '`Launch Application` called first.')
+        process.terminate()
 
 
-        

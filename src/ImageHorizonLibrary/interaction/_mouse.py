@@ -1,9 +1,6 @@
 import pyautogui as ag
 
-
-class MouseException(Exception):
-    pass
-
+from ..errors import MouseException
 
 class _Mouse(object):
 
@@ -65,11 +62,18 @@ class _Mouse(object):
             Move to    25    150
             Move to    (25, 150)
         '''
-        if not len(coordinates) in [1, 2]:
+        if len(coordinates) > 2 or (len(coordinates) == 1 and
+                                    type(coordinates[0]) not in (list, tuple)):
             raise MouseException('Invalid number of coordinates. Please give '
                                  'either (x, y) or x, y.')
         if len(coordinates) == 2:
             coordinates = (coordinates[0], coordinates[1])
+        else:
+            coordinates = coordinates[0]
+        try:
+            coordinates = [int(coord) for coord in coordinates]
+        except ValueError:
+            raise MouseException('Coordinates %s are not integers' % (coordinates,))
         ag.moveTo(*coordinates)
 
     def click(self, button='left'):
