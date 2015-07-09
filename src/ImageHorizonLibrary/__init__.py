@@ -63,6 +63,7 @@ class ImageHorizonLibrary(_Keyboard,
             interval = float(interval)
         except ValueError:
             raise MouseException('Invalid argument "%s" for `interval`')
+
         ag.click(x, y, clicks=clicks, button=button, interval=interval)
 
     def _convert_to_valid_special_key(self, key):
@@ -105,3 +106,12 @@ class ImageHorizonLibrary(_Keyboard,
     def _press(self, *keys, **options):
         keys = self._validate_keys(keys)
         ag.hotkey(*keys, **options)
+
+    def _run_on_failure(self):
+        if not self.keyword_on_failure:
+            return
+        try:
+            BuiltIn().run_keyword(self.keyword_on_failure)
+        except:
+            logger.warn('Failed to take a screenshot. '
+                        'Is Robot Framework running?')

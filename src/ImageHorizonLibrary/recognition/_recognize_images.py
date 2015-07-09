@@ -39,8 +39,8 @@ class _RecognizeImages(object):
     def _locate_and_click_direction(self, direction, reference_image, offset,
                                     clicks, button, interval):
         location = self.locate(reference_image)
-        self._click_to_the_direction_of(self, direction, location, offset,
-                                        clicks, button, interval)
+        self._click_to_the_direction_of(direction, location, offset, clicks,
+                                        button, interval)
 
     def click_to_the_above_of_image(self, reference_image, offset, clicks=1,
                                     button='left', interval=0.0):
@@ -96,15 +96,6 @@ class _RecognizeImages(object):
                 return bool(self.locate(reference_image))
             except ImageNotFoundException:
                 return False
-
-    def _run_on_failure(self):
-        if not self.keyword_on_failure:
-            return
-        try:
-            BuiltIn().run_keyword(self.keyword_on_failure)
-        except:
-            logger.warn('Failed to take a screenshot. '
-                        'Is Robot Framework running?')
 
     def locate(self, reference_image):
         reference_image = str(self.__normalize(reference_image))
