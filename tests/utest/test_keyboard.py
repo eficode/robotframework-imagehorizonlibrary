@@ -19,6 +19,10 @@ class TestKeyboard(TestCase):
     def test_type_with_text(self):
         self.lib.type('hey you fool')
         self.mock.typewrite.assert_called_once_with('hey you fool')
+        self.mock.reset_mock()
+
+        self.lib.type('.')
+        self.mock.press.assert_called_once_with('.')
 
     def test_type_with_text_and_keys(self):
         self.lib.type('I love you', 'Key.ENTER')
@@ -32,11 +36,27 @@ class TestKeyboard(TestCase):
                                                     interval=0.0)
         self.mock.keyUp.assert_called_once_with('shift', pause=0.0)
 
+    def test_type_with_keys_down_with_invalid_keys(self):
+        from ImageHorizonLibrary import KeyboardException
+
+        expected_msg = ', '.join(self.mock.KEYBOARD_KEYS)
+
+        with self.assertRaises(KeyboardException) as e:
+            self.lib.type_with_keys_down('sometext', 'enter')
+            self.assertTrue(e.message.endswith(expected_msg))
+
+        with self.assertRaises(KeyboardException) as e:
+            self.lib.type_with_keys_down('sometext', 'enter')
+            self.assertTrue(e.message.endswith(expected_msg))
+
     def test_press_combination(self):
-        from ImageHorizonLibrary import ImageHorizonLibrary
-        with patch('ImageHorizonLibrary.ImageHorizonLibrary._press',
-                   autospec=True) as press_mock:
-            lib = ImageHorizonLibrary()
-            lib.press_combination('Key.ctrl', 'A')
-            press_mock.assert_called_once_with(lib, 'Key.ctrl', 'A')
+            self.lib.press_combination('Key.ctrl', 'A')
+            self.mock.hotkey.assert_called_once_with('ctrl', 'a')
+            self.mock.reset_mock()
+
+            for key in self.mock.KEYBOARD_KEYS:
+                self.lib.press_combination('Key.%s' % key)
+                self.mock.hotkey.assert_called_once_with(key.lower())
+                self.mock.reset_mock()
+
 

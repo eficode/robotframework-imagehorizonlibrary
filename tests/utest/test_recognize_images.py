@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
 import time
 
 from unittest import TestCase
 from os.path import abspath, dirname, join as path_join
 from mock import call, MagicMock, patch
 
-TESTIMG_DIR = path_join(abspath(dirname(__file__)), 'reference_images')
+CURDIR = abspath(dirname(__file__))
+TESTIMG_DIR = path_join(CURDIR, 'reference_images')
 
 class TestRecognizeImages(TestCase):
     def setUp(self):
@@ -65,7 +67,7 @@ class TestRecognizeImages(TestCase):
             self.assertFalse(self.lib.does_exist('doesentmatter'))
             self.assertEquals(len(run_on_failure.mock_calls), 0)
 
-    def test_happy_path_wait_for(self):
+    def test_wait_for_happy_path(self):
         from ImageHorizonLibrary import ImageNotFoundException
         run_on_failure = MagicMock()
 
@@ -74,7 +76,7 @@ class TestRecognizeImages(TestCase):
             self.lib.wait_for('doesentmatter', timeout=1)
             self.assertEquals(len(run_on_failure.mock_calls), 0)
 
-    def test_negative_path_wait_for(self):
+    def test_wait_for_negative_path(self):
         from ImageHorizonLibrary import ImageNotFoundException
         run_on_failure = MagicMock()
 
@@ -83,10 +85,65 @@ class TestRecognizeImages(TestCase):
              patch.object(self.lib, '_run_on_failure', run_on_failure):
 
             start = time.time()
-            self.lib.wait_for('doesentmatter', timeout=u'1')
+            self.lib.wait_for('notfound', timeout=u'1')
             stop = time.time()
 
             run_on_failure.assert_called_once_with()
             # check that timeout given as string works and it does not use
             # default timeout
             self.assertLess(stop-start, 10)
+
+    def _verify_path_works(self, image_name, expected):
+        self.lib.locate(image_name)
+        expected_path = path_join(TESTIMG_DIR, expected)
+        self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
+        self.mock.reset_mock()
+
+    def test_locate(self):
+        from ImageHorizonLibrary import ImageNotFoundException
+
+        for image_name in ('my_picture.png', 'my picture.png', 'MY PICTURE',
+                           'mY_PiCtURe'):
+            self._verify_path_works(image_name, 'my_picture.png')
+
+        self.mock.locateCenterOnScreen.return_value = None
+        run_on_failure = MagicMock()
+        with self.assertRaises(ImageNotFoundException), \
+             patch.object(self.lib, '_run_on_failure', run_on_failure):
+            self.lib.locate('nonexistent')
+            run_on_failure.assert_called_once_with()
+
+    def test_locate_with_valid_reference_folder(self):
+        for ref, img in (('reference_images', 'my_picture.png'),
+                         ('./reference_images', 'my picture.png'),
+                         ('../../tests/utest/reference_images', 'MY PICTURE')):
+
+            ref = path_join(CURDIR, ref)
+            self.lib.reference_folder = ref
+            self._verify_path_works(img, 'my_picture.png')
+
+        self.lib.reference_folder = path_join(CURDIR, 'symbolic_link')
+        self.lib.locate('mY_PiCtURe')
+        expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
+        self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
+        self.mock.reset_mock()
+
+    def test_locate_with_invalid_reference_folder(self):
+        from ImageHorizonLibrary import ReferenceFolderException
+
+        for invalid_folder in (None, 123, 'nonexistent', u'nönëxistänt'):
+            self.lib.reference_folder = invalid_folder
+            with self.assertRaises(ReferenceFolderException):
+                self.lib.locate('doesentmatter')
+
+        if not self.lib.is_windows:
+            self.lib.reference_folder = TESTIMG_DIR.replace('/', '\\')
+            with self.assertRaises(ReferenceFolderException):
+                self.lib.locate('doesentmatter')
+
+    def test_locate_with_invalid_image_name(self):
+        from ImageHorizonLibrary import InvalidImageException
+
+        for invalid_image_name in (None, 123, 1.2, True, self.lib.__class__()):
+            with self.assertRaises(InvalidImageException):
+                self.lib.locate(invalid_image_name)

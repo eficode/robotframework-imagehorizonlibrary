@@ -10,6 +10,10 @@ class ImageNotFoundException(Exception):
         return 'Reference image "%s" was not found on screen' % self.image_name
 
 
+class InvalidImageException(Exception):
+    pass
+
+
 class KeyboardException(Exception):
     pass
 

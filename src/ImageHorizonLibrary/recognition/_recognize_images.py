@@ -6,7 +6,8 @@ import pyautogui as ag
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
 
-from ..errors import ImageNotFoundException, ReferenceFolderException
+from ..errors import ImageNotFoundException, InvalidImageException
+from ..errors import ReferenceFolderException
 
 
 class _RecognizeImages(object):
@@ -17,7 +18,9 @@ class _RecognizeImages(object):
             not isdir(self.reference_folder)):
             raise ReferenceFolderException('Reference folder is invalid: "%s"'
                                            % self.reference_folder)
-        path = path.replace(' ', '_').lower()
+        if (not path or not isinstance(path, basestring)):
+            raise InvalidImageException('"%s" is invalid image name.' % path)
+        path = path.lower().replace(' ', '_')
         if not path.endswith('.png'):
             path += '.png'
         path = abspath(path_join(self.reference_folder, path))

@@ -17,6 +17,7 @@ from errors import *
 from interaction import *
 from recognition import *
 
+
 class ImageHorizonLibrary(_Keyboard,
                           _Mouse,
                           _OperatingSystem,
@@ -79,12 +80,12 @@ class ImageHorizonLibrary(_Keyboard,
     def _validate_keys(self, keys, fail_fast=True):
         valid_keys = []
         for key in keys:
-            key = self._convert_to_valid_special_key(key)
-            if not key:
+            valid_key = self._convert_to_valid_special_key(key)
+            if not valid_key:
                 raise KeyboardException('Invalid keyboard key "%s", valid '
                                         'keyboard keys are:\n%r' %
                                         (key, ', '.join(ag.KEYBOARD_KEYS)))
-            valid_keys.append(key)
+            valid_keys.append(valid_key)
         return valid_keys
 
     @contextmanager
