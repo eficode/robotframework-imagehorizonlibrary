@@ -1,4 +1,4 @@
-class ImageHorizonLibraryException(Exception):
+class ImageHorizonLibraryError(ImportError):
     pass
 
 

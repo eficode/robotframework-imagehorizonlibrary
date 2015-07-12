@@ -5,13 +5,13 @@ from Tkinter import Tk as TK
 try:
     import pyautogui as ag
 except ImportError:
-    raise ImageHorizonLibraryException('Please install pyautogui')
+    raise ImageHorizonLibraryError('Please install pyautogui')
 
 try:
     from robot.api import logger as LOGGER
     from robot.libraries.BuiltIn import BuiltIn
 except ImportError:
-    raise ImageHorizonLibraryException('Please install Robot Framework')
+    raise ImageHorizonLibraryError('Please install robotframework')
 
 import utils
 from errors import *
