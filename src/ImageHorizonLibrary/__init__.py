@@ -8,7 +8,8 @@ except ImportError:
     raise ImageHorizonLibraryException('Please install pyautogui')
 
 try:
-    import robot
+    from robot.api import logger as LOGGER
+    from robot.libraries.BuiltIn import BuiltIn
 except ImportError:
     raise ImageHorizonLibraryException('Please install Robot Framework')
 
@@ -16,13 +17,18 @@ import utils
 from errors import *
 from interaction import *
 from recognition import *
+from version import VERSION
 
+__version__ = VERSION
 
 class ImageHorizonLibrary(_Keyboard,
                           _Mouse,
                           _OperatingSystem,
                           _RecognizeImages,
                           _Screenshot):
+
+    ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
+    ROBOT_LIBRARY_VERSION = VERSION
 
     def __init__(self, reference_folder=None, screenshot_folder=None,
                  keyword_on_failure='ImageHorizonLibrary.Take A Screenshot'):
@@ -65,6 +71,9 @@ class ImageHorizonLibrary(_Keyboard,
         except ValueError:
             raise MouseException('Invalid argument "%s" for `interval`')
 
+        LOGGER.info('Clicking %d time(s) at (%d, %d) with '
+                    '%s mouse button at interval %f' % (clicks, x, y,
+                                                        button, interval))
         ag.click(x, y, clicks=clicks, button=button, interval=interval)
 
     def _convert_to_valid_special_key(self, key):
@@ -113,6 +122,7 @@ class ImageHorizonLibrary(_Keyboard,
             return
         try:
             BuiltIn().run_keyword(self.keyword_on_failure)
-        except:
-            logger.warn('Failed to take a screenshot. '
+        except Exception as e:
+            LOGGER.debug(e)
+            LOGGER.warn('Failed to take a screenshot. '
                         'Is Robot Framework running?')

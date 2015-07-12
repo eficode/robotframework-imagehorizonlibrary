@@ -1,10 +1,20 @@
 import pyautogui as ag
 
 class _Keyboard(object):
+    def press_combination(self, *keys, **options):
+        '''
+        Press combination of keys, hold until the last one is pressed.
+        Examples:
+            Press combination    key.control    key.alt    key.delete
+            Press combination    key.control    c
+            Press combination    key.alt    key.f4
+        '''
+        self._press(*keys, **options)
 
     def type(self, *keys_or_text, **options):
-        ''' 
-        Type a sequence of text and/or special keys 
+        '''Type a sequence of text and/or special keys
+
+
         Examples:
             Type    separate    key.enter    by lineswap
             Type    Submit this with enter    key.enter
@@ -33,12 +43,3 @@ class _Keyboard(object):
         for key in valid_keys:
             ag.keyUp(key, pause=pause)
 
-    def press_combination(self, *keys, **options):
-        '''
-        Press combination of keys, hold until the last one is pressed.
-        Examples:
-            Press combination    key.control    key.alt    key.delete
-            Press combination    key.control    c
-            Press combination    key.alt    key.f4
-        '''
-        self._press(*keys, **options)

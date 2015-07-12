@@ -1,7 +1,9 @@
 from setuptools import setup
 
+execfile('src/ImageHorizonLibrary/version.py')
+
 setup(name='ImageHorizonLibrary',
-      version='0.1',
+      version=VERSION,
       description='ImageHorizonLibrary',
       author='Eficode Oy',
       author_email='info@eficode.com',
@@ -12,7 +14,7 @@ setup(name='ImageHorizonLibrary',
         'pyautogui>=0.9.30'
       ],
       packages=[
-        'ImageHorizonLibrary', 
+        'ImageHorizonLibrary',
         'ImageHorizonLibrary.interaction',
         'ImageHorizonLibrary.recognition',
       ],

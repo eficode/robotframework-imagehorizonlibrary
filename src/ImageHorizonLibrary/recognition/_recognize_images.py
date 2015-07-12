@@ -3,8 +3,7 @@ from time import time
 from contextlib import contextmanager
 
 import pyautogui as ag
-from robot.api import logger
-from robot.libraries.BuiltIn import BuiltIn
+from robot.api import logger as LOGGER
 
 from ..errors import ImageNotFoundException, InvalidImageException
 from ..errors import ReferenceFolderException
@@ -30,7 +29,7 @@ class _RecognizeImages(object):
 
     def click_image(self, image_name):
         center_location = self.locate(image_name)
-        logger.info('Clicking image "%s" in position %s' % (image_name,
+        LOGGER.info('Clicking image "%s" in position %s' % (image_name,
                                                             center_location))
         ag.click(center_location)
         return center_location
@@ -92,21 +91,28 @@ class _RecognizeImages(object):
         yield None
         self.keyword_on_failure = keyword
 
+    def _locate(self, reference_image, log_it=True):
+        reference_image = str(self.__normalize(reference_image))
+        location = ag.locateCenterOnScreen(reference_image)
+        if location == None:
+            if log_it:
+                LOGGER.info('Image "%s" was not found '
+                            'on screen.' % reference_image)
+            self._run_on_failure()
+            raise ImageNotFoundException(reference_image)
+        if log_it:
+            LOGGER.info('Image "%s" found at %r' % (reference_image, location))
+        return location
 
     def does_exist(self, reference_image):
         with self._suppress_keyword_on_failure():
             try:
-                return bool(self.locate(reference_image))
+                return bool(self._locate(reference_image, log_it=False))
             except ImageNotFoundException:
                 return False
 
     def locate(self, reference_image):
-        reference_image = str(self.__normalize(reference_image))
-        location = ag.locateCenterOnScreen(reference_image)
-        if location == None:
-            self._run_on_failure()
-            raise ImageNotFoundException(reference_image)
-        return location
+        self._locate(reference_image)
 
     def wait_for(self, reference_image, timeout=10):
         stop_time = time() + int(timeout)
@@ -114,20 +120,12 @@ class _RecognizeImages(object):
         with self._suppress_keyword_on_failure():
             while time() < stop_time:
                 try:
-                    location = self.locate(reference_image)
+                    location = self._locate(reference_image, log_it=False)
                     break
                 except ImageNotFoundException:
                     pass
         if location == None:
             self._run_on_failure()
             raise ImageNotFoundException(reference_image)
-        logger.info('Found image "%s" in position %s' % (reference_image,
-                                                         location))
+        LOGGER.info('Image "%s" found at %r' % (reference_image, location))
         return location
-
-
-
-
-
-
-
