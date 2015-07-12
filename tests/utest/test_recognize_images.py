@@ -16,6 +16,7 @@ class TestRecognizeImages(TestCase):
         from ImageHorizonLibrary import ImageHorizonLibrary
         self.lib = ImageHorizonLibrary(reference_folder=TESTIMG_DIR)
         self.locate = 'ImageHorizonLibrary.ImageHorizonLibrary.locate'
+        self._locate = 'ImageHorizonLibrary.ImageHorizonLibrary._locate'
 
     def tearDown(self):
         self.mock.reset_mock()
@@ -58,7 +59,7 @@ class TestRecognizeImages(TestCase):
     def test_does_exist(self):
         from ImageHorizonLibrary import ImageNotFoundException
 
-        with patch(self.locate, return_value=(0,0)):
+        with patch(self._locate, return_value=(0,0)):
             self.assertTrue(self.lib.does_exist('doesentmatter'))
 
         run_on_failure = MagicMock()
@@ -71,7 +72,7 @@ class TestRecognizeImages(TestCase):
         from ImageHorizonLibrary import ImageNotFoundException
         run_on_failure = MagicMock()
 
-        with patch(self.locate, return_value=(0,0)), \
+        with patch(self._locate, return_value=(0,0)), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
             self.lib.wait_for('doesentmatter', timeout=1)
             self.assertEquals(len(run_on_failure.mock_calls), 0)

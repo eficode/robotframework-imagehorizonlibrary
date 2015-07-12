@@ -1,5 +1,6 @@
 *** Settings ***
-Library    ImageHorizonLibrary    tests/mac/reference_images
+Library    ImageHorizonLibrary    .${/}reference_images${/}mac
+Force Tags    mac
 
 *** Test Cases ***
 Test empty lib initialization
@@ -33,13 +34,13 @@ Test click to directions
     Wait for    calculator active
     Clear calculator
     ${button_5_pos}=    locate    button 5
-    Click to the left of    ${button_5_pos}    56     clicks=2    button=left    
+    Click to the left of    ${button_5_pos}    56     clicks=2    button=left
     ...    interval=0.0
-    Click to the above of    ${button_5_pos}    56     clicks=2    button=left    
+    Click to the above of    ${button_5_pos}    56     clicks=2    button=left
     ...    interval=0.0
-    Click to the right of    ${button_5_pos}    56     clicks=2    button=left    
+    Click to the right of    ${button_5_pos}    56     clicks=2    button=left
     ...    interval=0.0
-    Click to the below of    ${button_5_pos}    56     clicks=2    button=left    
+    Click to the below of    ${button_5_pos}    56     clicks=2    button=left
     ...    interval=0.0
     Wait for    result 44886622
     Terminate application
@@ -47,4 +48,4 @@ Test click to directions
 *** Keywords ***
 Clear calculator
     Type    c
-    
+
