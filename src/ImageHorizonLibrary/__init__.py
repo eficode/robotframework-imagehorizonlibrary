@@ -97,6 +97,10 @@ class ImageHorizonLibrary(_Keyboard,
             valid_keys.append(valid_key)
         return valid_keys
 
+    def _press(self, *keys, **options):
+        keys = self._validate_keys(keys)
+        ag.hotkey(*keys, **options)
+
     @contextmanager
     def _tk(self):
         tk = TK()
@@ -112,10 +116,6 @@ class ImageHorizonLibrary(_Keyboard,
     def pause(self):
         ag.alert(text='Test execution paused.', title='Pause',
                  button='Continue')
-
-    def _press(self, *keys, **options):
-        keys = self._validate_keys(keys)
-        ag.hotkey(*keys, **options)
 
     def _run_on_failure(self):
         if not self.keyword_on_failure:
