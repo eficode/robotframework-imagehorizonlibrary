@@ -19,6 +19,8 @@ Install [XCode](https://developer.apple.com/xcode/downloads/)
 
 ## Running tests
 
+Install [mock](http://www.voidspace.org.uk/python/mock/)
+
     cd tests/utest
     ./run_tests.py
 
