@@ -13,8 +13,8 @@ if __name__ == '__main__':
     if is_windows():
         tag = 'windows'
     elif is_mac():
-    tag = 'mac'
-        elif is_linux():
-    tag = 'linux'
+        tag = 'mac'
+    elif is_linux():
+        tag = 'linux'
 
 run_cli(sys.argv[1:] + ['--include', tag, '.'])
