@@ -2,12 +2,13 @@
 
 import sys
 
-from os.path import join as path_join
+from os.path import abspath, dirname, join as path_join
 
 from robot import run_cli
 
 if __name__ == '__main__':
-    sys.path.insert(1, path_join('..', '..', 'src'))
+    curdir = abspath(dirname(__file__))
+    sys.path.insert(1, abspath(path_join(curdir, '..', '..', 'src')))
     from ImageHorizonLibrary.utils import *
 
     if is_windows():

@@ -1,5 +1,5 @@
 *** Settings ***
-Library    ImageHorizonLibrary    .${/}reference_images${/}win    screenshot_folder=%{TMP}
+Library    ImageHorizonLibrary    ${CURDIR}${/}reference_images${/}win    screenshot_folder=${TEMPDIR}
 Force Tags    windows
 
 *** Test Cases ***
