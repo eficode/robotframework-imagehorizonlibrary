@@ -112,7 +112,7 @@ class _RecognizeImages(object):
                 return False
 
     def locate(self, reference_image):
-        self._locate(reference_image)
+        return self._locate(reference_image)
 
     def wait_for(self, reference_image, timeout=10):
         stop_time = time() + int(timeout)
