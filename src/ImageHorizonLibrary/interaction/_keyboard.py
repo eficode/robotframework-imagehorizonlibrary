@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pyautogui as ag
 
 class _Keyboard(object):

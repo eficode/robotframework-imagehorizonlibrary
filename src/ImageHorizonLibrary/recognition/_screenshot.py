@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from os.path import abspath, join as path_join
 from random import choice
 from string import ascii_lowercase

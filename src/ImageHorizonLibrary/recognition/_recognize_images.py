@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from os.path import abspath, isdir, isfile, join as path_join
 from time import time
 from contextlib import contextmanager

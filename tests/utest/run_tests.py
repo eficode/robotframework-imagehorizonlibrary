@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import sys
 import unittest
 from os.path import abspath, dirname, join as path_join

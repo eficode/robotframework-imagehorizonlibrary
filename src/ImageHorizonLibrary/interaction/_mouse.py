@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pyautogui as ag
 
 from ..errors import MouseException
