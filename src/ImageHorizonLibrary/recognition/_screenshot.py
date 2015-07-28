@@ -6,6 +6,8 @@ import pyautogui as ag
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 from robot.api import logger as LOGGER
 
+from ..errors import ScreenshotFolderException
+
 class _Screenshot(object):
     def _make_up_filename(self):
         try:
@@ -20,6 +22,9 @@ class _Screenshot(object):
 
     def take_a_screenshot(self):
         target_dir = self.screenshot_folder if self.screenshot_folder else ''
+        if not isinstance(target_dir, basestring):
+            raise ScreenshotFolderException('Screenshot folder is invalid: '
+                                            '"%s"' % target_dir)
         path = self._make_up_filename()
         path = abspath(path_join(target_dir, path))
         LOGGER.info('Screenshot taken: {0}<br/><img src="{0}" '

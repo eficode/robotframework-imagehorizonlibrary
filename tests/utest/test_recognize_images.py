@@ -116,7 +116,7 @@ class TestRecognizeImages(TestCase):
 
     def test_locate_with_valid_reference_folder(self):
         for ref, img in (('reference_images', 'my_picture.png'),
-                         ('./reference_images', 'my picture.png'),
+                         (u'./reference_images', 'my picture.png'),
                          ('../../tests/utest/reference_images', 'MY PICTURE')):
 
             ref = path_join(CURDIR, ref)

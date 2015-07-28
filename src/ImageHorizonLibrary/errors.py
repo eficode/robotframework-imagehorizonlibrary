@@ -29,5 +29,6 @@ class OSException(Exception):
 class ReferenceFolderException(Exception):
     pass
 
-
+class ScreenshotFolderException(Exception):
+    pass
 
