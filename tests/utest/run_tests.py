@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-import unittest
+
 from os.path import abspath, dirname, join as path_join
+from unittest import TestLoader, TextTestRunner
 
 directory = dirname(__file__)
 path = path_join(abspath(path_join(directory, '..', '..', 'src')))
@@ -13,5 +14,10 @@ try:
 except ImportError:
     raise ImportError('Please install mock')
 
-unittest.TextTestRunner().run(unittest.TestLoader().discover(directory))
+if len(sys.argv) > 1 and 'verbosity=' in sys.argv[1]:
+    verbosity = int(sys.argv[1].split('=')[1])
+else:
+    verbosity = 1
+
+TextTestRunner(verbosity=verbosity).run(TestLoader().discover(directory))
 

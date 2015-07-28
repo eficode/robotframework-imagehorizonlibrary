@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 from contextlib import contextmanager
-from Tkinter import Tk as TK
+
+from errors import *    # import errors before checking dependencies!
 
 try:
     import pyautogui as ag
@@ -14,8 +15,13 @@ try:
 except ImportError:
     raise ImageHorizonLibraryError('Please install robotframework')
 
+try:
+    from Tkinter import Tk as TK
+except ImportError:
+    raise ImageHorizonLibraryError('Java is not supported platform. '
+                                   'Please use Python')
+
 import utils
-from errors import *
 from interaction import *
 from recognition import *
 from version import VERSION
@@ -41,9 +47,6 @@ class ImageHorizonLibrary(_Keyboard,
         self.is_windows = utils.is_windows()
         self.is_mac = utils.is_mac()
         self.is_linux = utils.is_linux()
-        if utils.is_java():
-            raise ImageHorizonLibraryException('Java is not supported.'
-                                               ' Please use pybot.')
 
     def _get_location(self, direction, location, offset):
         x, y = location

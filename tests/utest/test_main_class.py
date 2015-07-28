@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
+import os
+import shlex
+
+from os.path import abspath, dirname, join as path_join
+from subprocess import PIPE, Popen
+from unittest import SkipTest, TestCase
+from warnings import warn
 
 from mock import MagicMock, patch
+
+
+SRCDIR = path_join(abspath(dirname(__file__)), '..', '..', 'src')
 
 class TestMainClass(TestCase):
     def setUp(self):
@@ -39,5 +48,21 @@ class TestMainClass(TestCase):
         # on windows, mock.assert_any_call() seems to fail for some reason?
         self.assertEquals(len(self.pyautogui_mock.mock_calls), 1)
 
+    def _get_cmd(self, jython, path):
+        cmd = ('JYTHONPATH={path} {jython} -c '
+               '"from ImageHorizonLibrary import ImageHorizonLibrary"')
+        return cmd.format(jython=jython, path=path)
 
+    def test_importing_fails_on_java(self):
+        # This test checks that importing fails when any of the dependencies
+        # are not installed or, at least, importing Tkinter fails because
+        # it's not supported on Jython.
+        if not 'JYTHON_HOME' in os.environ:
+            #warn()
+            self.skipTest('%s() was not run because JYTHON_HOME was not set.' % self._testMethodName)
+        jython_cmd = path_join(os.environ['JYTHON_HOME'], 'bin', 'jython')
+        cmd = self._get_cmd(jython_cmd, SRCDIR)
+        p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+        _, stderr = p.communicate()
+        self.assertNotEqual(stderr, '')
 
