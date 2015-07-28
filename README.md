@@ -1,6 +1,6 @@
-# Image Horizon Library
+# ImageHorizonLibrary
 
-This is the Robot Framework library to run [pyautogui](https://github.com/asweigart/pyautogui).
+This library provides the facilities to automate GUIs based on image recognition similar to Sikuli. This library wraps [pyautogui](https://github.com/asweigart/pyautogui) to achieve this.
 
 ## Prerequisites
 
@@ -21,9 +21,9 @@ Install [XCode](https://developer.apple.com/xcode/downloads/)
 
 Install [mock](http://www.voidspace.org.uk/python/mock/)
 
-    cd tests/utest
-    ./run_tests.py
+    python tests/utest/run_tests.py
 
-## Running
+and
 
-    python -c "import pykuli; print pykuli.demonstrate()"
+    python tests/atest/run_tests.py
+
