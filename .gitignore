@@ -4,3 +4,5 @@ report.html
 log.html
 *.pyc
 *-screenshot-*.png
+*\$py.class
+*.swp
