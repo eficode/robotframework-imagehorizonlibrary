@@ -17,17 +17,33 @@ This Robot Framework library provides the facilities to automate GUIs based on i
 
 If you have pip, installation is straightforward
 
-    pip install pyautogui robotframework robotframework-imagehorizonlibrary
+    pip install robotframework-imagehorizonlibrary
+
+This will automatically install dependencies as well as their dependencies.
 
 ### OSX
 
-Install [XCode](https://developer.apple.com/xcode/downloads/)
+You additionally need to install these for `pyautogui`:
 
     pip install pyobjc-core pyobjc
 
+For these, you need to install [XCode](https://developer.apple.com/xcode/downloads/)
+
 ### Linux
 
+You additionally need to install these for `pyautogui`:
+
     sudo apt-get install python-dev python-xlib
+
+You might also need, depending on your distribution, to install:
+
+    sudo apt-get install python-tk
+
+If you are using virtualenv, you must install `python-xlib` manually for `pyautogui`.
+
+- [Fetch the source distribution](http://sourceforge.net/projects/python-xlib/files/)
+- Install with:
+     pip install python-xlib-<latest version>.tar.gz
 
 ## Running tests
 
