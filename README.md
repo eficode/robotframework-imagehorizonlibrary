@@ -6,7 +6,7 @@ This Robot Framework library provides the facilities to automate GUIs based on i
 
 - [Python 2.7+](http://python.org) (unfortunately not 3.x)
 - [pip](https://pypi.python.org/pypi/pip) for easy installation
-- [pyautogui](https://github.com/asweigart/pyautogui) and it's prerequisites
+- [pyautogui](https://github.com/asweigart/pyautogui) and [it's prerequisites](https://pyautogui.readthedocs.org/en/latest/install.html)
 - [Robot Framework](http://robotframework.org)
 
 ### Development
