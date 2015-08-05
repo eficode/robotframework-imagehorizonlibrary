@@ -7,13 +7,15 @@ from errors import *    # import errors before checking dependencies!
 try:
     import pyautogui as ag
 except ImportError:
-    raise ImageHorizonLibraryError('Please install pyautogui')
+    raise ImageHorizonLibraryError('There is something wrong pyautogui or '
+                                   'it is not installed.')
 
 try:
     from robot.api import logger as LOGGER
     from robot.libraries.BuiltIn import BuiltIn
 except ImportError:
-    raise ImageHorizonLibraryError('Please install robotframework')
+    raise ImageHorizonLibraryError('There is something wrong with '
+                                   'Robot Framework or it is not installed.')
 
 try:
     from Tkinter import Tk as TK
