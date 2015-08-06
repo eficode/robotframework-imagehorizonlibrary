@@ -45,8 +45,8 @@ class TestMainClass(TestCase):
 
     def test_alert(self):
         self.lib.pause()
-        # on windows, mock.assert_any_call() seems to fail for some reason?
-        self.assertEquals(len(self.pyautogui_mock.mock_calls), 1)
+        self.pyautogui_mock.alert.assert_called_once_with(
+            button='Continue', text='Test execution paused.', title='Pause')
 
     def _get_cmd(self, jython, path):
         cmd = ('JYTHONPATH={path} {jython} -c '
@@ -58,7 +58,6 @@ class TestMainClass(TestCase):
         # are not installed or, at least, importing Tkinter fails because
         # it's not supported on Jython.
         if not 'JYTHON_HOME' in os.environ:
-            #warn()
             self.skipTest('%s() was not run because JYTHON_HOME was not set.' % self._testMethodName)
         jython_cmd = path_join(os.environ['JYTHON_HOME'], 'bin', 'jython')
         cmd = self._get_cmd(jython_cmd, SRCDIR)
