@@ -9,6 +9,10 @@ This Robot Framework library provides the facilities to automate GUIs based on i
 - [pyautogui](https://github.com/asweigart/pyautogui) and [it's prerequisites](https://pyautogui.readthedocs.org/en/latest/install.html)
 - [Robot Framework](http://robotframework.org)
 
+On OS X, Retina display might [double all coordinates](https://github.com/asweigart/pyautogui/issues/33) from what they are suppose to be. Unfortunately you need to work around this problem yourself.
+
+On Ubuntu, you need to take [special measures](https://pyautogui.readthedocs.org/en/latest/screenshot.html#special-notes-about-ubuntu) to make the screenshot functionality to work correctly. The keyboard functions might not work on Ubuntu when run in VirtualBox on Windows.
+
 ### Development
 
 - [mock](http://www.voidspace.org.uk/python/mock/)
