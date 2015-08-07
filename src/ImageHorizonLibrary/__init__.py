@@ -93,10 +93,10 @@ class ImageHorizonLibrary(_Keyboard,
                  keyword_on_failure='ImageHorizonLibrary.Take A Screenshot'):
         '''ImageHorizonLibrary can be imported with several options.
 
-        ``reference_folder`` is path to the folder where all reference images are
-        stored. It must be a valid absolute or relative path. As the library is
-        suite-specific (ie. new instance is created for every suite), different
-        suites can have different folders for it's reference images.
+        ``reference_folder`` is path to the folder where all reference images
+        arestored. It must be a _valid absolute path_. As the library
+        is suite-specific (ie. new instance is created for every suite),
+        different suites can have different folders for it's reference images.
 
         ``screenshot_folder`` is path to the folder where screenshots are saved.
         If not given, screenshots are saved to the current working directory.
