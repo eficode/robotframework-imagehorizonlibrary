@@ -11,57 +11,70 @@ class _Mouse(object):
 
     def click_to_the_above_of(self, location, offset, clicks=1,
                               button='left', interval=0.0):
-        '''
-        Click (offset) abowe a known location.
+        '''Clicks above of given location by given offset.
+
+        ``location`` can be any Python sequence type (tuple, list, etc.) that
+        represents coordinates on the screen ie. have an x-value and y-value.
+        Locating-related keywords return location you can use with this keyword.
+
+        ``offset`` is the number of pixels from the specified ``location``.
+
+        ``clicks`` is how many times the mouse button is clicked.
+
+        See `Click` for documentation for valid buttons.
+
         Example:
-            ${image_location} = locate(my image)
-            Click to the abowe of    ${image_location}    50
+
+        | ${image location}=    | Locate             | my image |        |
+        | Click To The Above Of | ${image location}  | 50       |        |
+        | @{coordinates}=       | Create List        | ${600}   | ${500} |
+        | Click To The Above Of | ${coordinates}     | 100      |        |
         '''
         self._click_to_the_direction_of('up', location, offset,
                                         clicks, button, interval)
 
     def click_to_the_below_of(self, location, offset, clicks=1,
                               button='left', interval=0.0):
-        '''
-        Click (offset) under a known location.
-        Example:
-            ${image_location} = locate(my image)
-            Click to the below of    ${image_location}    50
+        '''Clicks below of given location by given offset.
+
+        See argument documentation in `Click To The Above Of`.
         '''
         self._click_to_the_direction_of('down', location, offset,
                                         clicks, button, interval)
 
     def click_to_the_left_of(self, location, offset, clicks=1,
                              button='left', interval=0.0):
-        '''
-        Click (offset) to the left from known location.
-        Example:
-            ${image_location} = locate(my image)
-            Click to the left of    ${image_location}    50
+        '''Clicks left of given location by given offset.
+
+        See argument documentation in `Click To The Above Of`.
         '''
         self._click_to_the_direction_of('left', location, offset,
                                         clicks, button, interval)
 
     def click_to_the_right_of(self, location, offset, clicks=1,
                               button='left', interval=0.0):
-        '''
-        Click (offset) to the right from known location.
-        Example:
-            ${image_location} = locate(my image)
-            Click to the right of    ${image_location}    50
+        '''Clicks right of given location by given offset.
+
+        See argument documentation in `Click To The Above Of`.
         '''
         self._click_to_the_direction_of('right', location, offset,
                                         clicks, button, interval)
 
     def move_to(self, *coordinates):
-        '''
-        Moves the mouse pointer to an absolute location (x, y).
-        Takes either a tuple (x, y) or separate values x and y.
-        X grows from left to right.
-        Y grows from top to bottom.
-        Examples:
-            Move to    25    150
-            Move to    (25, 150)
+        '''Moves the mouse pointer to an absolute coordinates.
+
+        ``coordinates`` can either be a Python sequence type with two values
+        (eg. ``(x, y)``) or separate values ``x`` and ``y``:
+
+        | Move To         | 25             | 150       |     |
+        | @{coordinates}= | Create List    | 25        | 150 |
+        | Move To         | ${coordinates} |           |     |
+        | ${coords}=      | Evaluate       | (25, 150) |     |
+        | Move To         | ${coords}      |           |     |
+
+
+        X grows from left to right and Y grows from top to bottom, which means
+        that top left corner of the screen is (0, 0)
         '''
         if len(coordinates) > 2 or (len(coordinates) == 1 and
                                     type(coordinates[0]) not in (list, tuple)):
@@ -78,22 +91,28 @@ class _Mouse(object):
         ag.moveTo(*coordinates)
 
     def click(self, button='left'):
-        '''
-        Clicks the mouse with the specified button.
+        '''Clicks with the specified mouse button.
+
+        Valid buttons are ``left``, ``right`` or ``middle``.
         '''
         ag.click(button=button)
 
     def double_click(self, button='left', interval=0.0):
-        '''
-        Double clicks the mouse with the specified button.
-        Argument interval specifies the time between clicks.
+        '''Double clicks with the specified mouse button.
+
+        See documentation of ``button`` in `Click`.
+
+        ``interval`` specifies the time between clicks and should be
+        floating point number.
         '''
         ag.doubleClick(button=button, interval=float(interval))
 
     def triple_click(self, button='left', interval=0.0):
-        '''
-        Triple clicks the mouse with the specified button.
-        Argument interval specifies the time between clicks.
+        '''Triple clicks with the specified mouse button.
+
+        See documentation of ``button`` in `Click`.
+
+        See documentation of ``interval`` in `Double Click`.
         '''
         ag.tripleClick(button=button, interval=float(interval))
 

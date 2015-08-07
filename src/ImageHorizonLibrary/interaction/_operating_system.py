@@ -7,16 +7,19 @@ from ..errors import OSException
 class _OperatingSystem(object):
 
     def launch_application(self, app, alias=None):
-        '''
-        Launches an application.
-        Executes the string argument 'app' as a subprocess.
-        Returns alias, which is a reference to the subprocess
-        and can be passed to terminate application. Alias can be overridden
-        by providing argument alias.
+        '''Launches an application.
 
-        Warning:
-        If the app itself launches processes in the background,
-        like 'open' in OSX, they cannot be terminated returned with alias.
+        Executes the string argument ``app`` as a separate process with
+        Python's
+        ``[https://docs.python.org/2/library/subprocess.html|subprocess]``
+        module. It should therefore be the exact command you would use to
+        launch the application from command line.
+
+        Returns automatically generated alias which can be used with `Terminate
+        Application`.
+
+        Automatically generated alias can be overridden by providing ``alias``
+        yourself.
         '''
         if not alias:
             alias = str(len(self.open_applications))
@@ -25,9 +28,10 @@ class _OperatingSystem(object):
         return alias
 
     def terminate_application(self, alias=None):
-        '''
-        Terminates the last app that was launched with launch_application,
-        or the app corresponding to alias if alias is given.
+        '''Terminates the process launched with `Launch Application` with given
+        ``alias``.
+
+        If no ``alias`` is given, terminates the last process that was launched.
         '''
         if alias and not alias in self.open_applications:
             raise OSException('Invalid alias "%s".' % alias)
@@ -37,7 +41,7 @@ class _OperatingSystem(object):
                 _, process = self.open_applications.popitem()
             except KeyError:
                 raise OSException('`Terminate Application` called without '
-                            '`Launch Application` called first.')
+                                  '`Launch Application` called first.')
         process.terminate()
 
 

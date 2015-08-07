@@ -37,12 +37,75 @@ class ImageHorizonLibrary(_Keyboard,
                           _OperatingSystem,
                           _RecognizeImages,
                           _Screenshot):
+    '''A cross-platform Robot Framework library for GUI automation.
+
+    ImageHorizonLibrary provides keyboard and mouse actions as well as
+    facilities to recognize images on screen. It can also take screenshots in
+    case of failure or otherwise.
+
+    This library is built on top of
+    [https://pyautogui.readthedocs.org|pyautogui].
+
+    = Reference image names =
+    For ease of use, reference image names are automatically normalized according to the following rules:
+
+    - The name is lower cased: ``MYPICTURE`` and ``mYPiCtUrE`` become ``mypicture``
+
+    - All spaces are converted to underscore ``_``: ``my picture`` becomes
+      ``my_picture``
+
+    - If the image name does not end in ``.png``, it will be added:
+      ``mypicture`` becomes ``mypicture.png``
+
+    - Path to _reference folder_ is prepended. This option must be given when
+      `importing` the library.
+
+    Using good names for reference images is evident from easy-to-read test
+    data:
+
+    | `Import Library` | ImageHorizonLibrary                   | reference_folder=images |                                                            |
+    | `Click Image`    | popup Window title                    |                         | # Path is images/popup_window_title.png                    | 
+    | `Click Image`    | button Login Without User Credentials |                         | # Path is images/button_login_without_user_credentials.png | 
+
+
+    = Performance =
+
+    Locating images on screen, especially if screen resolution is large and
+    reference image is small, might take considerable time. It is therefore
+    advisable to save the returned coordinates if you are manipulating the
+    same context many times in the row:
+
+    | `Wait For`                   | label Name |     |
+    | `Click To The Left Of Image` | label Name | 200 |
+
+    In the above example, same image is located twice. Below is an example how
+    we can leverage the returned location:
+
+    | ${location}=           | `Wait For`  | label Name | 
+    | `Click To The Left Of` | ${location} | 200        |
+
+    '''
 
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
     ROBOT_LIBRARY_VERSION = VERSION
 
     def __init__(self, reference_folder=None, screenshot_folder=None,
                  keyword_on_failure='ImageHorizonLibrary.Take A Screenshot'):
+        '''ImageHorizonLibrary can be imported with several options.
+
+        ``reference_folder`` is path to the folder where all reference images are
+        stored. It must be a valid absolute or relative path. As the library is
+        suite-specific (ie. new instance is created for every suite), different
+        suites can have different folders for it's reference images.
+
+        ``screenshot_folder`` is path to the folder where screenshots are saved.
+        If not given, screenshots are saved to the current working directory.
+
+        ``keyword_on_failure`` is the keyword to be run, when location-related
+        keywords fail. If you wish to not take screenshots, use for example
+        `BuiltIn.No Operation`. Keyword must, however, be a valid keyword.
+        '''
+
         self.reference_folder = reference_folder
         self.screenshot_folder = screenshot_folder
         self.keyword_on_failure = keyword_on_failure
@@ -116,12 +179,21 @@ class ImageHorizonLibrary(_Keyboard,
         tk.destroy()
 
     def copy(self):
+        '''Executes ``Ctrl+C`` on Windows and Linux, ``⌘+C`` on OS X and
+        returns the content of the clipboard.'''
         key = 'Key.command' if self.is_mac else 'Key.ctrl'
         self._press(key, 'c')
         with self._tk() as clipboard_content:
             return clipboard_content
 
     def pause(self):
+        '''Shows a dialog that must be dismissed with manually clicking.
+
+        This is mainly for when you are developing the test case and want to
+        stop the test execution.
+
+        It should probably not be used otherwise.
+        '''
         ag.alert(text='Test execution paused.', title='Pause',
                  button='Continue')
 

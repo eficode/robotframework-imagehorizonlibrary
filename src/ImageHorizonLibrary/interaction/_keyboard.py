@@ -2,45 +2,53 @@
 import pyautogui as ag
 
 class _Keyboard(object):
-    def press_combination(self, *keys, **options):
+    def press_combination(self, *keys):
+        '''Press given keyboard keys.
+
+        All keyboard keys must be prefixed with ``Key.``.
+
+        Keyboard keys are case-insensitive:
+
+        | Press Combination | KEY.ALT | key.f4 | 
+        | Press Combination | kEy.EnD |        |
+
+        [https://pyautogui.readthedocs.org/en/latest/keyboard.html#keyboard-keys|
+        See valid keyboard keys here].
         '''
-        Press combination of keys, hold until the last one is pressed.
-        Examples:
-            Press combination    key.control    key.alt    key.delete
-            Press combination    key.control    c
-            Press combination    key.alt    key.f4
-        '''
-        self._press(*keys, **options)
+        self._press(*keys)
 
-    def type(self, *keys_or_text, **options):
-        '''Type a sequence of text and/or special keys
+    def type(self, *keys_or_text):
+        '''Type text and keyboard keys.
 
+        See valid keyboard keys in `Press Combination`.
 
         Examples:
-            Type    separate    key.enter    by lineswap
-            Type    Submit this with enter    key.enter
-            Type    key.windows    notepad    key.enter
+
+        | Type | separated              | Key.ENTER | by linebreak |
+        | Type | Submit this with enter | Key.enter |              |
+        | Type | key.windows            | notepad   | Key.enter    |
         '''
         for key_or_text in keys_or_text:
             key = self._convert_to_valid_special_key(key_or_text)
             if key:
-                ag.press(key, **options)
+                ag.press(key)
             else:
-                ag.typewrite(key_or_text, **options)
+                ag.typewrite(key_or_text)
 
-    def type_with_keys_down(self, text, *keys, **options):
-        '''
-        Type text while holding keys keysdow
+    def type_with_keys_down(self, text, *keys):
+        '''Press keyboard keys down, then write given text, then release the
+        keyboard keys.
+
+        See valid keyboard keys in `Press Combination`.
+
         Examples:
-            Type with keys down    yell this1    key.shift
-            Type with keys down    key.delete    key.control    key.alt
+
+        | Type with keys down | write this in caps  | Key.Shift |
         '''
-        pause = float(options.get('pause', 0.0))
-        interval = float(options.get('interval', 0.0))
         valid_keys = self._validate_keys(keys)
         for key in valid_keys:
-            ag.keyDown(key, pause=pause)
-        ag.typewrite(text, pause=pause, interval=interval)
+            ag.keyDown(key)
+        ag.typewrite(text)
         for key in valid_keys:
-            ag.keyUp(key, pause=pause)
+            ag.keyUp(key)
 

@@ -28,9 +28,14 @@ class _RecognizeImages(object):
             raise ImageNotFoundException(path)
         return path
 
-    def click_image(self, image_name):
-        center_location = self.locate(image_name)
-        LOGGER.info('Clicking image "%s" in position %s' % (image_name,
+    def click_image(self, reference_image):
+        '''Finds the reference image on screen and clicks it once.
+
+        ``reference_image`` is automatically normalized as described in the
+        `Reference image names`.
+        '''
+        center_location = self.locate(reference_image)
+        LOGGER.info('Clicking image "%s" in position %s' % (reference_image,
                                                             center_location))
         ag.click(center_location)
         return center_location
@@ -47,40 +52,86 @@ class _RecognizeImages(object):
 
     def click_to_the_above_of_image(self, reference_image, offset, clicks=1,
                                     button='left', interval=0.0):
+        '''Clicks above of reference image by given offset.
+
+        See `Reference image names` for documentation for ``reference_image``.
+
+        ``offset`` is the number of pixels from the center of the reference
+        image.
+
+        ``clicks`` and ``button`` are documented in `Click To The Above Of`.
+        '''
         self._locate_and_click_direction('up', reference_image, offset,
                                          clicks, button, interval)
 
     def click_to_the_below_of_image(self, reference_image, offset, clicks=1,
                                     button='left', interval=0.0):
+        '''Clicks below of reference image by given offset.
+
+        See argument documentation in `Click To The Above Of Image`.
+        '''
         self._locate_and_click_direction('down', reference_image, offset,
                                          clicks, button, interval)
 
     def click_to_the_left_of_image(self, reference_image, offset, clicks=1,
                                    button='left', interval=0.0):
+        '''Clicks left of reference image by given offset.
+
+        See argument documentation in `Click To The Above Of Image`.
+        '''
         self._locate_and_click_direction('left', reference_image, offset,
                                          clicks, button, interval)
 
     def click_to_the_right_of_image(self, reference_image, offset, clicks=1,
                                     button='left', interval=0.0):
+        '''Clicks right of reference image by given offset.
+
+        See argument documentation in `Click To The Above Of Image`.
+        '''
         self._locate_and_click_direction('right', reference_image, offset,
                                          clicks, button, interval)
 
     def copy_from_the_above_of(self, reference_image, offset):
+        '''Clicks three times above of reference image by given offset and
+        copies.
+
+        See `Reference image names` for documentation for ``reference_image``.
+
+        See `Click To The Above Of Image` for documentation for ``offset``.
+
+        Copy is done by pressing ``Ctrl+C``` on Windows and Linux and ``⌘+C``
+        on OS X.
+        '''
         self._locate_and_click_direction('up', reference_image, offset,
                                          clicks=3, button='left', interval=0.0)
         return self.copy()
 
     def copy_from_the_below_of(self, reference_image, offset):
+        '''Clicks three times below of reference image by given offset and
+        copies.
+
+        See argument documentation in `Copy From The Above Of`.
+        '''
         self._locate_and_click_direction('down', reference_image, offset,
                                          clicks=3, button='left', interval=0.0)
         return self.copy()
 
     def copy_from_the_left_of(self, reference_image, offset):
+        '''Clicks three times left of reference image by given offset and
+        copies.
+
+        See argument documentation in `Copy From The Above Of`.
+        '''
         self._locate_and_click_direction('left', reference_image, offset,
                                          clicks=3, button='left', interval=0.0)
         return self.copy()
 
     def copy_from_the_right_of(self, reference_image, offset):
+        '''Clicks three times right of reference image by given offset and
+        copies.
+
+        See argument documentation in `Copy From The Above Of`.
+        '''
         self._locate_and_click_direction('right', reference_image, offset,
                                          clicks=3, button='left', interval=0.0)
         return self.copy()
@@ -106,6 +157,11 @@ class _RecognizeImages(object):
         return location
 
     def does_exist(self, reference_image):
+        '''Returns ``True`` if reference image was found on screen or
+        ``False`` otherwise.
+
+        See `Reference image names` for documentation for ``reference_image``.
+        '''
         with self._suppress_keyword_on_failure():
             try:
                 return bool(self._locate(reference_image, log_it=False))
@@ -113,9 +169,26 @@ class _RecognizeImages(object):
                 return False
 
     def locate(self, reference_image):
+        '''Locate image on screen.
+
+        Throws exception if image is not found on screen.
+
+        Returns Python tuple ``(x, y)`` of the coordinates.
+        '''
         return self._locate(reference_image)
 
     def wait_for(self, reference_image, timeout=10):
+        '''Tries to locate given image from the screen for given time.
+
+        If the image is not found on the screen after ``timeout`` has expired,
+        throw an exception.
+
+        See `Reference image names` for documentation for ``reference_image``.
+
+        ``timeout`` is given in seconds.
+
+        Returns Python tuple ``(x, y)`` of the coordinates.
+        '''
         stop_time = time() + int(timeout)
         location = None
         with self._suppress_keyword_on_failure():

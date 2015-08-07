@@ -22,6 +22,19 @@ class _Screenshot(object):
         return path
 
     def take_a_screenshot(self):
+        '''Takes a screenshot of the screen.
+
+        This keyword is run on failure if it is not overwritten when
+        `importing` the library.
+
+        Screenshots are saved to the current working directory or in the
+        ``screenshot_folder`` if such is defined during `importing`.
+
+        The file name for the screenshot is the current suite name with a
+        running integer appended. If this keyword is used outside of Robot
+        Framework execution, file name is this library's name with running
+        integer appended.
+        '''
         target_dir = self.screenshot_folder if self.screenshot_folder else ''
         if not isinstance(target_dir, basestring):
             raise ScreenshotFolderException('Screenshot folder is invalid: '
