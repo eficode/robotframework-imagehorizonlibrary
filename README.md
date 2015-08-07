@@ -2,6 +2,10 @@
 
 This Robot Framework library provides the facilities to automate GUIs based on image recognition similar to Sikuli. This library wraps [pyautogui](https://github.com/asweigart/pyautogui) to achieve this.
 
+## Keyword documentation
+
+[Keyword Documentation](http://eficode.github.io/robotframework-imagehorizonlibrary/doc/ImageHorizonLibrary.html)
+
 ## Prerequisites
 
 - [Python 2.7+](http://python.org) (unfortunately not 3.x)
