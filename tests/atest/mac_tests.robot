@@ -1,5 +1,5 @@
 *** Settings ***
-Library    ImageHorizonLibrary    .${/}reference_images${/}mac
+Library    ImageHorizonLibrary    ${CURDIR}${/}reference_images${/}mac
 Force Tags    mac
 
 *** Test Cases ***
