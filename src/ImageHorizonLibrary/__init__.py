@@ -32,6 +32,7 @@ from version import VERSION
 
 __version__ = VERSION
 
+
 class ImageHorizonLibrary(_Keyboard,
                           _Mouse,
                           _OperatingSystem,
@@ -47,9 +48,11 @@ class ImageHorizonLibrary(_Keyboard,
     [https://pyautogui.readthedocs.org|pyautogui].
 
     = Reference image names =
-    For ease of use, reference image names are automatically normalized according to the following rules:
+    For ease of use, reference image names are automatically normalized
+    according to the following rules:
 
-    - The name is lower cased: ``MYPICTURE`` and ``mYPiCtUrE`` become ``mypicture``
+    - The name is lower cased: ``MYPICTURE`` and ``mYPiCtUrE`` become
+      ``mypicture``
 
     - All spaces are converted to underscore ``_``: ``my picture`` becomes
       ``my_picture``
@@ -94,12 +97,13 @@ class ImageHorizonLibrary(_Keyboard,
         '''ImageHorizonLibrary can be imported with several options.
 
         ``reference_folder`` is path to the folder where all reference images
-        arestored. It must be a _valid absolute path_. As the library
+        are stored. It must be a _valid absolute path_. As the library
         is suite-specific (ie. new instance is created for every suite),
         different suites can have different folders for it's reference images.
 
-        ``screenshot_folder`` is path to the folder where screenshots are saved.
-        If not given, screenshots are saved to the current working directory.
+        ``screenshot_folder`` is path to the folder where screenshots are
+        saved. If not given, screenshots are saved to the current working
+        directory.
 
         ``keyword_on_failure`` is the keyword to be run, when location-related
         keywords fail. If you wish to not take screenshots, use for example
@@ -135,7 +139,7 @@ class ImageHorizonLibrary(_Keyboard,
             clicks = int(clicks)
         except ValueError:
             raise MouseException('Invalid argument "%s" for `clicks`')
-        if not button in ['left', 'middle', 'right']:
+        if button not in ['left', 'middle', 'right']:
             raise MouseException('Invalid button "%s" for `button`')
         try:
             interval = float(interval)

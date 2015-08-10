@@ -20,4 +20,3 @@ else:
     verbosity = 1
 
 TextTestRunner(verbosity=verbosity).run(TestLoader().discover(directory))
-

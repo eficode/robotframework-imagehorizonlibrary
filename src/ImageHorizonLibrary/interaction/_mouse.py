@@ -3,6 +3,7 @@ import pyautogui as ag
 
 from ..errors import MouseException
 
+
 class _Mouse(object):
 
     def _click_to_the_direction_of(self, direction, location, offset,
@@ -15,7 +16,8 @@ class _Mouse(object):
 
         ``location`` can be any Python sequence type (tuple, list, etc.) that
         represents coordinates on the screen ie. have an x-value and y-value.
-        Locating-related keywords return location you can use with this keyword.
+        Locating-related keywords return location you can use with this
+        keyword.
 
         ``offset`` is the number of pixels from the specified ``location``.
 
@@ -87,7 +89,8 @@ class _Mouse(object):
         try:
             coordinates = [int(coord) for coord in coordinates]
         except ValueError:
-            raise MouseException('Coordinates %s are not integers' % (coordinates,))
+            raise MouseException('Coordinates %s are not integers' %
+                                 (coordinates,))
         ag.moveTo(*coordinates)
 
     def click(self, button='left'):
@@ -115,4 +118,3 @@ class _Mouse(object):
         See documentation of ``interval`` in `Double Click`.
         '''
         ag.tripleClick(button=button, interval=float(interval))
-

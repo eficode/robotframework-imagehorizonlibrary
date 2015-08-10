@@ -12,6 +12,7 @@ from mock import MagicMock, patch
 
 SRCDIR = path_join(abspath(dirname(__file__)), '..', '..', 'src')
 
+
 class TestMainClass(TestCase):
     def setUp(self):
         self.pyautogui_mock = MagicMock()
@@ -20,8 +21,8 @@ class TestMainClass(TestCase):
         self.clipboard_mock.clipboard_get.return_value = 'copied text'
         self.Tk_mock.Tk.return_value = self.clipboard_mock
         self.patcher = patch.dict('sys.modules',
-                                  {'pyautogui' : self.pyautogui_mock,
-                                   'Tkinter' : self.Tk_mock})
+                                  {'pyautogui': self.pyautogui_mock,
+                                   'Tkinter': self.Tk_mock})
         self.patcher.start()
         from ImageHorizonLibrary import ImageHorizonLibrary
         self.lib = ImageHorizonLibrary()
@@ -57,11 +58,11 @@ class TestMainClass(TestCase):
         # This test checks that importing fails when any of the dependencies
         # are not installed or, at least, importing Tkinter fails because
         # it's not supported on Jython.
-        if not 'JYTHON_HOME' in os.environ:
-            self.skipTest('%s() was not run because JYTHON_HOME was not set.' % self._testMethodName)
+        if 'JYTHON_HOME' not in os.environ:
+            self.skipTest('%s() was not run because JYTHON_HOME '
+                          'was not set.' % self._testMethodName)
         jython_cmd = path_join(os.environ['JYTHON_HOME'], 'bin', 'jython')
         cmd = self._get_cmd(jython_cmd, SRCDIR)
         p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
         _, stderr = p.communicate()
         self.assertNotEqual(stderr, '')
-

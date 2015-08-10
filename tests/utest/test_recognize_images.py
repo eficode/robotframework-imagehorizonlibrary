@@ -8,10 +8,11 @@ from mock import call, MagicMock, patch
 CURDIR = abspath(dirname(__file__))
 TESTIMG_DIR = path_join(CURDIR, 'reference_images')
 
+
 class TestRecognizeImages(TestCase):
     def setUp(self):
         self.mock = MagicMock()
-        self.patcher = patch.dict('sys.modules', {'pyautogui' : self.mock})
+        self.patcher = patch.dict('sys.modules', {'pyautogui': self.mock})
         self.patcher.start()
         from ImageHorizonLibrary import ImageHorizonLibrary
         self.lib = ImageHorizonLibrary(reference_folder=TESTIMG_DIR)
@@ -23,16 +24,16 @@ class TestRecognizeImages(TestCase):
         self.patcher.stop()
 
     def test_click_image(self):
-        with patch(self.locate, return_value=(0,0)):
+        with patch(self.locate, return_value=(0, 0)):
             self.lib.click_image('doesentmatter')
-            self.mock.click.assert_called_once_with((0,0))
+            self.mock.click.assert_called_once_with((0, 0))
 
     def _call_all_directional_functions(self, fn_name):
         from ImageHorizonLibrary import ImageHorizonLibrary
         retvals = []
         for direction in ['above', 'below', 'left', 'right']:
             fn = getattr(self.lib, fn_name % direction)
-            with patch(self.locate, return_value=(0,0)):
+            with patch(self.locate, return_value=(0, 0)):
                 retvals.append(fn('doesentmatter', 10))
         return retvals
 
@@ -59,7 +60,7 @@ class TestRecognizeImages(TestCase):
     def test_does_exist(self):
         from ImageHorizonLibrary import ImageNotFoundException
 
-        with patch(self._locate, return_value=(0,0)):
+        with patch(self._locate, return_value=(0, 0)):
             self.assertTrue(self.lib.does_exist('doesentmatter'))
 
         run_on_failure = MagicMock()
@@ -72,7 +73,7 @@ class TestRecognizeImages(TestCase):
         from ImageHorizonLibrary import ImageNotFoundException
         run_on_failure = MagicMock()
 
-        with patch(self._locate, return_value=(0,0)), \
+        with patch(self._locate, return_value=(0, 0)), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
             self.lib.wait_for('doesentmatter', timeout=1)
             self.assertEquals(len(run_on_failure.mock_calls), 0)

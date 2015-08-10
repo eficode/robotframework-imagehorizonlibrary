@@ -43,5 +43,4 @@ setup(name='ImageHorizonLibrary',
       classifiers=CLASSIFIERS,
       version=VERSION,
       description=SHORT_DESC,
-      long_description=LONG_DESCRIPTION
-)
+      long_description=LONG_DESCRIPTION)

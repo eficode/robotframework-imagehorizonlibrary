@@ -4,6 +4,7 @@ import subprocess
 
 from ..errors import OSException
 
+
 class _OperatingSystem(object):
 
     def launch_application(self, app, alias=None):
@@ -28,12 +29,13 @@ class _OperatingSystem(object):
         return alias
 
     def terminate_application(self, alias=None):
-        '''Terminates the process launched with `Launch Application` with given
-        ``alias``.
+        '''Terminates the process launched with `Launch Application` with
+        given ``alias``.
 
-        If no ``alias`` is given, terminates the last process that was launched.
+        If no ``alias`` is given, terminates the last process that was
+        launched.
         '''
-        if alias and not alias in self.open_applications:
+        if alias and alias not in self.open_applications:
             raise OSException('Invalid alias "%s".' % alias)
         process = self.open_applications.pop(alias, None)
         if not process:
@@ -43,5 +45,3 @@ class _OperatingSystem(object):
                 raise OSException('`Terminate Application` called without '
                                   '`Launch Application` called first.')
         process.terminate()
-
-

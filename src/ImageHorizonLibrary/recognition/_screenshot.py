@@ -9,13 +9,15 @@ from robot.api import logger as LOGGER
 
 from ..errors import ScreenshotFolderException
 
+
 class _Screenshot(object):
     def _make_up_filename(self):
         try:
             path = BuiltIn().get_variable_value('${SUITE NAME}')
             path = '%s-screenshot' % path.replace(' ', '')
         except RobotNotRunningError:
-            LOGGER.info('Could not get suite name, using default naming scheme')
+            LOGGER.info('Could not get suite name, using '
+                        'default naming scheme')
             path = 'ImageHorizon-screenshot'
         path = '%s-%d.png' % (path, self.screenshot_counter)
         self.screenshot_counter += 1
@@ -44,4 +46,3 @@ class _Screenshot(object):
         LOGGER.info('Screenshot taken: {0}<br/><img src="{0}" '
                     'width="100%" />'.format(path), html=True)
         ag.screenshot(path)
-

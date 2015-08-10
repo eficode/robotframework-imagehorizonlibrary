@@ -3,9 +3,10 @@ from unittest import TestCase
 
 from mock import MagicMock, patch
 
+
 class TestOperatingSystem(TestCase):
     def setUp(self):
-        self.patcher = patch.dict('sys.modules', {'pyautogui' : MagicMock()})
+        self.patcher = patch.dict('sys.modules', {'pyautogui': MagicMock()})
         self.patcher.start()
         from ImageHorizonLibrary import ImageHorizonLibrary
         self.lib = ImageHorizonLibrary()
@@ -26,9 +27,9 @@ class TestOperatingSystem(TestCase):
             self.lib.launch_application('application -a -r --gu ment',
                                         'MY ALIAS')
             mock_popen.assert_called_once_with(['application', '-a',
-                                                 '-r', '--gu', 'ment'])
-            self.assertDictEqual(self.lib.open_applications, {'0': mock,
-                                                              'MY ALIAS': mock})
+                                                '-r', '--gu', 'ment'])
+            self.assertDictEqual(self.lib.open_applications,
+                                 {'0': mock, 'MY ALIAS': mock})
 
     def test_terminate_application_when_application_was_not_launched(self):
         from ImageHorizonLibrary import OSException
@@ -50,18 +51,19 @@ class TestOperatingSystem(TestCase):
                                                               'shelias': mock})
 
             self.lib.terminate_application()
-            self.assertDictEqual(self.lib.open_applications, {'0': mock,
-                                                              'my alias': mock,
-                                                              'youalias': mock})
+            self.assertDictEqual(self.lib.open_applications,
+                                 {'0': mock,
+                                  'my alias': mock,
+                                  'youalias': mock})
             self.lib.terminate_application('my alias')
-            self.assertDictEqual(self.lib.open_applications, {'0': mock,
-                                                              'youalias': mock})
+            self.assertDictEqual(self.lib.open_applications,
+                                 {'0': mock, 'youalias': mock})
             self.lib.terminate_application('0')
-            self.assertDictEqual(self.lib.open_applications, {'youalias': mock})
+            self.assertDictEqual(self.lib.open_applications,
+                                 {'youalias': mock})
 
             self.lib.terminate_application()
             self.assertDictEqual(self.lib.open_applications, {})
 
             with self.assertRaises(OSException):
                 self.lib.terminate_application('nonexistent alias')
-

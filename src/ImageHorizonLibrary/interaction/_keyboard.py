@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pyautogui as ag
 
+
 class _Keyboard(object):
     def press_combination(self, *keys):
         '''Press given keyboard keys.
@@ -51,4 +52,3 @@ class _Keyboard(object):
         ag.typewrite(text)
         for key in valid_keys:
             ag.keyUp(key)
-

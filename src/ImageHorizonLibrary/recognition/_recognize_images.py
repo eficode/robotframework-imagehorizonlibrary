@@ -14,10 +14,10 @@ class _RecognizeImages(object):
 
     def __normalize(self, path):
         if (not self.reference_folder or
-            not isinstance(self.reference_folder, basestring) or
-            not isdir(self.reference_folder)):
-            raise ReferenceFolderException('Reference folder is invalid: "%s"'
-                                           % self.reference_folder)
+                not isinstance(self.reference_folder, basestring) or
+                not isdir(self.reference_folder)):
+            raise ReferenceFolderException('Reference folder is invalid: '
+                                           '"%s"' % self.reference_folder)
         if (not path or not isinstance(path, basestring)):
             raise InvalidImageException('"%s" is invalid image name.' % path)
         path = path.lower().replace(' ', '_')
@@ -146,7 +146,7 @@ class _RecognizeImages(object):
     def _locate(self, reference_image, log_it=True):
         reference_image = str(self.__normalize(reference_image))
         location = ag.locateCenterOnScreen(reference_image)
-        if location == None:
+        if location is None:
             if log_it:
                 LOGGER.info('Image "%s" was not found '
                             'on screen.' % reference_image)
@@ -198,7 +198,7 @@ class _RecognizeImages(object):
                     break
                 except ImageNotFoundException:
                     pass
-        if location == None:
+        if location is None:
             self._run_on_failure()
             raise ImageNotFoundException(reference_image)
         LOGGER.info('Image "%s" found at %r' % (reference_image, location))
