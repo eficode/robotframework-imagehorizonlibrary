@@ -46,6 +46,12 @@ If you have pip, installation is straightforward
 
 This will automatically install dependencies as well as their dependencies.
 
+Windows
+'''''''
+
+ImageHorizonLibrary should work on Windows "out-of-the-box". Just run the
+command above to install it.
+
 OSX
 '''
 
