@@ -33,10 +33,9 @@ class TestKeyboard(TestCase):
 
     def test_type_with_keys_down(self):
         self.lib.type_with_keys_down('hello', 'key.shift')
-        self.mock.keyDown.assert_called_once_with('shift', pause=0.0)
-        self.mock.typewrite.assert_called_once_with('hello', pause=0.0,
-                                                    interval=0.0)
-        self.mock.keyUp.assert_called_once_with('shift', pause=0.0)
+        self.mock.keyDown.assert_called_once_with('shift')
+        self.mock.typewrite.assert_called_once_with('hello')
+        self.mock.keyUp.assert_called_once_with('shift')
 
     def test_type_with_keys_down_with_invalid_keys(self):
         from ImageHorizonLibrary import KeyboardException
