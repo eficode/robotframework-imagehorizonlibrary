@@ -171,7 +171,7 @@ class _RecognizeImages(object):
     def locate(self, reference_image):
         '''Locate image on screen.
 
-        Throws exception if image is not found on screen.
+        Fails if image is not found on screen.
 
         Returns Python tuple ``(x, y)`` of the coordinates.
         '''
@@ -180,8 +180,8 @@ class _RecognizeImages(object):
     def wait_for(self, reference_image, timeout=10):
         '''Tries to locate given image from the screen for given time.
 
-        If the image is not found on the screen after ``timeout`` has expired,
-        throw an exception.
+        Fail if the image is not found on the screen after ``timeout`` has
+        expired.
 
         See `Reference image names` for documentation for ``reference_image``.
 

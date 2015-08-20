@@ -107,7 +107,7 @@ class ImageHorizonLibrary(_Keyboard,
 
         ``keyword_on_failure`` is the keyword to be run, when location-related
         keywords fail. If you wish to not take screenshots, use for example
-        `BuiltIn.No Operation`. Keyword must, however, be a valid keyword.
+        `BuiltIn.No Operation`. Keyword must however be a valid keyword.
         '''
 
         self.reference_folder = reference_folder
