@@ -26,6 +26,10 @@ class TestKeyboard(TestCase):
         self.lib.type('.')
         self.mock.press.assert_called_once_with('.')
 
+    def test_type_with_umlauts(self):
+        self.lib.type(u'öäöäü')
+        self.mock.typewrite.assert_called_once_with(u'öäöäü')
+
     def test_type_with_text_and_keys(self):
         self.lib.type('I love you', 'Key.ENTER')
         self.mock.typewrite.assert_called_once_with('I love you')

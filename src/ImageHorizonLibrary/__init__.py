@@ -152,7 +152,7 @@ class ImageHorizonLibrary(_Keyboard,
         ag.click(x, y, clicks=clicks, button=button, interval=interval)
 
     def _convert_to_valid_special_key(self, key):
-        key = str(key).lower()
+        key = unicode(key).lower()
         if key.startswith('key.'):
             key = key.split('key.', 1)[1]
         elif len(key) > 1:

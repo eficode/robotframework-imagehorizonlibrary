@@ -144,7 +144,7 @@ class _RecognizeImages(object):
         self.keyword_on_failure = keyword
 
     def _locate(self, reference_image, log_it=True):
-        reference_image = str(self.__normalize(reference_image))
+        reference_image = unicode(self.__normalize(reference_image))
         location = ag.locateCenterOnScreen(reference_image)
         if location is None:
             if log_it:

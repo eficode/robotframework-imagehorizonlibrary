@@ -30,6 +30,13 @@ class TestOperatingSystem(TestCase):
                                                 '-r', '--gu', 'ment'])
             self.assertDictEqual(self.lib.open_applications,
                                  {'0': mock, 'MY ALIAS': mock})
+            mock_popen.reset_mock()
+
+            self.lib.launch_application('application', 'ÛMLÄYT ÖLIAS')
+            mock_popen.assert_called_once_with(['application'])
+            self.assertDictEqual(self.lib.open_applications,
+                                 {'0': mock, 'MY ALIAS': mock, 'ÛMLÄYT ÖLIAS': mock})
+
 
     def test_terminate_application_when_application_was_not_launched(self):
         from ImageHorizonLibrary import OSException

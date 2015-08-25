@@ -117,7 +117,7 @@ class TestRecognizeImages(TestCase):
 
     def test_locate_with_valid_reference_folder(self):
         for ref, img in (('reference_images', 'my_picture.png'),
-                         (u'./reference_images', 'my picture.png'),
+                         (u'./reference_images', u'my picture.png'),
                          ('../../tests/utest/reference_images', 'MY PICTURE')):
 
             ref = path_join(CURDIR, ref)
@@ -127,6 +127,13 @@ class TestRecognizeImages(TestCase):
         self.lib.reference_folder = path_join(CURDIR, 'symbolic_link')
         self.lib.locate('mY_PiCtURe')
         expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
+        self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
+        self.mock.reset_mock()
+
+        self.lib.reference_folder = path_join(CURDIR, u'rëförence_imägës')
+        self.lib.locate(u'mŸ PäKSÖR')
+        expected_path = path_join(CURDIR, u'rëförence_imägës',
+                                  u'mÿ_päksör.png')
         self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
