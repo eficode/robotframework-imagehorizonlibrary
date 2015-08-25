@@ -74,9 +74,9 @@ class ImageHorizonLibrary(_Keyboard,
     = Performance =
 
     Locating images on screen, especially if screen resolution is large and
-    reference image is small, might take considerable time. It is therefore
-    advisable to save the returned coordinates if you are manipulating the
-    same context many times in the row:
+    reference image is also large, might take considerable time. It is
+    therefore advisable to save the returned coordinates if you are
+    manipulating the same context many times in the row:
 
     | `Wait For`                   | label Name |     |
     | `Click To The Left Of Image` | label Name | 200 |
@@ -86,7 +86,6 @@ class ImageHorizonLibrary(_Keyboard,
 
     | ${location}=           | `Wait For`  | label Name | 
     | `Click To The Left Of` | ${location} | 200        |
-
     '''
 
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
