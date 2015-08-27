@@ -20,7 +20,7 @@ class _RecognizeImages(object):
                                            '"%s"' % self.reference_folder)
         if (not path or not isinstance(path, basestring)):
             raise InvalidImageException('"%s" is invalid image name.' % path)
-        path = path.lower().replace(' ', '_')
+        path = unicode(path.lower().replace(' ', '_'))
         if not path.endswith('.png'):
             path += '.png'
         path = abspath(path_join(self.reference_folder, path))
@@ -144,7 +144,7 @@ class _RecognizeImages(object):
         self.keyword_on_failure = keyword
 
     def _locate(self, reference_image, log_it=True):
-        reference_image = self.__normalize(unicode(reference_image))
+        reference_image = self.__normalize(reference_image)
         location = ag.locateCenterOnScreen(reference_image.encode('utf-8'))
         if location is None:
             if log_it:
