@@ -32,9 +32,10 @@ class _Keyboard(object):
         for key_or_text in keys_or_text:
             key = self._convert_to_valid_special_key(key_or_text)
             if key:
-                ag.press(key)
+                ag.press(key.encode('utf-8'))
             else:
                 ag.typewrite(key_or_text)
+
 
     def type_with_keys_down(self, text, *keys):
         '''Press keyboard keys down, then write given text, then release the

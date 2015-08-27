@@ -35,6 +35,13 @@ class TestKeyboard(TestCase):
         self.mock.typewrite.assert_called_once_with('I love you')
         self.mock.press.assert_called_once_with('enter')
 
+    def test_type_with_utf8_keys(self):
+        self.lib.type(u'key.Tab')
+        self.assertEquals(self.mock.typewrite.call_count, 0)
+        self.mock.press.assert_called_once_with('tab')
+        self.assertEquals(type(self.mock.press.call_args[0][0]),
+                          type(str()))
+
     def test_type_with_keys_down(self):
         self.lib.type_with_keys_down('hello', 'key.shift')
         self.mock.keyDown.assert_called_once_with('shift')
