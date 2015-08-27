@@ -16,6 +16,12 @@ class _OperatingSystem(object):
         module. It should therefore be the exact command you would use to
         launch the application from command line.
 
+        On Windows, if you are using relative or absolute paths in ``app``,
+        enclose the command with double quotes:
+
+        | Launch Application | "C:\\my folder\\myprogram.exe" | # Needs quotes       |
+        | Launch Application | myprogram.exe                  | # No need for quotes |
+
         Returns automatically generated alias which can be used with `Terminate
         Application`.
 
