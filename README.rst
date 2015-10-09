@@ -46,6 +46,9 @@ If you have pip, installation is straightforward
 
 This will automatically install dependencies as well as their dependencies.
 
+Note: if pip install does not find the package, 
+download, extract and pip install the folder
+
 Windows
 '''''''
 
