@@ -189,6 +189,11 @@ class ImageHorizonLibrary(_Keyboard,
         with self._tk() as clipboard_content:
             return clipboard_content
 
+    def get_clipboard_content(self):
+        '''Returns clipboard content'''
+        with self._tk() as clipboard_content:
+            return clipboard_content
+
     def pause(self):
         '''Shows a dialog that must be dismissed with manually clicking.
 

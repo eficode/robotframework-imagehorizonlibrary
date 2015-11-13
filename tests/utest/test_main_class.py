@@ -44,6 +44,11 @@ class TestMainClass(TestCase):
             else:
                 press_mock.assert_called_once_with('Key.ctrl', 'c')
 
+    def test_clipboard_content(self):
+        retval = self.lib.get_clipboard_content()
+        self.assertEquals(retval, 'copied text')
+        self.clipboard_mock.clipboard_get.assert_called_once_with()
+
     def test_alert(self):
         self.lib.pause()
         self.pyautogui_mock.alert.assert_called_once_with(
