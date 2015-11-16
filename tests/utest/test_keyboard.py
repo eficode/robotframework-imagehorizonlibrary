@@ -2,6 +2,7 @@
 from unittest import TestCase
 from mock import patch, MagicMock
 
+
 # For travis: pyautogui import fails without a display
 try:
     from pyautogui import KEYBOARD_KEYS
