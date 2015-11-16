@@ -13,6 +13,11 @@ Keyword documentation
 
 __ http://eficode.github.io/robotframework-imagehorizonlibrary/doc/ImageHorizonLibrary.html
 
+Travis CI
+---------
+`Travis CI`__
+__ https://travis-ci.org/Eficode/robotframework-imagehorizonlibrary/
+
 Prerequisites
 -------------
 
