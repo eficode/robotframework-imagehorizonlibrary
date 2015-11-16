@@ -2,13 +2,13 @@
 from unittest import TestCase
 from mock import patch, MagicMock
 
-import pyautogui
+from pyautogui import KEYBOARD_KEYS
 
 
 class TestKeyboard(TestCase):
     def setUp(self):
         self.mock = MagicMock()
-        self.mock.KEYBOARD_KEYS = pyautogui.KEYBOARD_KEYS
+        self.mock.KEYBOARD_KEYS = KEYBOARD_KEYS
         self.patcher = patch.dict('sys.modules', {'pyautogui': self.mock})
         self.patcher.start()
         from ImageHorizonLibrary import ImageHorizonLibrary
