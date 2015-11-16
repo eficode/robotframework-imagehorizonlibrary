@@ -71,6 +71,7 @@ You additionally need to install these for pyautogui_:
 
     $ pip install pyobjc-core pyobjc
 
+
 For these, you need to install XCode_
 
 Linux
@@ -81,9 +82,8 @@ You additionally need to install these for pyautogui_:
 ::
 
     $ sudo apt-get install python-dev python-xlib
-
-::
     $ sudo pip install pillow
+
 
 You might also need, depending on your Python distribution, to install:
 

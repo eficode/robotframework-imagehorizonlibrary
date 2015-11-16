@@ -5,9 +5,11 @@ from mock import patch, MagicMock
 # For travis: pyautogui import fails without a display
 try:
     from pyautogui import KEYBOARD_KEYS
-except DisplayNameError:
+except Exception, e:
+    # Cannot import DisplayNameError from pyautogui
+    if type(e).__name__ != 'DisplayNameError':
+        raise e
     KEYBOARD_KEYS = []
-
 
 class TestKeyboard(TestCase):
     def setUp(self):
