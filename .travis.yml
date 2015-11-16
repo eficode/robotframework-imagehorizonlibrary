@@ -1,0 +1,12 @@
+language: python
+python:
+  - "2.7"
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y python-dev python-xlib python-tk
+  - wget http://sourceforge.net/projects/python-xlib/files/python-xlib/0.15rc1/python-xlib-0.15rc1.tar.gz/download /tmp/xlib.tar.gz
+  - tar -zxvf /tmp/xlib.tar.gz
+  - pip install /tmp/xlib
+
+script:
+  - python tests/utest/run_tests.py
