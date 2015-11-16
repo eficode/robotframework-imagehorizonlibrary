@@ -99,7 +99,7 @@ class _RecognizeImages(object):
 
         See `Click To The Above Of Image` for documentation for ``offset``.
 
-        Copy is done by pressing ``Ctrl+C``` on Windows and Linux and ``⌘+C``
+        Copy is done by pressing ``Ctrl+C`` on Windows and Linux and ``⌘+C``
         on OS X.
         '''
         self._locate_and_click_direction('up', reference_image, offset,
