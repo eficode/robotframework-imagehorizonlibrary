@@ -93,6 +93,14 @@ class _Mouse(object):
                                  (coordinates,))
         ag.moveTo(*coordinates)
 
+    def mouse_down(self, button='left'):
+        '''Presses specidied mouse button down'''
+        ag.mouseDown(button)
+
+    def mouse_up(self, button='left'):
+        '''Releases specified mouse button'''
+        ag.mouseUp(button)
+
     def click(self, button='left'):
         '''Clicks with the specified mouse button.
 

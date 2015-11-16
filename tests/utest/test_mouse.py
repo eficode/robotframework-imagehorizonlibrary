@@ -63,3 +63,13 @@ class TestMouse(TestCase):
                      (u'1', u'lollerskates'),
                      ((u'1', u'lollerskates'),)]:
             self._verify_move_to_fails(*args)
+
+    def test_mouse_down(self):
+        for args in [tuple(), ('right',)]:
+            self.lib.mouse_down(*args)
+        self.assertEquals(self.mock.mouseDown.mock_calls, [call('left'), call('right')])
+
+    def test_mouse_up(self):
+        for args in [tuple(), ('right',)]:
+            self.lib.mouse_up(*args)
+        self.assertEquals(self.mock.mouseUp.mock_calls, [call('left'), call('right')])
