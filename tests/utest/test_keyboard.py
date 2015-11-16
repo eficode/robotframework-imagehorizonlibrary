@@ -2,7 +2,11 @@
 from unittest import TestCase
 from mock import patch, MagicMock
 
-from pyautogui import KEYBOARD_KEYS
+# For travis: pyautogui import fails without a display
+try:
+    from pyautogui import KEYBOARD_KEYS
+except DisplayNameError:
+    KEYBOARD_KEYS = []
 
 
 class TestKeyboard(TestCase):
