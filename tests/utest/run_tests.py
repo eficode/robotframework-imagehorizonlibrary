@@ -19,4 +19,4 @@ if len(sys.argv) > 1 and 'verbosity=' in sys.argv[1]:
 else:
     verbosity = 1
 
-TextTestRunner(verbosity=verbosity).run(TestLoader().discover(directory))
+sys.exit(not bool(TextTestRunner(verbosity=verbosity).run(TestLoader().discover(directory)).wasSuccessful()))
