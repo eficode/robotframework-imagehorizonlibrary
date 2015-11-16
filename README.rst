@@ -15,7 +15,9 @@ __ http://eficode.github.io/robotframework-imagehorizonlibrary/doc/ImageHorizonL
 
 Travis CI
 ---------
+
 `Travis CI`__
+
 __ https://travis-ci.org/Eficode/robotframework-imagehorizonlibrary/
 
 Prerequisites
