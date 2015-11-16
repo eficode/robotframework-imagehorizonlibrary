@@ -2,9 +2,17 @@
 from unittest import TestCase
 from mock import patch, MagicMock
 
+# For travis: pyautogui import fails without a display
+try:
+    from pyautogui import KEYBOARD_KEYS
+except DisplayNameError:
+    KEYBOARD_KEYS = []
+
+
 class TestKeyboard(TestCase):
     def setUp(self):
         self.mock = MagicMock()
+        self.mock.KEYBOARD_KEYS = KEYBOARD_KEYS
         self.patcher = patch.dict('sys.modules', {'pyautogui': self.mock})
         self.patcher.start()
         from ImageHorizonLibrary import ImageHorizonLibrary
@@ -62,3 +70,7 @@ class TestKeyboard(TestCase):
             self.mock.hotkey.assert_called_once_with('ctrl', 'a')
             self.mock.reset_mock()
 
+            #for key in self.mock.KEYBOARD_KEYS:
+            #    self.lib.press_combination('Key.%s' % key)
+            #    self.mock.hotkey.assert_called_once_with(key.lower())
+            #    self.mock.reset_mock()
