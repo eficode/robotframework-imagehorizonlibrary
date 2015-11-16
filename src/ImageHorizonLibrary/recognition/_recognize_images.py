@@ -158,7 +158,7 @@ class _RecognizeImages(object):
 
     def does_exist(self, reference_image):
         '''Returns ``True`` if reference image was found on screen or
-        ``False`` otherwise.
+        ``False`` otherwise. Never fails.
 
         See `Reference image names` for documentation for ``reference_image``.
         '''
