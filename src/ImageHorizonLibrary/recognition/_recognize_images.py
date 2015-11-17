@@ -200,6 +200,6 @@ class _RecognizeImages(object):
                     pass
         if location is None:
             self._run_on_failure()
-            raise ImageNotFoundException(reference_image)
+            raise ImageNotFoundException(self.__normalize(reference_image))
         LOGGER.info('Image "%s" found at %r' % (reference_image, location))
         return location
