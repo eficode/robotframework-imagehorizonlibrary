@@ -20,6 +20,11 @@ Travis CI
 
 __ https://travis-ci.org/Eficode/robotframework-imagehorizonlibrary/
 
+
+.. image:: https://travis-ci.org/Eficode/robotframework-imagehorizonlibrary.svg?branch=master
+    :target: https://travis-ci.org/Eficode/robotframework-imagehorizonlibrary
+
+
 Prerequisites
 -------------
 
