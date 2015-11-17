@@ -45,10 +45,12 @@ __ http://www.voidspace.org.uk/python/mock/
 Installation
 ------------
 
-If you have pip, installation is straightforward
+If you have pip, installation is straightforward. Explicit pillow install
+required in newer pip versions.
 
 ::
 
+    $ pip install pillow
     $ pip install robotframework-imagehorizonlibrary
 
 This will automatically install dependencies as well as their dependencies.
