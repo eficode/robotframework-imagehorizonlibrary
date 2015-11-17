@@ -15,3 +15,11 @@ before_install:
 
 script:
   - python tests/utest/run_tests.py
+
+notifications:
+  email:
+    recipients:
+      - tatu.kairi@eficode.com
+      - markus.suonto@eficode.com
+    on_success: change
+    on_failure: always
