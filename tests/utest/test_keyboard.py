@@ -13,7 +13,7 @@ except Exception, e:
     KEYBOARD_KEYS = [
         'enter',
         'shift',
-        'control'
+        'ctrl'
     ]
 
 class TestKeyboard(TestCase):
