@@ -10,7 +10,11 @@ except Exception, e:
     # Cannot import DisplayNameError from pyautogui
     if type(e).__name__ != 'DisplayNameError':
         raise e
-    KEYBOARD_KEYS = []
+    KEYBOARD_KEYS = [
+        'enter',
+        'shift',
+        'control'
+    ]
 
 class TestKeyboard(TestCase):
     def setUp(self):
@@ -73,7 +77,7 @@ class TestKeyboard(TestCase):
             self.mock.hotkey.assert_called_once_with('ctrl', 'a')
             self.mock.reset_mock()
 
-            #for key in self.mock.KEYBOARD_KEYS:
-            #    self.lib.press_combination('Key.%s' % key)
-            #    self.mock.hotkey.assert_called_once_with(key.lower())
-            #    self.mock.reset_mock()
+            for key in self.mock.KEYBOARD_KEYS:
+                self.lib.press_combination('Key.%s' % key)
+                self.mock.hotkey.assert_called_once_with(key.lower())
+                self.mock.reset_mock()
