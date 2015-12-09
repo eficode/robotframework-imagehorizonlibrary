@@ -186,11 +186,10 @@ class ImageHorizonLibrary(_Keyboard,
         returns the content of the clipboard.'''
         key = 'Key.command' if self.is_mac else 'Key.ctrl'
         self._press(key, 'c')
-        with self._tk() as clipboard_content:
-            return clipboard_content
+        return self.get_clipboard_content()
 
     def get_clipboard_content(self):
-        '''Returns clipboard content'''
+        '''Returns what is currently copied in the system clipboard.'''
         with self._tk() as clipboard_content:
             return clipboard_content
 
