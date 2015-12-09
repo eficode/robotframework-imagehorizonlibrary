@@ -50,15 +50,13 @@ __ http://www.voidspace.org.uk/python/mock/
 Installation
 ------------
 
-ImageHorizonLibrary is not yet at PyPI. Meanwhile, you can install it
-manually with:
+If you have pip_, installation is straightforward, although you need to
+explicitly install pillow first:
 
 ::
 
-    $ git clone https://github.com/Eficode/robotframework-imagehorizonlibrary.git
-    $ cd robotframework-imagehorizonlibrary
     $ pip install pillow
-    $ pip install .
+    $ pip install robotframework-imagehorizonlibrary
 
 This will automatically install dependencies as well as their dependencies.
 
@@ -67,7 +65,7 @@ Windows
 '''''''
 
 ImageHorizonLibrary should work on Windows "out-of-the-box". Just run the
-command above to install it.
+commands above to install it.
 
 OSX
 '''
