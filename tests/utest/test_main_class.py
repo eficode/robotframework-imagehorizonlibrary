@@ -71,3 +71,13 @@ class TestMainClass(TestCase):
         p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
         _, stderr = p.communicate()
         self.assertNotEqual(stderr, '')
+
+    def test_set_reference_folder(self):
+        self.assertEquals(self.lib.reference_folder, None)
+        self.lib.set_reference_folder('/test/path')
+        self.assertEquals(self.lib.reference_folder, '/test/path')
+
+    def test_set_screenshot_folder(self):
+        self.assertEquals(self.lib.screenshot_folder, None)
+        self.lib.set_screenshot_folder('/test/path')
+        self.assertEquals(self.lib.screenshot_folder, '/test/path')

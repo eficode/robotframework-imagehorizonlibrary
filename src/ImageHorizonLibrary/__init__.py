@@ -214,3 +214,17 @@ class ImageHorizonLibrary(_Keyboard,
             LOGGER.debug(e)
             LOGGER.warn('Failed to take a screenshot. '
                         'Is Robot Framework running?')
+
+    def set_reference_folder(self, reference_folder_path):
+        '''Sets where all reference images are stored.
+
+        See `library importing` for format of the reference folder path.
+        '''
+        self.reference_folder = reference_folder_path
+
+    def set_screenshot_folder(self, screenshot_folder_path):
+        '''Sets the folder where screenshots are saved to.
+
+        See `library importing` for more specific information.
+        '''
+        self.screenshot_folder = screenshot_folder_path
