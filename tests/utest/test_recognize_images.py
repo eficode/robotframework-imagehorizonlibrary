@@ -120,8 +120,7 @@ class TestRecognizeImages(TestCase):
                          (u'./reference_images', u'my picture.png'),
                          ('../../tests/utest/reference_images', 'MY PICTURE')):
 
-            ref = path_join(CURDIR, ref)
-            self.lib.reference_folder = ref
+            self.lib.set_reference_folder(path_join(CURDIR, ref))
             self._verify_path_works(img, 'my_picture.png')
 
         self.lib.reference_folder = path_join(CURDIR, 'symbolic_link')

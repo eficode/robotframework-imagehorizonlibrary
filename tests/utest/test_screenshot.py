@@ -26,7 +26,7 @@ class TestScreenshot(TestCase):
 
     def _take_screenshot_many_times(self, expected_filename):
         folder = path_join(CURDIR, 'reference_folder')
-        self.lib.screenshot_folder = folder
+        self.lib.set_screenshot_folder(folder)
         for i in range(1, 15):
             self.lib.take_a_screenshot()
             self.mock.screenshot.assert_called_once_with(
