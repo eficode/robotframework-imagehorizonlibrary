@@ -24,7 +24,7 @@ Topic :: Software Development :: Testing
 License :: OSI Approved :: MIT License
 '''.strip().splitlines()
 
-setup(name='ImageHorizonLibrary',
+setup(name='robotframework-imagehorizonlibrary',
       author='Eficode Oy',
       author_email='info@eficode.com',
       url='https://github.com/Eficode/robotframework-imagehorizonlibrary',
