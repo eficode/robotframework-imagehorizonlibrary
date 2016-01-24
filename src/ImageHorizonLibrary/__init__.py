@@ -160,7 +160,7 @@ class ImageHorizonLibrary(_Keyboard,
             return key
         return None
 
-    def _validate_keys(self, keys, fail_fast=True):
+    def _validate_keys(self, keys):
         valid_keys = []
         for key in keys:
             valid_key = self._convert_to_valid_special_key(key)
