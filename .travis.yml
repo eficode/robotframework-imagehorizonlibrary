@@ -2,14 +2,7 @@ language: python
 python:
 - '2.7'
 before_install:
-- sudo apt-get update -qq
-- sudo apt-get install -y python-dev python-xlib python-tk
-- curl http://heanet.dl.sourceforge.net/project/python-xlib/python-xlib/0.15rc1/python-xlib-0.15rc1.tar.gz -o /tmp/python-xlib-0.15rc1.tar.gz
-- tar -zxvf /tmp/python-xlib-0.15rc1.tar.gz
-- pip install --upgrade pip
-- pip install /tmp/python-xlib-0.15rc1.tar.gz
-- pip install pillow
-- pip install pyautogui
+- pip install mock
 - pip install robotframework
 script:
 - python tests/utest/run_tests.py
