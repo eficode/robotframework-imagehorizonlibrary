@@ -25,7 +25,7 @@ class TestRecognizeImages(TestCase):
 
     def test_click_image(self):
         with patch(self.locate, return_value=(0, 0)):
-            self.lib.click_image('doesentmatter')
+            self.lib.click_image('my_picture')
             self.mock.click.assert_called_once_with((0, 0))
 
     def _call_all_directional_functions(self, fn_name):
@@ -34,7 +34,7 @@ class TestRecognizeImages(TestCase):
         for direction in ['above', 'below', 'left', 'right']:
             fn = getattr(self.lib, fn_name % direction)
             with patch(self.locate, return_value=(0, 0)):
-                retvals.append(fn('doesentmatter', 10))
+                retvals.append(fn('my_picture', 10))
         return retvals
 
     def _verify_calls_to_pyautogui(self, mock_calls, clicks=1):
@@ -61,29 +61,29 @@ class TestRecognizeImages(TestCase):
         from ImageHorizonLibrary import ImageNotFoundException
 
         with patch(self._locate, return_value=(0, 0)):
-            self.assertTrue(self.lib.does_exist('doesentmatter'))
+            self.assertTrue(self.lib.does_exist('my_picture'))
 
         run_on_failure = MagicMock()
-        with patch(self.locate, side_effect=ImageNotFoundException('')), \
+        with patch(self._locate, side_effect=ImageNotFoundException('')), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
-            self.assertFalse(self.lib.does_exist('doesentmatter'))
+            self.assertFalse(self.lib.does_exist('my_picture'))
             self.assertEquals(len(run_on_failure.mock_calls), 0)
 
     def test_wait_for_happy_path(self):
-        from ImageHorizonLibrary import ImageNotFoundException
+        from ImageHorizonLibrary import InvalidImageException
         run_on_failure = MagicMock()
 
         with patch(self._locate, return_value=(0, 0)), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
-            self.lib.wait_for('doesentmatter', timeout=1)
+            self.lib.wait_for('my_picture', timeout=1)
             self.assertEquals(len(run_on_failure.mock_calls), 0)
 
     def test_wait_for_negative_path(self):
-        from ImageHorizonLibrary import ImageNotFoundException
+        from ImageHorizonLibrary import InvalidImageException
         run_on_failure = MagicMock()
 
-        with self.assertRaises(ImageNotFoundException), \
-             patch(self.locate, side_effect=ImageNotFoundException('')), \
+        with self.assertRaises(InvalidImageException), \
+             patch(self.locate, side_effect=InvalidImageException('')), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
 
             start = time.time()
@@ -102,7 +102,7 @@ class TestRecognizeImages(TestCase):
         self.mock.reset_mock()
 
     def test_locate(self):
-        from ImageHorizonLibrary import ImageNotFoundException
+        from ImageHorizonLibrary import InvalidImageException
 
         for image_name in ('my_picture.png', 'my picture.png', 'MY PICTURE',
                            'mY_PiCtURe'):
@@ -110,7 +110,7 @@ class TestRecognizeImages(TestCase):
 
         self.mock.locateCenterOnScreen.return_value = None
         run_on_failure = MagicMock()
-        with self.assertRaises(ImageNotFoundException), \
+        with self.assertRaises(InvalidImageException), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
             self.lib.locate('nonexistent')
             run_on_failure.assert_called_once_with()
@@ -142,12 +142,12 @@ class TestRecognizeImages(TestCase):
         for invalid_folder in (None, 123, 'nonexistent', u'nönëxistänt'):
             self.lib.reference_folder = invalid_folder
             with self.assertRaises(ReferenceFolderException):
-                self.lib.locate('doesentmatter')
+                self.lib.locate('my_picture')
 
         if not self.lib.is_windows:
             self.lib.reference_folder = TESTIMG_DIR.replace('/', '\\')
             with self.assertRaises(ReferenceFolderException):
-                self.lib.locate('doesentmatter')
+                self.lib.locate('my_picture')
 
     def test_locate_with_invalid_image_name(self):
         from ImageHorizonLibrary import InvalidImageException
