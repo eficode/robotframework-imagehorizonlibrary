@@ -17,6 +17,11 @@ Test open and close application
     Wait for    calculator_active
     Terminate application
 
+Test folder as reference image
+    Launch application    open -a Calculator     alias=My calculator
+    Wait for    folder_calculator_active
+    Terminate application    My calculator
+
 Test calculator
     Launch application    open -a Calculator
     Wait for    calculator active

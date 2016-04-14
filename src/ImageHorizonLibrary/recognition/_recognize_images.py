@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from os import listdir
 from os.path import abspath, isdir, isfile, join as path_join
 from time import time
 from contextlib import contextmanager
@@ -12,7 +13,7 @@ from ..errors import ReferenceFolderException
 
 class _RecognizeImages(object):
 
-    def __normalize(self, path):
+    def __normalize(self, path, is_folder=False):
         if (not self.reference_folder or
                 not isinstance(self.reference_folder, basestring) or
                 not isdir(self.reference_folder)):
@@ -21,11 +22,11 @@ class _RecognizeImages(object):
         if (not path or not isinstance(path, basestring)):
             raise InvalidImageException('"%s" is invalid image name.' % path)
         path = unicode(path.lower().replace(' ', '_'))
-        if not path.endswith('.png'):
+        if not path.endswith('.png') and not is_folder:
             path += '.png'
         path = abspath(path_join(self.reference_folder, path))
-        if not isfile(path):
-            raise ImageNotFoundException(path)
+        if not isfile(path) and not (is_folder and isdir(path)):
+            raise InvalidImageException('Image path not found: "%s".' % path)
         return path
 
     def click_image(self, reference_image):
@@ -178,10 +179,13 @@ class _RecognizeImages(object):
         return self._locate(reference_image)
 
     def wait_for(self, reference_image, timeout=10):
-        '''Tries to locate given image from the screen for given time.
+        '''Operates on a single image if ``reference_image`` is a file. If 
+        ``reference_image`` is a folder, operates on all images in the folder.
 
-        Fail if the image is not found on the screen after ``timeout`` has
-        expired.
+        For each reference image:
+        Tries to locate given image from the screen until ``timeout`` occurs.
+
+        Fail if the image or none of images in target folder is found.
 
         See `Reference image names` for documentation for ``reference_image``.
 
@@ -189,17 +193,50 @@ class _RecognizeImages(object):
 
         Returns Python tuple ``(x, y)`` of the coordinates.
         '''
-        stop_time = time() + int(timeout)
+        is_dir = False
+        try:
+            if isdir(self.__normalize(reference_image, is_folder=True)):
+                is_dir = True
+        except InvalidImageException:
+            pass
+        is_file = False
+        try:
+            if isfile(self.__normalize(reference_image)):
+                is_file = True
+        except InvalidImageException:
+            pass
+
+        reference_images = []
+        if is_file:
+            reference_images = [reference_image]
+        elif is_dir:
+            for f in listdir(self.__normalize(reference_image, is_folder=True)):
+                if not isfile(self.__normalize(path_join(reference_image, f))):
+                    raise InvalidImageException(
+                                            self.__normalize(reference_image), 
+                                            is_folder=True)
+                reference_images.append(path_join(reference_image, f))
+        
+        def try_locate(ref_image):
+            stop_time = time() + int(timeout)
+            location = None
+            with self._suppress_keyword_on_failure():
+                while time() < stop_time:
+                    try:
+                        location = self._locate(ref_image, log_it=False)
+                        break
+                    except ImageNotFoundException:
+                        pass
+            return location
+
         location = None
-        with self._suppress_keyword_on_failure():
-            while time() < stop_time:
-                try:
-                    location = self._locate(reference_image, log_it=False)
-                    break
-                except ImageNotFoundException:
-                    pass
+        for ref_image in reference_images:
+            location = try_locate(ref_image)
+            if location != None:
+                break
         if location is None:
             self._run_on_failure()
-            raise ImageNotFoundException(self.__normalize(reference_image))
+            raise ImageNotFoundException(self.__normalize(reference_image, 
+                                                          is_folder=True))
         LOGGER.info('Image "%s" found at %r' % (reference_image, location))
         return location
