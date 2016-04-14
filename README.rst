@@ -55,7 +55,7 @@ explicitly install pillow first:
 
 ::
 
-    $ pip install pillow
+    $ pip install pillow==2.9.0
     $ pip install robotframework-imagehorizonlibrary
 
 This will automatically install dependencies as well as their dependencies.
