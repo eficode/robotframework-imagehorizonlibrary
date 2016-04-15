@@ -48,6 +48,10 @@ class ImageHorizonLibrary(_Keyboard,
     [https://pyautogui.readthedocs.org|pyautogui].
 
     = Reference image names =
+    ``reference_image`` parameter can be either a single file, or a folder.
+    If ``reference_image`` is a folder, image recognition is tried separately 
+    for each image in that folder, in alphabetical order until a match is found.
+
     For ease of use, reference image names are automatically normalized
     according to the following rules:
 
