@@ -236,12 +236,12 @@ class _RecognizeImages(object):
                 return False
 
     def locate(self, reference_image, get_center=True):
-        '''Locate image on screen. If ``get_center`` is set to ``False``
+        '''Locate image on screen. Fails if image is not found on screen.
 
-        Fails if image is not found on screen.
+        Returns Python tuple ``(x, y)`` coordinates of the *center* of the first found instance of the image on
+        the screen.
 
-        Returns Python tuple ``(x, y)`` coordinates of the center of the first found instance of the image on the
-        screen. If ``get_center`` is set to ``False``, will returns Python tuple ``(left, top, width, height)``
+        If ``get_center`` is set to ``False``, will returns Python tuple ``(left, top, width, height)``
         coordinate of first found instance of the image on the screen
         '''
         return self._locate(reference_image=reference_image, get_center=get_center)
