@@ -162,7 +162,7 @@ class _RecognizeImages(object):
         yield None
         self.keyword_on_failure = keyword
 
-    def _locate(self, reference_image, contain_image=False, get_center=True, log_it=True):
+    def _locate(self, reference_image, contain_image=None, get_center=True, log_it=True):
         is_dir = False
         try:
             if isdir(self.__normalize(reference_image)):
@@ -188,16 +188,18 @@ class _RecognizeImages(object):
                 reference_images.append(path_join(reference_image, f))
 
         def calculate_center(position):
-            return position[-2]/2, position[-1]/2
+            return position[0]/2, position[1]/2, position[2], position[3]
 
         def try_locate(ref_image):
             location = None
             with self._suppress_keyword_on_failure():
                 try:
-                    if not contain_image:
+                    if contain_image is None:
+                        # returns (x, y)
                         location = ag.locateCenterOnScreen(ref_image.encode('utf-8')) if get_center \
                             else ag.locateOnScreen(ref_image.encode('utf-8'))
                     else:
+                        # returns (x, y, w, h)
                         location = calculate_center(ag.locate(
                             ref_image.encode('utf-8'), contain_image.encode('utf-8'))) if get_center \
                             else ag.locate(ref_image.encode('utf-8'), contain_image.encode('utf-8'))
