@@ -7,13 +7,11 @@ from contextlib import contextmanager
 import pyautogui as ag
 from robot.api import logger as LOGGER
 
-from ImageHorizonLibrary.errors import ImageNotFoundException, InvalidImageException
-from ImageHorizonLibrary.errors import ReferenceFolderException
+from ..errors import ImageNotFoundException, InvalidImageException
+from ..errors import ReferenceFolderException
 
 
 class _RecognizeImages(object):
-    def __init__(self):
-        self.reference_folder = 'c:\\robot'
 
     def __normalize(self, path):
         if (not self.reference_folder or
