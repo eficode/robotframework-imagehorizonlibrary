@@ -50,10 +50,11 @@ class _RecognizeImages(object):
         `Reference image names`.
         '''
         contain_img_location = self._locate(reference_image=contain_image, get_center=False)
-        img_in_img_location = self._locate(reference_image=reference_image, contain_image=contain_image)
+        img_in_img_location = self._locate(reference_image=reference_image, contain_image=contain_image,
+                                           get_center=True)
 
-        x_to_click = contain_img_location[0] + img_in_img_location[0] + img_in_img_location[2]/2
-        y_to_click = contain_img_location[1] + img_in_img_location[1] + img_in_img_location[3]/2
+        x_to_click = contain_img_location[0] + img_in_img_location[0]
+        y_to_click = contain_img_location[1] + img_in_img_location[1]
         LOGGER.info('Clicking image "{img}" in position ({x}, {y})'.format(img=reference_image,
                                                                            x=x_to_click, y=y_to_click))
         ag.click(x=x_to_click, y=y_to_click)
@@ -188,7 +189,7 @@ class _RecognizeImages(object):
                 reference_images.append(path_join(reference_image, f))
 
         def calculate_center(position):
-            return position[0]/2, position[1]/2, position[2], position[3]
+            return position[0] + position[2]/2, position[1] + position[3]/2, position[2], position[3]
 
         def try_locate(ref_image):
             location = None
