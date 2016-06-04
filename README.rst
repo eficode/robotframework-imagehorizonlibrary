@@ -11,7 +11,7 @@ Keyword documentation
 
 `Keyword Documentation`__
 
-__ http://eficode.github.io/robotframework-imagehorizonlibrary/doc/ImageHorizonLibrary.html
+__ http://eyarz.github.io/robotframework-imagehorizonlibrary/doc/ImageHorizonLibrary.html
 
 Travis CI
 ---------
