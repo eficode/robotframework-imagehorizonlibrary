@@ -32,7 +32,7 @@ class TestRecognizeImages(TestCase):
         from ImageHorizonLibrary import ReferenceFolderException
         with patch(self._locate, return_value=(1, 2, 3, 4)):
             try:
-                self.lib.click_image_in_image('my_picture', 'my_picture')
+                self.lib.click_image_in_image('picture_in_my_picture', 'my_picture')
                 self.mock.click.assert_called_once_with(x=3, y=6)
             except ReferenceFolderException:
                 pass
@@ -46,6 +46,18 @@ class TestRecognizeImages(TestCase):
         with patch(self.locate, return_value=(1, 2, 3, 4)):
             locate = self.lib.locate('my_picture', get_center=False)
             self.assertEqual(locate, (1, 2, 3, 4))
+
+    def test__locate_with_get_center_true_and_contain_image(self):
+        self.mock.locate.return_value = (10, 20, 3, 4)
+        locate = self.lib._locate(reference_image='picture_in_my_picture', contain_image='my_picture',
+                                  get_center=True)
+        self.assertEqual(locate, (5, 10, 3, 4))
+
+    def test__locate_with_get_center_false_and_contain_image(self):
+        self.mock.locate.return_value = (10, 20, 3, 4)
+        locate = self.lib._locate(reference_image='picture_in_my_picture', contain_image='my_picture',
+                                  get_center=False)
+        self.assertEqual(locate, (10, 20, 3, 4))
 
     def _call_all_directional_functions(self, fn_name):
         from ImageHorizonLibrary import ImageHorizonLibrary
