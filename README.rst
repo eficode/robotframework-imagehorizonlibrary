@@ -70,6 +70,9 @@ commands above to install it.
 OSX
 '''
 
+*NOTICE*
+ImageHorizonLibrary does not currently work with XCode v.8. Please use a previous version. 
+
 You additionally need to install these for pyautogui_:
 
 ::
