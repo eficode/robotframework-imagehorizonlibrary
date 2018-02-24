@@ -95,11 +95,11 @@ class _Mouse(object):
 
     def mouse_down(self, button='left'):
         '''Presses specidied mouse button down'''
-        ag.mouseDown(button)
+        ag.mouseDown(button=button)
 
     def mouse_up(self, button='left'):
         '''Releases specified mouse button'''
-        ag.mouseUp(button)
+        ag.mouseUp(button=button)
 
     def click(self, button='left'):
         '''Clicks with the specified mouse button.

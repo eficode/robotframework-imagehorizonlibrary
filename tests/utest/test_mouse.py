@@ -67,9 +67,9 @@ class TestMouse(TestCase):
     def test_mouse_down(self):
         for args in [tuple(), ('right',)]:
             self.lib.mouse_down(*args)
-        self.assertEquals(self.mock.mouseDown.mock_calls, [call('left'), call('right')])
+        self.assertEquals(self.mock.mouseDown.mock_calls, [call(button='left'), call(button='right')])
 
     def test_mouse_up(self):
         for args in [tuple(), ('right',)]:
             self.lib.mouse_up(*args)
-        self.assertEquals(self.mock.mouseUp.mock_calls, [call('left'), call('right')])
+        self.assertEquals(self.mock.mouseUp.mock_calls, [call(button='left'), call(button='right')])
