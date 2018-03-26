@@ -35,11 +35,28 @@ class _RecognizeImages(object):
         ``reference_image`` is automatically normalized as described in the
         `Reference image names`.
         '''
-        center_location = self.locate(reference_image)
+        center_location = self.locate(reference_image=reference_image)
         LOGGER.info('Clicking image "%s" in position %s' % (reference_image,
                                                             center_location))
         ag.click(center_location)
         return center_location
+
+    def click_image_in_image(self, reference_image, contain_image):
+        '''Finds the reference image in the contain image and clicks it once.
+
+        ``reference_image`` and ``contain_image`` are automatically normalized as described in the
+        `Reference image names`.
+        '''
+        contain_img_location = self._locate(reference_image=contain_image, get_center=False)
+        img_in_img_location = self._locate(reference_image=reference_image, contain_image=contain_image,
+                                           get_center=True)
+
+        x_to_click = contain_img_location[0] + img_in_img_location[0]
+        y_to_click = contain_img_location[1] + img_in_img_location[1]
+        LOGGER.info('Clicking image "{img}" in position ({x}, {y})'.format(img=reference_image,
+                                                                           x=x_to_click, y=y_to_click))
+        ag.click(x=x_to_click, y=y_to_click)
+        return img_in_img_location
 
     def _click_to_the_direction_of(self, direction, location, offset,
                                    clicks, button, interval):
@@ -144,7 +161,7 @@ class _RecognizeImages(object):
         yield None
         self.keyword_on_failure = keyword
 
-    def _locate(self, reference_image, log_it=True):
+    def _locate(self, reference_image, contain_image=None, get_center=True, log_it=True):
         is_dir = False
         try:
             if isdir(self.__normalize(reference_image)):
@@ -169,11 +186,22 @@ class _RecognizeImages(object):
                                             self.__normalize(reference_image))
                 reference_images.append(path_join(reference_image, f))
 
+        def calculate_center(position):
+            return position[0] + position[2]/2, position[1] + position[3]/2, position[2], position[3]
+
         def try_locate(ref_image):
             location = None
             with self._suppress_keyword_on_failure():
                 try:
-                    location = ag.locateCenterOnScreen(ref_image.encode('utf-8'))
+                    if contain_image is None:
+                        # returns (x, y)
+                        location = ag.locateCenterOnScreen(ref_image.encode('utf-8')) if get_center \
+                            else ag.locateOnScreen(ref_image.encode('utf-8'))
+                    else:
+                        # returns (x, y, w, h)
+                        location = calculate_center(ag.locate(
+                            ref_image.encode('utf-8'), contain_image.encode('utf-8'))) if get_center \
+                            else ag.locate(ref_image.encode('utf-8'), contain_image.encode('utf-8'))
                 except ImageNotFoundException:
                     pass
             return location
@@ -206,14 +234,16 @@ class _RecognizeImages(object):
             except ImageNotFoundException:
                 return False
 
-    def locate(self, reference_image):
-        '''Locate image on screen.
+    def locate(self, reference_image, get_center=True):
+        '''Locate image on screen. Fails if image is not found on screen.
 
-        Fails if image is not found on screen.
+        Returns Python tuple ``(x, y)`` coordinates of the *center* of the first found instance of the image on
+        the screen.
 
-        Returns Python tuple ``(x, y)`` of the coordinates.
+        If ``get_center`` is set to ``False``, will returns Python tuple ``(left, top, width, height)``
+        coordinate of first found instance of the image on the screen
         '''
-        return self._locate(reference_image)
+        return self._locate(reference_image=reference_image, get_center=get_center)
 
     def wait_for(self, reference_image, timeout=10):
         '''Tries to locate given image from the screen for given time.

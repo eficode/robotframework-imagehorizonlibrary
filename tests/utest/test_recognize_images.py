@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import time
 
-from unittest import TestCase
+from unittest import TestCase, skip
 from os.path import abspath, dirname, join as path_join
 from mock import call, MagicMock, patch
 
@@ -28,8 +28,34 @@ class TestRecognizeImages(TestCase):
             self.lib.click_image('my_picture')
             self.mock.click.assert_called_once_with((0, 0))
 
+    def test_click_image_in_image(self):
+        with patch(self._locate, return_value=(10, 20, 3, 4)):
+            self.lib.click_image_in_image('picture_in_my_picture', 'my_picture')
+            self.mock.click.assert_called_once_with(x=20, y=40)
+
+    def test_locate_with_get_center_true(self):
+        with patch(self.locate, return_value=(1, 2)):
+            locate = self.lib.locate('my_picture', get_center=True)
+            self.assertEqual(locate, (1, 2))
+
+    def test_locate_with_get_center_false(self):
+        with patch(self.locate, return_value=(1, 2, 3, 4)):
+            locate = self.lib.locate('my_picture', get_center=False)
+            self.assertEqual(locate, (1, 2, 3, 4))
+
+    def test__locate_with_get_center_true_and_contain_image(self):
+        self.mock.locate.return_value = (1, 2, 30, 40)
+        locate = self.lib._locate(reference_image='picture_in_my_picture', contain_image='my_picture',
+                                  get_center=True)
+        self.assertEqual(locate, (16, 22, 30, 40))
+
+    def test__locate_with_get_center_false_and_contain_image(self):
+        self.mock.locate.return_value = (10, 20, 3, 4)
+        locate = self.lib._locate(reference_image='picture_in_my_picture', contain_image='my_picture',
+                                  get_center=False)
+        self.assertEqual(locate, (10, 20, 3, 4))
+
     def _call_all_directional_functions(self, fn_name):
-        from ImageHorizonLibrary import ImageHorizonLibrary
         retvals = []
         for direction in ['above', 'below', 'left', 'right']:
             fn = getattr(self.lib, fn_name % direction)
@@ -101,20 +127,35 @@ class TestRecognizeImages(TestCase):
         self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
-    def test_locate(self):
+    def test_negative_locate(self):
         from ImageHorizonLibrary import InvalidImageException
 
-        for image_name in ('my_picture.png', 'my picture.png', 'MY PICTURE',
-                           'mY_PiCtURe'):
+        for image_name in ('my_picture.png', 'my picture.png', 'MY PICTURE', 'mY_PiCtURe'):
             self._verify_path_works(image_name, 'my_picture.png')
 
-        self.mock.locateCenterOnScreen.return_value = None
         run_on_failure = MagicMock()
-        with self.assertRaises(InvalidImageException), \
-             patch.object(self.lib, '_run_on_failure', run_on_failure):
-            self.lib.locate('nonexistent')
+
+        def test_locateCenterOnScreen():
+            self.mock.locateCenterOnScreen.return_value = None
+            self.lib._locate('nonexistent')
             run_on_failure.assert_called_once_with()
 
+        def test_locateOnScreen():
+            self.mock.locateOnScreen.return_value = None
+            self.lib._locate('nonexistent', get_center=False)
+            run_on_failure.assert_called_once_with()
+
+        def test_locate():
+            self.mock.locate.return_value = None
+            self.lib._locate(reference_image='nonexistent', contain_image='nonexistent')
+            run_on_failure.assert_called_once_with()
+
+        with self.assertRaises(InvalidImageException), patch.object(self.lib, '_run_on_failure', run_on_failure):
+            test_locateCenterOnScreen()
+            test_locateOnScreen()
+            test_locate()
+
+    # @skip("won't work on OS windows")
     def test_locate_with_valid_reference_folder(self):
         for ref, img in (('reference_images', 'my_picture.png'),
                          (u'./reference_images', u'my picture.png'),
@@ -131,8 +172,7 @@ class TestRecognizeImages(TestCase):
 
         self.lib.reference_folder = path_join(CURDIR, u'rëförence_imägës')
         self.lib.locate(u'mŸ PäKSÖR')
-        expected_path = path_join(CURDIR, u'rëförence_imägës',
-                                  u'mÿ_päksör.png').encode('utf-8')
+        expected_path = path_join(CURDIR, u'rëförence_imägës', u'mÿ_päksör.png').encode('utf-8')
         self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
