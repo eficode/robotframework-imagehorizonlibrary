@@ -10,8 +10,6 @@ from robot.api import logger as LOGGER
 from ..errors import ImageNotFoundException, InvalidImageException
 from ..errors import ReferenceFolderException
 
-from .. import utils
-
 class _RecognizeImages(object):
 
     def __normalize(self, path):
@@ -197,7 +195,7 @@ class _RecognizeImages(object):
         center_point = ag.center(location)
         x = center_point.x
         y = center_point.y
-        retina = utils.has_retina()
+        retina = self.has_retina
         if retina:
             x = x / 2
             y = y / 2

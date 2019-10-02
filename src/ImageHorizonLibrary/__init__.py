@@ -121,6 +121,7 @@ class ImageHorizonLibrary(_Keyboard,
         self.is_windows = utils.is_windows()
         self.is_mac = utils.is_mac()
         self.is_linux = utils.is_linux()
+        self.has_retina = utils.has_retina()
 
     def _get_location(self, direction, location, offset):
         x, y = location
