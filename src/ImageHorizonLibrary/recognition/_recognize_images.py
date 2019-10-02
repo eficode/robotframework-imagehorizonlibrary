@@ -195,13 +195,12 @@ class _RecognizeImages(object):
         if log_it:
             LOGGER.info('Image "%s" found at %r' % (reference_image, location))
         center_point = ag.center(location)
+        x = center_point.x
+        y = center_point.y
         retina = utils.has_retina()
         if retina:
-            x = center_point.x / 2
-            y = center_point.y / 2
-        else:
-            x = center_point.x
-            y = center_point.y
+            x = x / 2
+            y = y / 2
         return (x, y)
 
     def does_exist(self, reference_image):
