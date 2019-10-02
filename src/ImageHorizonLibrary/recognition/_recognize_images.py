@@ -192,7 +192,7 @@ class _RecognizeImages(object):
             raise ImageNotFoundException(reference_image)
         if log_it:
             LOGGER.info('Image "%s" found at %r' % (reference_image, location))
-        return location
+        return (location.x, location.y)
 
     def does_exist(self, reference_image):
         '''Returns ``True`` if reference image was found on screen or
