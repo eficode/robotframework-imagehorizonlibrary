@@ -28,13 +28,10 @@ __ https://travis-ci.org/Eficode/robotframework-imagehorizonlibrary/
 Prerequisites
 -------------
 
-- `Python 2.7+`_ (unfortunately not 3.x)
+- `Python 2.7+`
 - pip_ for easy installation
 - pyautogui_ and `it's prerequisites`_
 - `Robot Framework`_
-
-On OS X, Retina display might `double all coordinates`_ from what they are
-suppose to be. Unfortunately you need to work around this problem yourself.
 
 On Ubuntu, you need to take `special measures`_ to make the screenshot
 functionality to work correctly. The keyboard functions might not work on
