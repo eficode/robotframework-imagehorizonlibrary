@@ -195,8 +195,7 @@ class _RecognizeImages(object):
         center_point = ag.center(location)
         x = center_point.x
         y = center_point.y
-        retina = self.has_retina
-        if retina:
+        if self.has_retina:
             x = x / 2
             y = y / 2
         return (x, y)
