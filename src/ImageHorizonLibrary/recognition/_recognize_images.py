@@ -10,6 +10,7 @@ from robot.api import logger as LOGGER
 from ..errors import ImageNotFoundException, InvalidImageException
 from ..errors import ReferenceFolderException
 
+from .. import utils
 
 class _RecognizeImages(object):
 
@@ -194,7 +195,14 @@ class _RecognizeImages(object):
         if log_it:
             LOGGER.info('Image "%s" found at %r' % (reference_image, location))
         center_point = ag.center(location)
-        return (center_point.x, center_point.y)
+        retina = utils.has_retina()
+        if retina:
+            x = center_point.x / 2
+            y = center_point.y / 2
+        else:
+            x = center_point.x
+            y = center_point.y
+        return (x, y)
 
     def does_exist(self, reference_image):
         '''Returns ``True`` if reference image was found on screen or
