@@ -173,8 +173,9 @@ class _RecognizeImages(object):
             location = None
             with self._suppress_keyword_on_failure():
                 try:
-                    location = ag.locateCenterOnScreen(ref_image)
-                except ImageNotFoundException:
+                    location = ag.locateOnScreen(ref_image)
+                except ImageNotFoundException as ex:
+                    LOGGER.info(ex)
                     pass
             return location
 
@@ -192,7 +193,8 @@ class _RecognizeImages(object):
             raise ImageNotFoundException(reference_image)
         if log_it:
             LOGGER.info('Image "%s" found at %r' % (reference_image, location))
-        return (location.x, location.y)
+        center_point = ag.center(location)
+        return (center_point.x, center_point.y)
 
     def does_exist(self, reference_image):
         '''Returns ``True`` if reference image was found on screen or
