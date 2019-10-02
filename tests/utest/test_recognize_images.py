@@ -132,7 +132,7 @@ class TestRecognizeImages(TestCase):
         self.lib.reference_folder = path_join(CURDIR, 'rëförence_imägës')
         self.lib.locate('mŸ PäKSÖR')
         expected_path = path_join(CURDIR, 'rëförence_imägës',
-                                  'mÿ_päksör.png').encode('utf-8')
+                                  'mÿ_päksör.png')
         self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 

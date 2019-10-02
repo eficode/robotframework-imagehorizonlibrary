@@ -22,7 +22,7 @@ class TestMainClass(TestCase):
         self.Tk_mock.Tk.return_value = self.clipboard_mock
         self.patcher = patch.dict('sys.modules',
                                   {'pyautogui': self.pyautogui_mock,
-                                   'Tkinter': self.Tk_mock})
+                                   'tkinter': self.Tk_mock})
         self.patcher.start()
         from ImageHorizonLibrary import ImageHorizonLibrary
         self.lib = ImageHorizonLibrary()

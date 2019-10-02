@@ -78,7 +78,7 @@ class TestKeyboard(TestCase):
                         'are:\n%r' % ', '.join(self.mock.KEYBOARD_KEYS))
         with self.assertRaises(KeyboardException) as cm:
             self.lib.type_with_keys_down('sometext', 'enter')
-        self.assertEqual(cm.exception.message, expected_msg)
+        self.assertEqual(str(cm.exception), expected_msg)
 
     def test_press_combination(self):
             self.lib.press_combination('Key.ctrl', 'A')

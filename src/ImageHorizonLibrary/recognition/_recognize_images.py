@@ -173,7 +173,7 @@ class _RecognizeImages(object):
             location = None
             with self._suppress_keyword_on_failure():
                 try:
-                    location = ag.locateCenterOnScreen(ref_image.encode('utf-8'))
+                    location = ag.locateCenterOnScreen(ref_image)
                 except ImageNotFoundException:
                     pass
             return location
