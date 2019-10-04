@@ -128,7 +128,7 @@ class ImageHorizonLibrary(_Keyboard,
         self.is_linux = utils.is_linux()
         self.has_retina = utils.has_retina()
         self.has_cv = utils.has_cv()
-        self.confidence = confidence
+        self.confidence = self.set_confidence(confidence)
 
     def _get_location(self, direction, location, offset):
         x, y = location
@@ -244,4 +244,10 @@ class ImageHorizonLibrary(_Keyboard,
         '''Sets the confidence level for finding images
         Applicable if opencv (python-opencv) is installed.
         '''
-        self.confidence = new_confidence
+        new_confidence = float(new_confidence)
+        if not 1 >= new_confidence >= 0:
+            LOGGER.warn('Unable to set confidence to {}. Value '
+                        'must be between 0 and 1, inclusive.'
+                        .format(new_confidence))
+        else:
+            self.confidence = new_confidence
