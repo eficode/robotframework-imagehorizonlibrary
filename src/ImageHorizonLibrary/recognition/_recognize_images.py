@@ -143,7 +143,7 @@ class _RecognizeImages(object):
         yield None
         self.keyword_on_failure = keyword
 
-    def _locate(self, reference_image, log_it=True, confidence=1):
+    def _locate(self, reference_image, log_it=True):
         is_dir = False
         try:
             if isdir(self.__normalize(reference_image)):
@@ -168,13 +168,13 @@ class _RecognizeImages(object):
                                             self.__normalize(reference_image))
                 reference_images.append(path_join(reference_image, f))
 
-        def try_locate(ref_image, confidence=1):
+        def try_locate(ref_image):
             location = None
             with self._suppress_keyword_on_failure():
                 try:
                     if self.has_cv:
                         location = ag.locateOnScreen(ref_image,
-                                                     confidence=confidence)
+                                                     confidence=self.confidence)
                     else:
                         location = ag.locateOnScreen(ref_image)
                 except ImageNotFoundException as ex:
@@ -184,7 +184,7 @@ class _RecognizeImages(object):
 
         location = None
         for ref_image in reference_images:
-            location = try_locate(ref_image, confidence)
+            location = try_locate(ref_image)
             if location != None:
                 break
 
@@ -204,37 +204,28 @@ class _RecognizeImages(object):
             y = y / 2
         return (x, y)
 
-    def does_exist(self, reference_image, confidence=1):
+    def does_exist(self, reference_image):
         '''Returns ``True`` if reference image was found on screen or
         ``False`` otherwise. Never fails.
-
-        ``confidence`` provides a tolerance for the ``reference_image``.
-                It can be used if python-opencv is installed and
-                is given as number between 0 and 1. Default is 1.
 
         See `Reference image names` for documentation for ``reference_image``.
         '''
         with self._suppress_keyword_on_failure():
             try:
-                return bool(self._locate(reference_image, log_it=False,
-                                         confidence=confidence))
+                return bool(self._locate(reference_image, log_it=False))
             except ImageNotFoundException:
                 return False
 
-    def locate(self, reference_image, confidence=1):
+    def locate(self, reference_image):
         '''Locate image on screen.
 
         Fails if image is not found on screen.
 
-        ``confidence`` provides a tolerance for the ``reference_image``.
-                       It can be used if python-opencv is installed and
-                       is given as number between 0 and 1. Default is 1.
-
         Returns Python tuple ``(x, y)`` of the coordinates.
         '''
-        return self._locate(reference_image, confidence)
+        return self._locate(reference_image)
 
-    def wait_for(self, reference_image, timeout=10, confidence=1):
+    def wait_for(self, reference_image, timeout=10):
         '''Tries to locate given image from the screen for given time.
 
         Fail if the image is not found on the screen after ``timeout`` has
@@ -244,10 +235,6 @@ class _RecognizeImages(object):
 
         ``timeout`` is given in seconds.
 
-        ``confidence`` provides a tolerance for the ``reference_image``.
-                       It can be used if python-opencv is installed and
-                       is given as number between 0 and 1. Default is 1.
-
         Returns Python tuple ``(x, y)`` of the coordinates.
         '''
         stop_time = time() + int(timeout)
@@ -255,8 +242,7 @@ class _RecognizeImages(object):
         with self._suppress_keyword_on_failure():
             while time() < stop_time:
                 try:
-                    location = self._locate(reference_image, log_it=False,
-                                            confidence=confidence)
+                    location = self._locate(reference_image, log_it=False)
                     break
                 except ImageNotFoundException:
                     pass
