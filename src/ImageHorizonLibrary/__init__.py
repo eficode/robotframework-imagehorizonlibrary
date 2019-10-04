@@ -96,7 +96,8 @@ class ImageHorizonLibrary(_Keyboard,
     ROBOT_LIBRARY_VERSION = VERSION
 
     def __init__(self, reference_folder=None, screenshot_folder=None,
-                 keyword_on_failure='ImageHorizonLibrary.Take A Screenshot'):
+                 keyword_on_failure='ImageHorizonLibrary.Take A Screenshot',
+                 confidence=1):
         '''ImageHorizonLibrary can be imported with several options.
 
         ``reference_folder`` is path to the folder where all reference images
@@ -111,6 +112,10 @@ class ImageHorizonLibrary(_Keyboard,
         ``keyword_on_failure`` is the keyword to be run, when location-related
         keywords fail. If you wish to not take screenshots, use for example
         `BuiltIn.No Operation`. Keyword must however be a valid keyword.
+
+        ``confidence`` provides a tolerance for the ``reference_image``.
+                       It can be used if python-opencv is installed and
+                       is given as number between 0 and 1. Default is 1.
         '''
 
         self.reference_folder = reference_folder
@@ -123,6 +128,7 @@ class ImageHorizonLibrary(_Keyboard,
         self.is_linux = utils.is_linux()
         self.has_retina = utils.has_retina()
         self.has_cv = utils.has_cv()
+        self.confidence = confidence
 
     def _get_location(self, direction, location, offset):
         x, y = location
