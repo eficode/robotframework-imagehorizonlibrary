@@ -172,7 +172,7 @@ class _RecognizeImages(object):
             location = None
             with self._suppress_keyword_on_failure():
                 try:
-                    if self.has_cv:
+                    if self.has_cv and self.confidence:
                         location = ag.locateOnScreen(ref_image,
                                                      confidence=self.confidence)
                     else:
