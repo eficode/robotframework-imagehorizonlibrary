@@ -239,3 +239,9 @@ class ImageHorizonLibrary(_Keyboard,
         See `library importing` for more specific information.
         '''
         self.screenshot_folder = screenshot_folder_path
+
+    def set_confidence(self, new_confidence):
+        '''Sets the confidence level for finding images
+        Applicable if opencv (python-opencv) is installed.
+        '''
+        self.confidence = new_confidence
