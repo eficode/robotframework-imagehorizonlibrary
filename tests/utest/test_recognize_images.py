@@ -8,6 +8,13 @@ from mock import call, MagicMock, patch
 CURDIR = abspath(dirname(__file__))
 TESTIMG_DIR = path_join(CURDIR, 'reference_images')
 
+def has_cv():
+    has_cv = True
+    try:
+        import cv2
+    except ModuleNotFoundError as err:
+        has_cv = False
+    return has_cv
 
 class TestRecognizeImages(TestCase):
     def setUp(self):
@@ -18,6 +25,7 @@ class TestRecognizeImages(TestCase):
         self.lib = ImageHorizonLibrary(reference_folder=TESTIMG_DIR)
         self.locate = 'ImageHorizonLibrary.ImageHorizonLibrary.locate'
         self._locate = 'ImageHorizonLibrary.ImageHorizonLibrary._locate'
+        self.lib.has_cv = has_cv()
 
     def tearDown(self):
         self.mock.reset_mock()
@@ -98,7 +106,10 @@ class TestRecognizeImages(TestCase):
     def _verify_path_works(self, image_name, expected):
         self.lib.locate(image_name)
         expected_path = path_join(TESTIMG_DIR, expected)
-        self.mock.locateOnScreen.assert_called_once_with(expected_path)
+        if self.lib.has_cv:
+            self.mock.locateOnScreen.assert_called_once_with(expected_path, confidence=1)
+        else:
+            self.mock.locateOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
     def test_locate(self):
@@ -126,14 +137,20 @@ class TestRecognizeImages(TestCase):
         self.lib.reference_folder = path_join(CURDIR, 'symbolic_link')
         self.lib.locate('mY_PiCtURe')
         expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
-        self.mock.locateOnScreen.assert_called_once_with(expected_path)
+        if self.lib.has_cv:
+            self.mock.locateOnScreen.assert_called_once_with(expected_path, confidence=1)
+        else:
+            self.mock.locateOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
         self.lib.reference_folder = path_join(CURDIR, 'rëförence_imägës')
         self.lib.locate('mŸ PäKSÖR')
         expected_path = path_join(CURDIR, 'rëförence_imägës',
                                   'mÿ_päksör.png')
-        self.mock.locateOnScreen.assert_called_once_with(expected_path)
+        if self.lib.has_cv:
+            self.mock.locateOnScreen.assert_called_once_with(expected_path, confidence=1)
+        else:
+            self.mock.locateOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
     def test_locate_with_invalid_reference_folder(self):

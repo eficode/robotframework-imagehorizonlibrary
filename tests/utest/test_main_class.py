@@ -83,7 +83,7 @@ class TestMainClass(TestCase):
         self.assertEqual(self.lib.screenshot_folder, '/test/path')
 
     def test_set_confidence(self):
-        self.asserEqual(self.lib.confidence, 1)
+        self.assertEqual(self.lib.confidence, 1)
 
         self.lib.set_confidence(0)
         self.assertEqual(self.lib.confidence, 0)
