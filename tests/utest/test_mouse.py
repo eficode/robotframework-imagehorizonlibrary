@@ -20,7 +20,7 @@ class TestMouse(TestCase):
         for direction in ['above', 'below', 'left', 'right']:
             fn = getattr(self.lib, 'click_to_the_%s_of' % direction)
             fn((0, 0), '10')
-        self.assertEquals(self.mock.click.mock_calls,
+        self.assertEqual(self.mock.click.mock_calls,
                           [call(0, -10, button='left', interval=0.0, clicks=1),
                            call(0, 10, button='left', interval=0.0, clicks=1),
                            call(-10, 0, button='left', interval=0.0, clicks=1),
@@ -32,12 +32,12 @@ class TestMouse(TestCase):
         fn = getattr(self.lib, 'click_to_the_%s_of' % direction)
         with self.assertRaises(MouseException):
             fn((0, 0), 10, **kwargs)
-        self.assertEquals(self.mock.click.mock_calls, [])
+        self.assertEqual(self.mock.click.mock_calls, [])
 
     def test_arguments_in_directional_clicks(self):
-        self.lib.click_to_the_above_of((0, 0), 10, clicks=u'2',
-                                       button=u'middle', interval=u'1.2')
-        self.assertEquals(self.mock.click.mock_calls, [call(0, -10,
+        self.lib.click_to_the_above_of((0, 0), 10, clicks='2',
+                                       button='middle', interval='1.2')
+        self.assertEqual(self.mock.click.mock_calls, [call(0, -10,
                                                             button='middle',
                                                             interval=1.2,
                                                             clicks=2)])
@@ -53,23 +53,23 @@ class TestMouse(TestCase):
             self.lib.move_to(*args)
 
     def test_move_to(self):
-        for args in [(1, 2), ((1, 2),), ('1', u'2'), ((u'1', '2'),)]:
+        for args in [(1, 2), ((1, 2),), ('1', '2'), (('1', '2'),)]:
             self.lib.move_to(*args)
-            self.assertEquals(self.mock.moveTo.mock_calls, [call(1, 2)])
+            self.assertEqual(self.mock.moveTo.mock_calls, [call(1, 2)])
             self.mock.reset_mock()
 
         for args in [(1,),
                      (1, 2, 3),
-                     (u'1', u'lollerskates'),
-                     ((u'1', u'lollerskates'),)]:
+                     ('1', 'lollerskates'),
+                     (('1', 'lollerskates'),)]:
             self._verify_move_to_fails(*args)
 
     def test_mouse_down(self):
         for args in [tuple(), ('right',)]:
             self.lib.mouse_down(*args)
-        self.assertEquals(self.mock.mouseDown.mock_calls, [call(button='left'), call(button='right')])
+        self.assertEqual(self.mock.mouseDown.mock_calls, [call(button='left'), call(button='right')])
 
     def test_mouse_up(self):
         for args in [tuple(), ('right',)]:
             self.lib.mouse_up(*args)
-        self.assertEquals(self.mock.mouseUp.mock_calls, [call(button='left'), call(button='right')])
+        self.assertEqual(self.mock.mouseUp.mock_calls, [call(button='left'), call(button='right')])

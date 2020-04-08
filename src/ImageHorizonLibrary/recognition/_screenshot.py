@@ -38,7 +38,7 @@ class _Screenshot(object):
         integer appended.
         '''
         target_dir = self.screenshot_folder if self.screenshot_folder else ''
-        if not isinstance(target_dir, basestring):
+        if not isinstance(target_dir, str):
             raise ScreenshotFolderException('Screenshot folder is invalid: '
                                             '"%s"' % target_dir)
         path = self._make_up_filename()

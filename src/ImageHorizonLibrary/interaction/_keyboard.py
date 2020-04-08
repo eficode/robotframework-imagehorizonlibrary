@@ -32,7 +32,7 @@ class _Keyboard(object):
         for key_or_text in keys_or_text:
             key = self._convert_to_valid_special_key(key_or_text)
             if key:
-                ag.press(key.encode('utf-8'))
+                ag.press(key)
             else:
                 ag.typewrite(key_or_text)
 
