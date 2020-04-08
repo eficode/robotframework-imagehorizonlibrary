@@ -28,7 +28,7 @@ __ https://travis-ci.org/Eficode/robotframework-imagehorizonlibrary/
 Prerequisites
 -------------
 
-- `Python 2.7+`
+- `Python 3.x`
 - pip_ for easy installation
 - pyautogui_ and `it's prerequisites`_
 - `Robot Framework`_
@@ -47,12 +47,10 @@ __ http://www.voidspace.org.uk/python/mock/
 Installation
 ------------
 
-If you have pip_, installation is straightforward, although you need to
-explicitly install pillow first:
+If you have pip_, installation is straightforward:
 
 ::
 
-    $ pip install pillow==2.9.0
     $ pip install robotframework-imagehorizonlibrary
 
 This will automatically install dependencies as well as their dependencies.
@@ -68,7 +66,7 @@ OSX
 '''
 
 *NOTICE*
-ImageHorizonLibrary does not currently work with XCode v.8. Please use a previous version. 
+ImageHorizonLibrary does not currently work with XCode v.8. Please use a previous version.
 
 You additionally need to install these for pyautogui_:
 
@@ -120,7 +118,7 @@ and
     $ python tests/atest/run_tests.py
 
 
-.. _Python 2.7+: http://python.org
+.. _Python 3.x: http://python.org
 .. _pip: https://pypi.python.org/pypi/pip
 .. _pyautogui: https://github.com/asweigart/pyautogui
 .. _it's prerequisites: https://pyautogui.readthedocs.org/en/latest/install.html

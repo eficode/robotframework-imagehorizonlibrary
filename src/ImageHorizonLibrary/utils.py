@@ -25,9 +25,8 @@ def is_java():
 def has_retina():
     if is_mac():
         # Will return 0 if there is a retina display
-        return_code = call("system_profiler SPDisplaysDataType | grep 'Retina'", shell=True)
-        return not return_code
-    return 0
+        return call("system_profiler SPDisplaysDataType | grep 'Retina'", shell=True) == 0
+    return False
 
 def has_cv():
     has_cv = True
