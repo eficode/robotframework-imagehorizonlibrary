@@ -5,7 +5,7 @@ from setuptools import setup
 CURDIR = abspath(dirname(__file__))
 
 # get VERSION number
-execfile('src/ImageHorizonLibrary/version.py')
+exec(compile(open('src/ImageHorizonLibrary/version.py', "rb").read(), 'src/ImageHorizonLibrary/version.py', 'exec'))
 
 KEYWORDS = ('imagerecognition gui robotframework testing testautomation '
             'acceptancetesting atdd bdd')

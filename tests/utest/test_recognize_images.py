@@ -38,7 +38,7 @@ class TestRecognizeImages(TestCase):
         return retvals
 
     def _verify_calls_to_pyautogui(self, mock_calls, clicks=1):
-        self.assertEquals(
+        self.assertEqual(
             mock_calls,
             [call(0, -10, button='left', interval=0.0, clicks=clicks),
              call(0, 10, button='left', interval=0.0, clicks=clicks),
@@ -55,7 +55,7 @@ class TestRecognizeImages(TestCase):
             ret = self._call_all_directional_functions('copy_from_the_%s_of')
         self._verify_calls_to_pyautogui(self.mock.click.mock_calls, clicks=3)
         for retval in ret:
-            self.assertEquals(retval, 'Some Text')
+            self.assertEqual(retval, 'Some Text')
 
     def test_does_exist(self):
         from ImageHorizonLibrary import ImageNotFoundException
@@ -67,7 +67,7 @@ class TestRecognizeImages(TestCase):
         with patch(self._locate, side_effect=ImageNotFoundException('')), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
             self.assertFalse(self.lib.does_exist('my_picture'))
-            self.assertEquals(len(run_on_failure.mock_calls), 0)
+            self.assertEqual(len(run_on_failure.mock_calls), 0)
 
     def test_wait_for_happy_path(self):
         from ImageHorizonLibrary import InvalidImageException
@@ -76,7 +76,7 @@ class TestRecognizeImages(TestCase):
         with patch(self._locate, return_value=(0, 0)), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
             self.lib.wait_for('my_picture', timeout=1)
-            self.assertEquals(len(run_on_failure.mock_calls), 0)
+            self.assertEqual(len(run_on_failure.mock_calls), 0)
 
     def test_wait_for_negative_path(self):
         from ImageHorizonLibrary import InvalidImageException
@@ -87,7 +87,7 @@ class TestRecognizeImages(TestCase):
              patch.object(self.lib, '_run_on_failure', run_on_failure):
 
             start = time.time()
-            self.lib.wait_for('notfound', timeout=u'1')
+            self.lib.wait_for('notfound', timeout='1')
             stop = time.time()
 
             run_on_failure.assert_called_once_with()
@@ -98,7 +98,7 @@ class TestRecognizeImages(TestCase):
     def _verify_path_works(self, image_name, expected):
         self.lib.locate(image_name)
         expected_path = path_join(TESTIMG_DIR, expected)
-        self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
+        self.mock.locateOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
     def test_locate(self):
@@ -108,7 +108,7 @@ class TestRecognizeImages(TestCase):
                            'mY_PiCtURe'):
             self._verify_path_works(image_name, 'my_picture.png')
 
-        self.mock.locateCenterOnScreen.return_value = None
+        self.mock.locateOnScreen.return_value = None
         run_on_failure = MagicMock()
         with self.assertRaises(InvalidImageException), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
@@ -117,7 +117,7 @@ class TestRecognizeImages(TestCase):
 
     def test_locate_with_valid_reference_folder(self):
         for ref, img in (('reference_images', 'my_picture.png'),
-                         (u'./reference_images', u'my picture.png'),
+                         ('./reference_images', 'my picture.png'),
                          ('../../tests/utest/reference_images', 'MY PICTURE')):
 
             self.lib.set_reference_folder(path_join(CURDIR, ref))
@@ -126,20 +126,20 @@ class TestRecognizeImages(TestCase):
         self.lib.reference_folder = path_join(CURDIR, 'symbolic_link')
         self.lib.locate('mY_PiCtURe')
         expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
-        self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
+        self.mock.locateOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
-        self.lib.reference_folder = path_join(CURDIR, u'rëförence_imägës')
-        self.lib.locate(u'mŸ PäKSÖR')
-        expected_path = path_join(CURDIR, u'rëförence_imägës',
-                                  u'mÿ_päksör.png').encode('utf-8')
-        self.mock.locateCenterOnScreen.assert_called_once_with(expected_path)
+        self.lib.reference_folder = path_join(CURDIR, 'rëförence_imägës')
+        self.lib.locate('mŸ PäKSÖR')
+        expected_path = path_join(CURDIR, 'rëförence_imägës',
+                                  'mÿ_päksör.png')
+        self.mock.locateOnScreen.assert_called_once_with(expected_path)
         self.mock.reset_mock()
 
     def test_locate_with_invalid_reference_folder(self):
         from ImageHorizonLibrary import ReferenceFolderException
 
-        for invalid_folder in (None, 123, 'nonexistent', u'nönëxistänt'):
+        for invalid_folder in (None, 123, 'nonexistent', 'nönëxistänt'):
             self.lib.reference_folder = invalid_folder
             with self.assertRaises(ReferenceFolderException):
                 self.lib.locate('my_picture')

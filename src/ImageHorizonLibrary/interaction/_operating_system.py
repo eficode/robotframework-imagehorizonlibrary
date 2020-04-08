@@ -29,7 +29,7 @@ class _OperatingSystem(object):
         yourself.
         '''
         if not alias:
-            alias = unicode(len(self.open_applications))
+            alias = str(len(self.open_applications))
         process = subprocess.Popen(shlex.split(app))
         self.open_applications[alias] = process
         return alias

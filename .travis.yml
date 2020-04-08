@@ -1,6 +1,8 @@
 language: python
 python:
-- '2.7'
+- '3.6'
+- '3.7'
+- '3.8'
 before_install:
 - pip install mock
 - pip install robotframework
@@ -11,6 +13,7 @@ notifications:
     recipients:
     - tatu.kairi@eficode.com
     - markus.suonto@eficode.com
+    - matej.cotman@eficode.com
     on_success: change
     on_failure: always
   slack:

@@ -22,7 +22,7 @@ class TestMainClass(TestCase):
         self.Tk_mock.Tk.return_value = self.clipboard_mock
         self.patcher = patch.dict('sys.modules',
                                   {'pyautogui': self.pyautogui_mock,
-                                   'Tkinter': self.Tk_mock})
+                                   'tkinter': self.Tk_mock})
         self.patcher.start()
         from ImageHorizonLibrary import ImageHorizonLibrary
         self.lib = ImageHorizonLibrary()
@@ -37,7 +37,7 @@ class TestMainClass(TestCase):
 
         with patch.object(ImageHorizonLibrary, '_press') as press_mock:
             retval = self.lib.copy()
-            self.assertEquals(retval, 'copied text')
+            self.assertEqual(retval, 'copied text')
             self.clipboard_mock.clipboard_get.assert_called_once_with()
             if self.lib.is_mac:
                 press_mock.assert_called_once_with('Key.command', 'c')
@@ -46,7 +46,7 @@ class TestMainClass(TestCase):
 
     def test_clipboard_content(self):
         retval = self.lib.get_clipboard_content()
-        self.assertEquals(retval, 'copied text')
+        self.assertEqual(retval, 'copied text')
         self.clipboard_mock.clipboard_get.assert_called_once_with()
 
     def test_alert(self):
@@ -73,11 +73,11 @@ class TestMainClass(TestCase):
         self.assertNotEqual(stderr, '')
 
     def test_set_reference_folder(self):
-        self.assertEquals(self.lib.reference_folder, None)
+        self.assertEqual(self.lib.reference_folder, None)
         self.lib.set_reference_folder('/test/path')
-        self.assertEquals(self.lib.reference_folder, '/test/path')
+        self.assertEqual(self.lib.reference_folder, '/test/path')
 
     def test_set_screenshot_folder(self):
-        self.assertEquals(self.lib.screenshot_folder, None)
+        self.assertEqual(self.lib.screenshot_folder, None)
         self.lib.set_screenshot_folder('/test/path')
-        self.assertEquals(self.lib.screenshot_folder, '/test/path')
+        self.assertEqual(self.lib.screenshot_folder, '/test/path')
