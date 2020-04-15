@@ -18,7 +18,7 @@ with open(path_join(CURDIR, 'README.rst'), 'r') as readme:
 
 CLASSIFIERS = '''
 Development Status :: 5 - Production/Stable
-Programming Language :: Python :: 2 :: Only
+Programming Language :: Python :: 3 :: Only
 Operating System :: OS Independent
 Topic :: Software Development :: Testing
 License :: OSI Approved :: MIT License
