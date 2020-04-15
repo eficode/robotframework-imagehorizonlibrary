@@ -27,3 +27,11 @@ def has_retina():
         # Will return 0 if there is a retina display
         return call("system_profiler SPDisplaysDataType | grep 'Retina'", shell=True) == 0
     return False
+
+def has_cv():
+    has_cv = True
+    try:
+        import cv2
+    except ModuleNotFoundError as err:
+        has_cv = False
+    return has_cv

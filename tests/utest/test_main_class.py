@@ -81,3 +81,24 @@ class TestMainClass(TestCase):
         self.assertEqual(self.lib.screenshot_folder, None)
         self.lib.set_screenshot_folder('/test/path')
         self.assertEqual(self.lib.screenshot_folder, '/test/path')
+
+    def test_set_confidence(self):
+        self.assertEqual(self.lib.confidence, None)
+
+        self.lib.set_confidence(0)
+        self.assertEqual(self.lib.confidence, 0)
+
+        self.lib.set_confidence(0.5)
+        self.assertEqual(self.lib.confidence, 0.5)
+
+        self.lib.set_confidence(-1)
+        self.assertEqual(self.lib.confidence, 0.5)
+
+        self.lib.set_confidence(2)
+        self.assertEqual(self.lib.confidence, 0.5)
+
+        self.lib.set_confidence(1)
+        self.assertEqual(self.lib.confidence, 1)
+
+        self.lib.set_confidence(None)
+        self.assertEqual(self.lib.confidence, None)

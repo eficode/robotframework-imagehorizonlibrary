@@ -172,7 +172,14 @@ class _RecognizeImages(object):
             location = None
             with self._suppress_keyword_on_failure():
                 try:
-                    location = ag.locateOnScreen(ref_image)
+                    if self.has_cv and self.confidence:
+                        location = ag.locateOnScreen(ref_image,
+                                                     confidence=self.confidence)
+                    else:
+                        if self.confidence:
+                            LOGGER.warn("Can't set confidence because you don't "
+                                        "have OpenCV (python-opencv) installed.")
+                        location = ag.locateOnScreen(ref_image)
                 except ImageNotFoundException as ex:
                     LOGGER.info(ex)
                     pass

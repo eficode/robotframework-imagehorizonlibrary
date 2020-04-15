@@ -8,7 +8,6 @@ from mock import call, MagicMock, patch
 CURDIR = abspath(dirname(__file__))
 TESTIMG_DIR = path_join(CURDIR, 'reference_images')
 
-
 class TestRecognizeImages(TestCase):
     def setUp(self):
         self.mock = MagicMock()
@@ -22,6 +21,24 @@ class TestRecognizeImages(TestCase):
     def tearDown(self):
         self.mock.reset_mock()
         self.patcher.stop()
+
+    def test_find_with_confidence(self):
+        self.lib.reference_folder = path_join(CURDIR, 'symbolic_link')
+        self.lib.set_confidence(0.5)
+        self.lib.has_cv = True
+        self.lib.locate('mY_PiCtURe')
+        expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
+        self.mock.locateOnScreen.assert_called_once_with(expected_path, confidence=0.5)
+        self.mock.reset_mock()
+
+    def test_find_with_confidence_no_opencv(self):
+        self.lib.reference_folder = path_join(CURDIR, 'symbolic_link')
+        self.lib.set_confidence(0.5)
+        self.lib.has_cv = False
+        self.lib.locate('mY_PiCtURe')
+        expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
+        self.mock.locateOnScreen.assert_called_once_with(expected_path)
+        self.mock.reset_mock()
 
     def test_click_image(self):
         with patch(self.locate, return_value=(0, 0)):
