@@ -1,13 +1,72 @@
-language: python
-python:
-- '3.6'
-- '3.7'
-- '3.8'
-before_install:
-- pip install mock
-- pip install robotframework
+matrix:
+  include:
+    - os: osx
+      language: shell
+      osx_image: xcode9.4
+      name: 'Python: 3.6'
+      before_install:
+      - . $(brew --prefix asdf)/asdf.sh
+      - asdf plugin add python
+      - asdf install python 3.6.10
+      - asdf global python 3.6.10
+    - os: osx
+      language: shell
+      osx_image: xcode9.4
+      name: 'Python: 3.7'
+      before_install:
+      - . $(brew --prefix asdf)/asdf.sh
+      - asdf plugin add python
+      - asdf install python 3.7.7
+      - asdf global python 3.7.7
+    - os: osx
+      language: shell
+      osx_image: xcode9.4
+      name: 'Python: 3.8'
+      before_install:
+      - . $(brew --prefix asdf)/asdf.sh
+      - asdf plugin add python
+      - asdf install python 3.8.2
+      - asdf global python 3.8.2
+install:
+- python3 --version
+- python3 -m pip install mock robotframework eel opencv-python .
 script:
-- python tests/utest/run_tests.py
+- python3 tests/utest/run_tests.py
+- python3 tests/atest/run_tests.py
+addons:
+  homebrew:
+    casks:
+      - chromium
+    packages:
+      - asdf
+        # asdf plugin dependencies
+      - coreutils
+      - automake
+      - autoconf
+      - openssl
+      - libyaml
+      - readline
+      - libxslt
+      - libtool
+      - unixodbc
+      - unzip
+      - curl
+    update: true
+    # Windows builds are not working on Travis-CI
+    # https://travis-ci.community/t/make-running-gui-multimedia-apps-available-in-windows/1557/5
+    #- os: windows
+      #language: sh
+      #name: "Python: 3.x"
+      #before_install:
+      #- choco install python3 --params "/InstallDir:C:\\Python"
+      #- export PATH="/c/Python:/c/Python/Scripts:$PATH"
+      #- choco install chromium
+      #- python -m pip install --upgrade pip wheel
+      #install:
+      #- python -m pip install mock robotframework eel opencv-contrib-python .
+      #script:
+      #- python tests/utest/run_tests.py
+      #- python tests/atest/run_tests.py
 notifications:
   email:
     recipients:
