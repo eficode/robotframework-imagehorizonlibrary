@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bitwise Calculator</title>
+
+        <style>
+        @font-face {
+            font-family: Roboto;
+            src: url('Roboto-Black.ttf')  format('truetype');
+        }
+
+        body {
+            font-family: Roboto;
+            font-size: 18px;
+        }
+
+        .clickable {
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .button {
+            background-color: black;
+            color: white;
+            padding: 10px 30px;
+            margin: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .button:active {
+            background-color: gray;
+        }
+
+        .binary-input {
+            border: 2px solid black;
+            outline: none;
+        }
+
+        #first,#second {
+            padding: 10px;
+        }
+
+        .check {
+            color: gray;
+        }
+
+        .check[checked] {
+            color: black;
+        }
+
+        #result {
+            text-align: center;
+            display: block;
+            font-size: 24px;
+            padding: 20px 0px;
+        }
+        </style>
+
+        <script type="text/javascript" src="/eel.js"></script>
+        <script type="text/javascript">
+            function setInputFilter(textbox, inputFilter) {
+                ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+                    textbox.addEventListener(event, function() {
+                        if (inputFilter(this.value)) {
+                            this.oldValue = this.value;
+                            this.oldSelectionStart = this.selectionStart;
+                            this.oldSelectionEnd = this.selectionEnd;
+                        } else if (this.hasOwnProperty("oldValue")) {
+                            this.value = this.oldValue;
+                            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                        } else {
+                            this.value = "";
+                        }
+                    });
+                });
+            }
+
+            function selectElementText(el, win) {
+                win = win || window;
+                var doc = win.document, sel, range;
+                if (win.getSelection && doc.createRange) {
+                    sel = win.getSelection();
+                    range = doc.createRange();
+                    range.selectNodeContents(el);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                } else if (doc.body.createTextRange) {
+                    range = doc.body.createTextRange();
+                    range.moveToElementText(el);
+                    range.select();
+                }
+            }
+
+            function main() {
+                let checks = document.querySelectorAll('.check');
+                checks.forEach(e => {
+                    e.addEventListener('click', event => {
+                        if (event.target.hasAttribute('checked')) {
+                            event.target.removeAttribute('checked');
+                        } else {
+                            event.target.setAttribute('checked', 1);
+                        }
+                    });
+                });
+
+                let inputs = document.querySelectorAll('.binary-input');
+                inputs.forEach(e => {
+                    setInputFilter(e, function(value) {
+                        return /^[01]+$/.test(value);
+                    });
+                });
+
+                let close = document.querySelector('#close');
+                close.addEventListener('click', event => {
+                    eel.close();
+                    window.close('','_parent','');
+                });
+
+                let result = document.querySelector('#result');
+                let resultArea = document.querySelector('#result-area');
+                resultArea.addEventListener('click', event => {
+                    selectElementText(result);
+                });
+
+                let fnot = document.querySelector('#fnot');
+                let fnumber = document.querySelector('#fnumber');
+                let snot = document.querySelector('#snot');
+                let snumber = document.querySelector('#snumber');
+
+                let buttons = document.querySelectorAll('.button[operation]');
+                buttons.forEach(e => {
+                    e.addEventListener('click', event => {
+
+                        let fvalue = parseInt(fnumber.value, 2);
+                        if (fnot.hasAttribute('checked')) {
+                            fvalue = ~fvalue;
+                        }
+                        let svalue = parseInt(snumber.value, 2);
+                        if (snot.hasAttribute('checked')) {
+                            svalue = ~svalue;
+                        }
+
+                        let operation = event.target.getAttribute('operation');
+
+                        switch (operation) {
+                            case 'and':
+                                res = fvalue & svalue;
+                                    break;
+                            case 'or':
+                                res = fvalue | svalue;
+                                    break;
+                            default:
+                                throw new Error('Unknown Operation');
+                        }
+
+                        result.innerHTML = res.toString(2);
+                    });
+                });
+            };
+
+            setTimeout('main()');
+        </script>
+    </head>
+
+
+    <body>
+        <div id="form">
+            <div id="first">
+                <label id="fnot" class="clickable check">NOT</label>
+                <input type="text" id="fnumber" class="binary-input" />
+            </div>
+            <div id="second">
+                <label id="snot" class="clickable check">NOT</label>
+                <input type="text" id="snumber" class="binary-input" />
+            </div>
+
+            <div>
+                <label id="and" class="clickable button" operation="and">AND</label>
+                <label id="or" class="clickable button" operation="or">OR</label>
+            </div>
+        </div>
+        <div id="result-area">
+            <span id="result">N/A</span>
+        </div>
+        <label id="close" class="clickable button">Close</label>
+    </body>
+</html>

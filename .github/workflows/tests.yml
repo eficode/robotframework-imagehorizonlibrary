@@ -1,0 +1,84 @@
+name: Tests (Python 3.x)
+
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'setup.py'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'setup.py'
+jobs:
+  test_using_builtin_python:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ 'ubuntu-latest', 'windows-latest' ]
+        python-version: [ '3.6', '3.7', '3.8' ]
+        include:
+          - os: ubuntu-latest
+            set_display: export DISPLAY=:99; Xvfb :99 -screen 0 1024x768x24 -ac -noreset & sleep 3
+          #- os: macos-latest
+            #set_tmpdir: export TMPDIR=/tmp
+          - os: windows-latest
+            set_codepage: chcp 850
+
+    runs-on: ${{ matrix.os }}
+
+    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup python ${{ matrix.python-version }} for running the tests
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+
+      # pyautogui does not work by default (https://github.com/asweigart/pyautogui/issues/247)
+      # need to disable security feature (https://apple.stackexchange.com/questions/178313/change-accessibility-setting-on-mac-using-terminal)
+      # and database is readonly (https://github.com/jacobsalmela/tccutil/issues/18)
+      # you need to disable SIP, but for that go into recovery mode and disable it - not on CI system
+      #- name: Install test tools to Mac
+        #run: |
+          #sudo sqlite3 "/Library/Application Support/com.apple.TCC/TCC.db" 'UPDATE access SET allowed = "1";'
+        #if: runner.os == 'macOS'
+
+      - name: Install test tools to Linux
+        run: |
+          sudo apt-get update
+          sudo apt-get -y -q install xvfb scrot chromium-browser
+          touch ~/.Xauthority
+        if: contains(matrix.os, 'ubuntu')
+
+      - name: Install python test dependencies
+        run: |
+          python --version
+          python -m pip install mock robotframework opencv-python eel .
+
+      - name: Run tests
+        run: |
+          ${{ matrix.set_codepage }}
+          ${{ matrix.set_display }}
+          python tests/utest/run_tests.py
+          python tests/atest/run_tests.py
+
+      - name: Archive acceptances test results
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: log-${{ matrix.python-version }}-${{ matrix.os }}
+          path: log.html
+        if: always() && job.status == 'failure'
+
+      - name: Archive acceptances test failure screenshot on Linux
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: screenshot-${{ matrix.python-version }}-${{ matrix.os }}
+          path: /tmp/Atest.Calculator-screenshot-1.png
+        if: always() && job.status == 'failure' && contains(matrix.os, 'ubuntu')
