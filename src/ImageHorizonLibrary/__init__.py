@@ -49,7 +49,7 @@ class ImageHorizonLibrary(_Keyboard,
 
     = Reference image names =
     ``reference_image`` parameter can be either a single file, or a folder.
-    If ``reference_image`` is a folder, image recognition is tried separately 
+    If ``reference_image`` is a folder, image recognition is tried separately
     for each image in that folder, in alphabetical order until a match is found.
 
     For ease of use, reference image names are automatically normalized
@@ -71,8 +71,8 @@ class ImageHorizonLibrary(_Keyboard,
     data:
 
     | `Import Library` | ImageHorizonLibrary                   | reference_folder=images |                                                            |
-    | `Click Image`    | popup Window title                    |                         | # Path is images/popup_window_title.png                    | 
-    | `Click Image`    | button Login Without User Credentials |                         | # Path is images/button_login_without_user_credentials.png | 
+    | `Click Image`    | popup Window title                    |                         | # Path is images/popup_window_title.png                    |
+    | `Click Image`    | button Login Without User Credentials |                         | # Path is images/button_login_without_user_credentials.png |
 
 
     = Performance =
@@ -88,8 +88,15 @@ class ImageHorizonLibrary(_Keyboard,
     In the above example, same image is located twice. Below is an example how
     we can leverage the returned location:
 
-    | ${location}=           | `Wait For`  | label Name | 
+    | ${location}=           | `Wait For`  | label Name |
     | `Click To The Left Of` | ${location} | 200        |
+
+
+    = Confidence Level =
+    Library provides support for recognizing images on screen that are not
+    a pixel-perfect match, by default is disabled, can be enabled by
+    installing ``opencv-python`` Python package and setting ``Set Confidence``
+    keyword before any image scanning operation.
     '''
 
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
@@ -242,8 +249,8 @@ class ImageHorizonLibrary(_Keyboard,
         self.screenshot_folder = screenshot_folder_path
 
     def set_confidence(self, new_confidence):
-        '''Sets the confidence level for finding images
-        Applicable if opencv (python-opencv) is installed.
+        '''Sets the confidence level for finding images.
+        Applicable if opencv (opencv-python) is installed.
         Allows for setting the value to None if you don't want
         to use it or a value between 0 and 1 inclusive.
         '''

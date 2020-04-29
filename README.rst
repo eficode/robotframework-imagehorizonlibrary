@@ -6,6 +6,11 @@ This Robot Framework library provides the facilities to automate GUIs based on
 image recognition similar to Sikuli. This library wraps pyautogui_ to achieve
 this.
 
+For non pixel perfect matches, there is a feature called `confidence level`
+that comes with a dependency OpenCV (python package: `opencv-python`).
+This functionality is optional - you are not required to
+install `opencv-python` package if you do not use confidence level.
+
 Keyword documentation
 ---------------------
 
@@ -85,7 +90,6 @@ You additionally need to install these for pyautogui_:
 ::
 
     $ sudo apt-get install python-dev python-xlib
-    $ sudo pip install pillow
 
 
 You might also need, depending on your Python distribution, to install:
@@ -100,22 +104,44 @@ virtual environment for pyautogui_:
 - `Fetch the source distribution`_
 - Install with:
 
-  ::
+::
 
-        $ pip install python-xlib-<latest version>.tar.gz
+    $ pip install python-xlib-<latest version>.tar.gz
 
-Running tests
--------------
+Running unit tests
+------------------
 
 ::
 
     $ python tests/utest/run_tests.py [verbosity=2]
 
-and
+
+Running acceptance tests
+------------------------
+
+Additionally to unit test dependencies, you also need OpenCV, Eel and Chrome/Chromium browser.
+OpenCV is used because this tests are testing also confidence level.
+Browser is used by Eel for cross-platform GUI demo application.
+
+::
+    $ pip install opencv-python eel
+
+
+To run tests, run this command:
 
 ::
 
     $ python tests/atest/run_tests.py
+
+
+Updating Docs
+-------------
+
+To regenerate documentation (`doc/ImageHorizonLibrary.html`), use this command:
+
+::
+
+    $ python -m robot.libdoc -P ./src ImageHorizonLibrary doc/ImageHorizonLibrary.html
 
 
 .. _Python 3.x: http://python.org
