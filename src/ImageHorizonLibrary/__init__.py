@@ -44,12 +44,31 @@ class ImageHorizonLibrary(_Keyboard,
     facilities to recognize images on screen. It can also take screenshots in
     case of failure or otherwise.
 
+
     This library is built on top of
     [https://pyautogui.readthedocs.org|pyautogui].
 
+    == Confidence Level ==
+    By default, image recognition searches images with pixel-perfect matching.
+    This is in many scenarios too precise, as changing desktop background,
+    transpareny in the reference images, slightly changing resolutions, and
+    myriad of factors might throw the algorithm off. In these cases, it is
+    advised to adjust the precision manually.
+
+    This ability to adjust can be enabled by installing
+    [https://pypi.org/project/opencv-python|opencv-python] Python package
+    separately:
+
+    | $ pip install opencv-python
+
+    After installation, the library will use OpenCV, which enables setting the
+    precision during `library importing` and during the test case  with keyword
+    `Set Confidence`.
+
+
     = Reference image names =
     ``reference_image`` parameter can be either a single file, or a folder.
-    If ``reference_image`` is a folder, image recognition is tried separately 
+    If ``reference_image`` is a folder, image recognition is tried separately
     for each image in that folder, in alphabetical order until a match is found.
 
     For ease of use, reference image names are automatically normalized
@@ -71,9 +90,8 @@ class ImageHorizonLibrary(_Keyboard,
     data:
 
     | `Import Library` | ImageHorizonLibrary                   | reference_folder=images |                                                            |
-    | `Click Image`    | popup Window title                    |                         | # Path is images/popup_window_title.png                    | 
-    | `Click Image`    | button Login Without User Credentials |                         | # Path is images/button_login_without_user_credentials.png | 
-
+    | `Click Image`    | popup Window title                    |                         | # Path is images/popup_window_title.png                    |
+    | `Click Image`    | button Login Without User Credentials |                         | # Path is images/button_login_without_user_credentials.png |
 
     = Performance =
 
@@ -88,7 +106,7 @@ class ImageHorizonLibrary(_Keyboard,
     In the above example, same image is located twice. Below is an example how
     we can leverage the returned location:
 
-    | ${location}=           | `Wait For`  | label Name | 
+    | ${location}=           | `Wait For`  | label Name |
     | `Click To The Left Of` | ${location} | 200        |
     '''
 
@@ -242,10 +260,12 @@ class ImageHorizonLibrary(_Keyboard,
         self.screenshot_folder = screenshot_folder_path
 
     def set_confidence(self, new_confidence):
-        '''Sets the confidence level for finding images
-        Applicable if opencv (python-opencv) is installed.
-        Allows for setting the value to None if you don't want
-        to use it or a value between 0 and 1 inclusive.
+        '''Sets the accuracy when finding images.
+
+        ``new_confidence`` is a decimal number between 0 and 1 inclusive.
+
+        See `Confidence level` about additional dependencies that needs to be
+        installed before this keyword has any effect.
         '''
         if new_confidence is not None:
             try:
