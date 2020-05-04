@@ -6,7 +6,7 @@ Library    ImageHorizonLibrary    ${CURDIR}${/}reference_images${/}calculator   
 Calculator
     Set Confidence      0.9
     Launch application    python tests/atest/calculator/calculator.py
-    ${location1}=    Wait for    inputs.png     timeout=30
+    ${location1}=    Wait for    inputs_folder     timeout=30
     Click to the above of     ${location1}    20
     Type    1010
     Click to the below of     ${location1}    20
