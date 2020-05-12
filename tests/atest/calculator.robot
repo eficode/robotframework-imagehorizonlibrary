@@ -1,5 +1,5 @@
 *** Settings ***
-Library    ImageHorizonLibrary    ${CURDIR}${/}reference_images${/}calculator    screenshot_folder=${TEMPDIR}
+Library    ImageHorizonLibrary    ${CURDIR}${/}reference_images${/}calculator
 
 *** Test cases ***
 
