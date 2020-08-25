@@ -125,6 +125,7 @@ Browser is used by Eel for cross-platform GUI demo application.
 scrot is used for capturing screenshots.
 
 ::
+
     $ pip install opencv-python eel
 
 
