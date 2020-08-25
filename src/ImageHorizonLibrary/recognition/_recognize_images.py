@@ -178,7 +178,8 @@ class _RecognizeImages(object):
                     else:
                         if self.confidence:
                             LOGGER.warn("Can't set confidence because you don't "
-                                        "have OpenCV (python-opencv) installed.")
+                                        "have OpenCV (python-opencv) installed "
+                                        "or a confidence level was not given.")
                         location = ag.locateOnScreen(ref_image)
                 except ImageNotFoundException as ex:
                     LOGGER.info(ex)
