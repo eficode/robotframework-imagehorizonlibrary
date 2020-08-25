@@ -119,9 +119,10 @@ Running unit tests
 Running acceptance tests
 ------------------------
 
-Additionally to unit test dependencies, you also need OpenCV, Eel and Chrome/Chromium browser.
+Additionally to unit test dependencies, you also need OpenCV, Eel, scrot and Chrome/Chromium browser.
 OpenCV is used because this tests are testing also confidence level.
 Browser is used by Eel for cross-platform GUI demo application.
+scrot is used for capturing screenshots.
 
 ::
     $ pip install opencv-python eel
