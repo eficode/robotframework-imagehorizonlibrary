@@ -35,3 +35,11 @@ def has_cv():
     except ModuleNotFoundError as err:
         has_cv = False
     return has_cv
+
+def has_skimage():
+    has_skimage = True
+    try:
+        import skimage
+    except ModuleNotFoundError as err:
+        has_skimage = False
+    return has_skimage

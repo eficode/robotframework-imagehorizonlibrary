@@ -33,3 +33,6 @@ class ReferenceFolderException(Exception):
 
 class ScreenshotFolderException(Exception):
     pass
+
+class StrategyException(Exception):
+    pass

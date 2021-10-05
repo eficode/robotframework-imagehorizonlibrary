@@ -31,12 +31,17 @@ setup(name='robotframework-imagehorizonlibrary',
       license='MIT',
       install_requires=[
           'robotframework>=2.8',
-          'pyautogui>=0.9.30'
+          'pyautogui>=0.9.30',
+          # scikit-image 0.19 can't be used yet - regression bug
+          # (reference images get an unexplainable white 1px border)
+          'scikit-image==0.18.3',
+          'matplotlib==3.4.3'
       ],
       packages=[
           'ImageHorizonLibrary',
           'ImageHorizonLibrary.interaction',
           'ImageHorizonLibrary.recognition',
+          'ImageHorizonLibrary.recognition.ImageDebugger'
       ],
       package_dir={'': 'src'},
       keywords=KEYWORDS,

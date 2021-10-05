@@ -1,0 +1,8 @@
+robotframework
+mock
+pyautogui
+tk
+opencv-python
+scikit-image
+# pyqt5 is only needed to use skimage.viewer.ImageViewer(refImage) while debugging
+# pyqt5
