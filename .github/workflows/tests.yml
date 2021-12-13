@@ -72,13 +72,8 @@ jobs:
       - name: Archive acceptances test results
         uses: actions/upload-artifact@v1.0.0
         with:
-          name: log-${{ matrix.python-version }}-${{ matrix.os }}
-          path: log.html
+          name: output-${{ matrix.python-version }}-${{ matrix.os }}
+          path: |
+            log.html
+            Atest.Calculator-screenshot-1.png
         if: always() && job.status == 'failure'
-
-      - name: Archive acceptances test failure screenshot on Linux
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: screenshot-${{ matrix.python-version }}-${{ matrix.os }}
-          path: /tmp/Atest.Calculator-screenshot-1.png
-        if: always() && job.status == 'failure' && contains(matrix.os, 'ubuntu')
