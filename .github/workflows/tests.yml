@@ -70,7 +70,7 @@ jobs:
           python tests/atest/run_tests.py
 
       - name: Archive acceptances test results
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v2.3.0
         with:
           name: output-${{ matrix.python-version }}-${{ matrix.os }}
           path: |
