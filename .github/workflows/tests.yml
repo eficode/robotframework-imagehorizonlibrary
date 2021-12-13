@@ -53,7 +53,7 @@ jobs:
       - name: Install test tools to Linux
         run: |
           sudo apt-get update
-          sudo apt-get -y -q install xvfb scrot chromium-browser
+          sudo apt-get -y -q install xvfb scrot
           touch ~/.Xauthority
         if: contains(matrix.os, 'ubuntu')
 
