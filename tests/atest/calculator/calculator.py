@@ -13,4 +13,6 @@ def close():
     sys.exit(0)
 
 
-eel.start('main.html', size=(300, 380))
+mode = 'edge' if os.name == 'nt' else 'chrome'
+
+eel.start('main.html', size=(300, 380), mode=mode)
