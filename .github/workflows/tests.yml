@@ -53,7 +53,7 @@ jobs:
       - name: Install test tools to Linux
         run: |
           sudo apt-get update
-          sudo apt-get -y -q install xvfb scrot chromium-browser
+          sudo apt-get -y -q install xvfb scrot
           touch ~/.Xauthority
         if: contains(matrix.os, 'ubuntu')
 
@@ -70,15 +70,10 @@ jobs:
           python tests/atest/run_tests.py
 
       - name: Archive acceptances test results
-        uses: actions/upload-artifact@v1.0.0
+        uses: actions/upload-artifact@v2.3.0
         with:
-          name: log-${{ matrix.python-version }}-${{ matrix.os }}
-          path: log.html
+          name: output-${{ matrix.python-version }}-${{ matrix.os }}
+          path: |
+            log.html
+            ./*.png
         if: always() && job.status == 'failure'
-
-      - name: Archive acceptances test failure screenshot on Linux
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: screenshot-${{ matrix.python-version }}-${{ matrix.os }}
-          path: /tmp/Atest.Calculator-screenshot-1.png
-        if: always() && job.status == 'failure' && contains(matrix.os, 'ubuntu')
