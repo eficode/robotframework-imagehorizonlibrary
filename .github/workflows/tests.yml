@@ -28,6 +28,10 @@ jobs:
             #set_tmpdir: export TMPDIR=/tmp
           - os: windows-latest
             set_codepage: chcp 850
+          - os: ubuntu-latest
+            listdir: ls -l
+          - os: windows-latest
+            listdir: dir
 
     runs-on: ${{ matrix.os }}
 
@@ -68,6 +72,11 @@ jobs:
           ${{ matrix.set_display }}
           python tests/utest/run_tests.py
           python tests/atest/run_tests.py
+
+      - name: Archive acceptances test results
+        run: |
+          ${{ matrix.listdir }}
+        if: always() && job.status == 'failure'
 
       - name: Archive acceptances test results
         uses: actions/upload-artifact@v2.3.0
