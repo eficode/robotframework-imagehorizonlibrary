@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from os.path import abspath, join as path_join
+from os.path import abspath, relpath, join as path_join
 from random import choice
 from string import ascii_lowercase
 
@@ -43,6 +43,8 @@ class _Screenshot(object):
                                             '"%s"' % target_dir)
         path = self._make_up_filename()
         path = abspath(path_join(target_dir, path))
+        logpath = BuiltIn().get_variable_value('${OUTPUT DIR}')
+        relativepath = relpath(path, start=logpath).replace('\\', '\/')
         LOGGER.info('Screenshot taken: {0}<br/><img src="{0}" '
-                    'width="100%" />'.format(path), html=True)
+                    'width="100%" />'.format(relativepath), html=True)
         ag.screenshot(path)
