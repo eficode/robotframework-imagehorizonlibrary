@@ -12,6 +12,11 @@ from ..errors import ReferenceFolderException
 
 class _RecognizeImages(object):
 
+    pixel_ratio = 0.0
+
+    def __get_pixel_ratio(self):
+        self.pixel_ratio = ag.screenshot().size[0]/ag.size().width
+
     def __normalize(self, path):
         if (not self.reference_folder or
                 not isinstance(self.reference_folder, str) or
@@ -203,9 +208,11 @@ class _RecognizeImages(object):
         center_point = ag.center(location)
         x = center_point.x
         y = center_point.y
-        if self.has_retina:
-            x = x / 2
-            y = y / 2
+        if self.pixel_ratio == 0.0:
+            self.__get_pixel_ratio()
+        if self.pixel_ratio>1:
+            x = x / self.pixel_ratio
+            y = y / self.pixel_ratio
         return (x, y)
 
     def does_exist(self, reference_image):
