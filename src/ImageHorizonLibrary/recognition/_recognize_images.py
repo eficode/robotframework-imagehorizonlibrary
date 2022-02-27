@@ -29,7 +29,7 @@ class _RecognizeImages(object):
         return path
 
     def click_image(self, reference_image):
-        '''Finds the reference image on screen and clicks it once.
+        '''Finds the reference image on screen and clicks at the centre point once.
 
         ``reference_image`` is automatically normalized as described in the
         `Reference image names`.
@@ -225,7 +225,7 @@ class _RecognizeImages(object):
 
         Fails if image is not found on screen.
 
-        Returns Python tuple ``(x, y)`` of the coordinates.
+        Returns Python tuple ``(x, y)`` of the coordinates matching the center point of the reference image.
         '''
         return self._locate(reference_image)
 
@@ -239,7 +239,7 @@ class _RecognizeImages(object):
 
         ``timeout`` is given in seconds.
 
-        Returns Python tuple ``(x, y)`` of the coordinates.
+        Returns Python tuple ``(x, y)`` of the coordinates matching the center point of the reference image.
         '''
         stop_time = time() + int(timeout)
         location = None

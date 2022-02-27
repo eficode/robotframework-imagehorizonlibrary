@@ -19,8 +19,11 @@ class _OperatingSystem(object):
         On Windows, if you are using relative or absolute paths in ``app``,
         enclose the command with double quotes:
 
-        | Launch Application | "C:\\my folder\\myprogram.exe" | # Needs quotes       |
-        | Launch Application | myprogram.exe                  | # No need for quotes |
+        | Launch Application | "C:\\my folder\\myprogram.exe" | # Needs quotes       ||||
+        | Launch Application | myprogram.exe                  | # No need for quotes ||||
+        | Launch Application | myprogram.exe                  | arg1 | arg2 | # Program with arguments ||
+        | Launch Application | myprogram.exe                  | alias=myprog | # Program with alias |||
+        | Launch Application | myprogram.exe                  | arg1 | arg2 | alias=myprog | # Program with arguments and alias |
 
         Returns automatically generated alias which can be used with `Terminate
         Application`.
