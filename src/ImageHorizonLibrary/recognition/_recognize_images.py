@@ -241,10 +241,10 @@ class _RecognizeImages(object):
 
         Returns Python tuple ``(x, y)`` of the coordinates.
         '''
-        stop_time = time() + int(timeout)
+        stop_time = int(time()) + int(timeout)
         location = None
         with self._suppress_keyword_on_failure():
-            while time() < stop_time:
+            while int(time()) <= stop_time:
                 try:
                     location = self._locate(reference_image, log_it=False)
                     break
