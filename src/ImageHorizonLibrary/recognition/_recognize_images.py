@@ -12,6 +12,8 @@ from ..errors import ReferenceFolderException
 
 class _RecognizeImages(object):
 
+    dflt_timeout = 0
+
     def __normalize(self, path):
         if (not self.reference_folder or
                 not isinstance(self.reference_folder, str) or
@@ -28,13 +30,15 @@ class _RecognizeImages(object):
             raise InvalidImageException('Image path not found: "%s".' % path)
         return path
 
-    def click_image(self, reference_image):
-        '''Finds the reference image on screen and clicks it once.
+    def click_image(self, reference_image, timeout=dflt_timeout):
+        '''Finds the reference image on screen and clicks it's center point once.
 
         ``reference_image`` is automatically normalized as described in the
         `Reference image names`.
+
+        ``timeout`` optional value, in whole seconds. default is 0
         '''
-        center_location = self.locate(reference_image)
+        center_location = self.wait_for(reference_image, timeout)
         LOGGER.info('Clicking image "%s" in position %s' % (reference_image,
                                                             center_location))
         ag.click(center_location)
@@ -45,13 +49,13 @@ class _RecognizeImages(object):
         raise NotImplementedError('This is defined in the main class.')
 
     def _locate_and_click_direction(self, direction, reference_image, offset,
-                                    clicks, button, interval):
-        location = self.locate(reference_image)
+                                    clicks, button, interval, timeout=dflt_timeout):
+        location = self.wait_for(reference_image, timeout)
         self._click_to_the_direction_of(direction, location, offset, clicks,
                                         button, interval)
 
     def click_to_the_above_of_image(self, reference_image, offset, clicks=1,
-                                    button='left', interval=0.0):
+                                    button='left', interval=0.0, timeout=dflt_timeout):
         '''Clicks above of reference image by given offset.
 
         See `Reference image names` for documentation for ``reference_image``.
@@ -60,38 +64,40 @@ class _RecognizeImages(object):
         image.
 
         ``clicks`` and ``button`` are documented in `Click To The Above Of`.
+
+        ``timeout`` optional value, in whole seconds. default is 0
         '''
         self._locate_and_click_direction('up', reference_image, offset,
-                                         clicks, button, interval)
+                                         clicks, button, interval, timeout)
 
     def click_to_the_below_of_image(self, reference_image, offset, clicks=1,
-                                    button='left', interval=0.0):
+                                    button='left', interval=0.0, timeout=dflt_timeout):
         '''Clicks below of reference image by given offset.
 
         See argument documentation in `Click To The Above Of Image`.
         '''
         self._locate_and_click_direction('down', reference_image, offset,
-                                         clicks, button, interval)
+                                         clicks, button, interval, timeout)
 
     def click_to_the_left_of_image(self, reference_image, offset, clicks=1,
-                                   button='left', interval=0.0):
+                                   button='left', interval=0.0, timeout=dflt_timeout):
         '''Clicks left of reference image by given offset.
 
         See argument documentation in `Click To The Above Of Image`.
         '''
         self._locate_and_click_direction('left', reference_image, offset,
-                                         clicks, button, interval)
+                                         clicks, button, interval, timeout)
 
     def click_to_the_right_of_image(self, reference_image, offset, clicks=1,
-                                    button='left', interval=0.0):
+                                    button='left', interval=0.0, timeout=dflt_timeout):
         '''Clicks right of reference image by given offset.
 
         See argument documentation in `Click To The Above Of Image`.
         '''
         self._locate_and_click_direction('right', reference_image, offset,
-                                         clicks, button, interval)
+                                         clicks, button, interval, timeout)
 
-    def copy_from_the_above_of(self, reference_image, offset):
+    def copy_from_the_above_of(self, reference_image, offset, timeout=dflt_timeout):
         '''Clicks three times above of reference image by given offset and
         copies.
 
@@ -101,39 +107,41 @@ class _RecognizeImages(object):
 
         Copy is done by pressing ``Ctrl+C`` on Windows and Linux and ``⌘+C``
         on OS X.
+
+        ``timeout`` optional value, in whole seconds. default is 0
         '''
         self._locate_and_click_direction('up', reference_image, offset,
-                                         clicks=3, button='left', interval=0.0)
+                                         clicks=3, button='left', interval=0.0, timeout=timeout)
         return self.copy()
 
-    def copy_from_the_below_of(self, reference_image, offset):
+    def copy_from_the_below_of(self, reference_image, offset, timeout=dflt_timeout):
         '''Clicks three times below of reference image by given offset and
         copies.
 
         See argument documentation in `Copy From The Above Of`.
         '''
         self._locate_and_click_direction('down', reference_image, offset,
-                                         clicks=3, button='left', interval=0.0)
+                                         clicks=3, button='left', interval=0.0, timeout=timeout)
         return self.copy()
 
-    def copy_from_the_left_of(self, reference_image, offset):
+    def copy_from_the_left_of(self, reference_image, offset, timeout=dflt_timeout):
         '''Clicks three times left of reference image by given offset and
         copies.
 
         See argument documentation in `Copy From The Above Of`.
         '''
         self._locate_and_click_direction('left', reference_image, offset,
-                                         clicks=3, button='left', interval=0.0)
+                                         clicks=3, button='left', interval=0.0, timeout=timeout)
         return self.copy()
 
-    def copy_from_the_right_of(self, reference_image, offset):
+    def copy_from_the_right_of(self, reference_image, offset, timeout=dflt_timeout):
         '''Clicks three times right of reference image by given offset and
         copies.
 
         See argument documentation in `Copy From The Above Of`.
         '''
         self._locate_and_click_direction('right', reference_image, offset,
-                                         clicks=3, button='left', interval=0.0)
+                                         clicks=3, button='left', interval=0.0, timeout=timeout)
         return self.copy()
 
     @contextmanager
@@ -237,7 +245,7 @@ class _RecognizeImages(object):
 
         See `Reference image names` for documentation for ``reference_image``.
 
-        ``timeout`` is given in seconds.
+        ``timeout`` is given in whole seconds.
 
         Returns Python tuple ``(x, y)`` of the coordinates.
         '''
