@@ -26,6 +26,16 @@
             ],
             "console": "integratedTerminal",
             "justMyCode": false
+        },
+        {
+            "type": "robotframework-lsp",
+            "name": "Robot Framework: Launch .robot file",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "target": "${file}",
+            "terminal": "integrated",
+            "env": {},
+            "args": []
         }
     ]
 }
