@@ -31,12 +31,24 @@ setup(name='robotframework-imagehorizonlibrary',
       license='MIT',
       install_requires=[
           'robotframework>=2.8',
-          'pyautogui>=0.9.30'
+          # Version 10 is not fully compatible (https://stackoverflow.com/questions/76616042/attributeerror-module-pil-image-has-no-attribute-antialias)
+          'matplotlib',
+          'Pillow==9.5.0',
+          'PyScreeze==0.1.29',
+          'pyautogui>=0.9.30',
+          #'scikit-image@ file://
+          #'scikit-image==0.22.0 @ https://files.pythonhosted.org/packages/ce/d0/a3f60c9f57ed295b3076e4acdb29a37bbd8823452562ab2ad51b03d6f377/scikit_image-0.22.0-cp311-cp311-win_amd64.whl',
+          # scikit-image 0.19 can't be used yet - regression bug
+          # (reference images get an unexplainable white 1px border)
+          #'scikit-image==0.18.3',
+          'scikit-image==0.22.0',
+          #'matplotlib==3.4.3'
       ],
       packages=[
           'ImageHorizonLibrary',
           'ImageHorizonLibrary.interaction',
           'ImageHorizonLibrary.recognition',
+          'ImageHorizonLibrary.recognition.ImageDebugger'
       ],
       package_dir={'': 'src'},
       keywords=KEYWORDS,

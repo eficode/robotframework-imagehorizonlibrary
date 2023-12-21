@@ -60,7 +60,7 @@ jobs:
       - name: Install python test dependencies
         run: |
           python --version
-          python -m pip install mock robotframework opencv-python eel .
+          python -m pip install mock robotframework opencv-python scikit-image eel .
 
       - name: Run tests
         run: |

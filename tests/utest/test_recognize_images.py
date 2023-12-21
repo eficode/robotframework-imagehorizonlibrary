@@ -3,7 +3,7 @@ import time
 
 from unittest import TestCase
 from os.path import abspath, dirname, join as path_join
-from mock import call, MagicMock, patch
+from mock import call, MagicMock, patch, ANY
 
 CURDIR = abspath(dirname(__file__))
 TESTIMG_DIR = path_join(CURDIR, 'reference_images')
@@ -28,7 +28,8 @@ class TestRecognizeImages(TestCase):
         self.lib.has_cv = True
         self.lib.locate('mY_PiCtURe')
         expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
-        self.mock.locateOnScreen.assert_called_once_with(expected_path, confidence=0.5)
+        # haystack image can be anything
+        self.mock.locate.assert_called_once_with(expected_path, ANY, confidence=0.5)
         self.mock.reset_mock()
 
     def test_find_with_confidence_no_opencv(self):
@@ -37,7 +38,7 @@ class TestRecognizeImages(TestCase):
         self.lib.has_cv = False
         self.lib.locate('mY_PiCtURe')
         expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
-        self.mock.locateOnScreen.assert_called_once_with(expected_path)
+        self.mock.locate.assert_called_once_with(expected_path, ANY)
         self.mock.reset_mock()
 
     def test_click_image(self):
@@ -115,7 +116,7 @@ class TestRecognizeImages(TestCase):
     def _verify_path_works(self, image_name, expected):
         self.lib.locate(image_name)
         expected_path = path_join(TESTIMG_DIR, expected)
-        self.mock.locateOnScreen.assert_called_once_with(expected_path)
+        self.mock.locate.assert_called_once_with(expected_path, ANY)
         self.mock.reset_mock()
 
     def test_locate(self):
@@ -125,7 +126,7 @@ class TestRecognizeImages(TestCase):
                            'mY_PiCtURe'):
             self._verify_path_works(image_name, 'my_picture.png')
 
-        self.mock.locateOnScreen.return_value = None
+        self.mock.locate.return_value = None
         run_on_failure = MagicMock()
         with self.assertRaises(InvalidImageException), \
              patch.object(self.lib, '_run_on_failure', run_on_failure):
@@ -143,14 +144,14 @@ class TestRecognizeImages(TestCase):
         self.lib.reference_folder = path_join(CURDIR, 'symbolic_link')
         self.lib.locate('mY_PiCtURe')
         expected_path = path_join(CURDIR, 'symbolic_link', 'my_picture.png')
-        self.mock.locateOnScreen.assert_called_once_with(expected_path)
+        self.mock.locate.assert_called_once_with(expected_path, ANY)
         self.mock.reset_mock()
 
         self.lib.reference_folder = path_join(CURDIR, 'rëförence_imägës')
         self.lib.locate('mŸ PäKSÖR')
         expected_path = path_join(CURDIR, 'rëförence_imägës',
                                   'mÿ_päksör.png')
-        self.mock.locateOnScreen.assert_called_once_with(expected_path)
+        self.mock.locate.assert_called_once_with(expected_path, ANY)
         self.mock.reset_mock()
 
     def test_locate_with_invalid_reference_folder(self):

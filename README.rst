@@ -3,11 +3,14 @@ ImageHorizonLibrary
 ===================
 
 This Robot Framework library provides the facilities to automate GUIs based on
-image recognition similar to Sikuli. This library wraps pyautogui_ to achieve
-this.
+image recognition similar to Sikuli, but without any Java dependeny (100% Python). 
 
-For non pixel perfect matches, there is a feature called `confidence level`
-that comes with a dependency OpenCV (python package: `opencv-python`).
+There are two different recognition strategies: *default* (using pyautogui_) and *edge* (using skimage_). 
+
+For non pixel perfect matches, there is a feature called "confidence level" that 
+allows to define the percentage of pixels which *must* match.
+
+In the *default* strategy, confidence comes with a dependency to OpenCV (python package: `opencv-python`).
 This functionality is optional - you are not required to
 install `opencv-python` package if you do not use confidence level.
 
@@ -35,7 +38,6 @@ Prerequisites
 
 - `Python 3.x`
 - pip_ for easy installation
-- pyautogui_ and `it's prerequisites`_
 - `Robot Framework`_
 
 On Ubuntu, you need to take `special measures`_ to make the screenshot
@@ -149,6 +151,7 @@ To regenerate documentation (`doc/ImageHorizonLibrary.html`), use this command:
 .. _Python 3.x: http://python.org
 .. _pip: https://pypi.python.org/pypi/pip
 .. _pyautogui: https://github.com/asweigart/pyautogui
+.. _skimage: https://scikit-image.org/docs/dev/auto_examples/features_detection/plot_template.html
 .. _it's prerequisites: https://pyautogui.readthedocs.org/en/latest/install.html
 .. _Robot Framework: http://robotframework.org
 .. _double all coordinates: https://github.com/asweigart/pyautogui/issues/33

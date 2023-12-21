@@ -10,3 +10,5 @@ log.html
 /bin
 /include
 /lib
+*egg-info
+test_*
